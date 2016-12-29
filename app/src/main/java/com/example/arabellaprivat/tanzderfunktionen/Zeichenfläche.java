@@ -45,7 +45,7 @@ public class Zeichenfläche extends View {
         paint.setColor(Color.BLACK);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(8f);
+        paint.setStrokeWidth(12f);
         distance =0;
 
     }

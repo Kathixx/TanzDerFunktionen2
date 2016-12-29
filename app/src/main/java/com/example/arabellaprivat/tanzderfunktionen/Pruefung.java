@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Kathi on 09.12.2016.
  * enthält alle Methoden, die für die Prüfung der gezeichneten Funktion mit der original Funktion notwendig sind
@@ -23,6 +25,9 @@ public class Pruefung {
     private Hilfspunkte h;
     /** Levelanzeige */
     private int x;
+
+    /** Array mit den aktuellen Werten der Funktion */
+    private float[] parameters;
 
 
     /**
@@ -45,7 +50,7 @@ public class Pruefung {
     */
 
 
-    int check(int level) {
+    int check(int level, float [] fl, TextView text) {
         double xWert;
         double yWert;
         // index i wird fortlaufend hochgezählt, bis zum Ende der Liste
@@ -55,31 +60,45 @@ public class Pruefung {
         // Zähler zählt richtige Vergleiche des gezeichneten und berechneten Wert
         int counter=0;
 
-        //TODO nur wenn Extremstellen-Check positiv ist, dann wird weiter geprüft
-        // TODO hier harcoding: Nullstellen aus Level 1: (-4/0)
-        if (comparePoints(convertViewToBitmap(z),-4,0)) {
+        // aktuelle Werte aus der Klasse Spiele holen
+        parameters=fl;
+        //Parameter zuweisen
+        float a=parameters[0];
+        float b=parameters[1];
+        float c= parameters[2];
+        float d=parameters [3];
+        //TODO casten wegmachen?
+        int n1= (int)parameters[4];
+        int  n2= (int)parameters[5];
+        int t= (int)parameters[6];
+        text.setText(a+" | "+b+" | "+c+" | "+d+" | "+n1+" | "+n2+" | "+t);
+        // Nullstellen und Achsenabschnitte überprüfen ob diese richtig gezeichnet wurden
+        if ( compareSpecialPoints(n1,0)&&compareSpecialPoints(n2,0)&&compareSpecialPoints(0,t)) {
+            //restliche Werte der Funktion mit dem Graphen vergleichen, inklusive Toleranzgrenze
             while (index < listLength) {
                 // x-Wert aus der Liste auslesen
                 xWert = (listeX.get(index));
                 // in x-Koordinaten-Werte umwandeln
                 xWert = pixelToCoordinate(xWert, z, 10);
                 // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
-                // TODO VICKY + ARABELLA: wie liest man das Level aus??
                 switch (level) {
                     case 1:
-                        yWert = linearFunction(xWert);
+                        // allgemeine Funktion a*x+b also zwei Parameter übergeben
+                       yWert = linearFunction(xWert, a, b);
                         break;
                     case 2:
-                        yWert = quadratFunction(xWert);
+                        //allgemeine Funktion ax^2+bx+c also drei Parameter übergeben
+                        yWert = quadratFunction(xWert, a,b,c);
                         break;
                     case 3:
+
                         yWert = rationalFunction(xWert);
                         break;
                     case 4:
-                        yWert= trigonometricFunction(xWert);
+                        yWert= trigonometricFunction(xWert, a,b,c,d);
                         break;
                     case 5:
-                        yWert= logarithmicFunction(xWert);
+                        yWert= logarithmicFunction(xWert, a,b,c,d);
                         break;
                     default:
                         yWert = 0;
@@ -108,24 +127,23 @@ public class Pruefung {
 
 
     /**
+     * lineare Fuktion allgemein: f(x)= m*x+t= a*x+b
      * lineare Funktion: f(x)=0,5x+2
      * hier könnte man eventuell vorgegeben Werte auch aus Datenbank auslesen?
      * @param x zu berechneter x-Wert in Koordinaten-Angaben
      * @return yWert berechneter y-Wert
      */
-    private double linearFunction (double x){
-        // TODO VICKY auslesen aus der Liste
-        // Daten evtl. aus Datenbank auslesen
-        double yWert=(0.5*x)+2;
+    private double linearFunction (double x, float  a, float b){
+        double yWert=(a*x)+b;
         return  round(yWert);
     }// Ende linearFunction()
 
     /**
+     * allgemein: a*x^2+bx+c
      * quadratische Funktion: 0.25*x^2+1x-4
-     * Todo Vicky Datenbank auslesen
      */
-    private double quadratFunction (double x){
-        double yWert=(0.25*x*x)+x-4;
+    private double quadratFunction (double x, float a, float b, float c){
+        double yWert=(a*x*x)+b*x-c;
         return round(yWert);
     }
 
@@ -138,24 +156,22 @@ public class Pruefung {
         return round(yWert);
     }
 
-    /**
+    /** allgemeine Funktion: a*sin(bx+x)+d
      * trigonometrische Funktion: 3cos(x+1)
-     * TODO VICKY Datenbank auslesen
      * TODO bei cosinus muss in der Tabelle bereits ein Parameter mit -90 sein, sodass man mit Sinus rechnen kann!
      */
-    private double trigonometricFunction (double x){
-        //double yWert = 3*Math.sin(x+1);
-        double yWert = 3*Math.cos(x+1);
+    private double trigonometricFunction (double x, float a, float b, float c, float d){
+        double yWert = a*Math.sin(b*x+c)+d;
         return round (yWert);
     }
 
     /**
+     * allgemeine Funktion: a*ln(bx+c)+d
      * logharitmische Funktionen: ln(x+5)
-     * TODO VICKY Datenbank auslesen
      * TODO welche anderen logharitmischen FUnktion gibt es noch? wie könnte man die miteinander vereinbaren?
      */
-    private double logarithmicFunction (double x){
-        double yWert= Math.log(x+5);
+    private double logarithmicFunction (double x, float a, float b, float c, float d){
+        double yWert= a*Math.log(b*x+c)+d;
         return round (yWert);
     }
 
@@ -266,4 +282,9 @@ public class Pruefung {
          return  (pixel==-16777216);
     }
 
+    private boolean compareSpecialPoints(int x, int y){
+        // wenn es beispielsweise nur eine Nullstelle gibt, steht in der LIste der Wert 99 drin, dann soll dies automatisch auf true also ungewertet bleiben
+        if (x==99||y==99)return true;
+        else return comparePoints(convertViewToBitmap(z),x,y);
+    }
 }

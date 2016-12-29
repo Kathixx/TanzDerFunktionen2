@@ -12,11 +12,13 @@ import android.widget.TextView;
  */
 public class Info extends AppCompatActivity {
 
+
     /** zeigt den Hilfetext an */
     private TextView t_help;
     /** schließt die Activity */
     private Button b_close;
     private int level;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +38,9 @@ public class Info extends AppCompatActivity {
         Intent i = getIntent();
         Bundle b = i.getExtras();
 
-        // Hilfetext ausgeben
-        if(level == 1)
-            t_help.setText("Erinnerst Du Dich an die Funktion der Parameter m und b in f(x)=mx+b? m steht für die Steigung und b für den Schnittpunkt mit der y-Achse.");
-        else if(level == 2)
-            t_help.setText("Alles, was Du tun musst ist, den Scheitelpunkt und die Verschiebung abzulesen.");
-        else if(level == 3)
-            t_help.setText("Wie verhält sich der Graph für lim x->0?");
-        else if(level == 4)
-            t_help.setText("Die allgemeine Form dieser Funktion lautet: f(x) = a * sin(b * (x+c)) + d Was geben die Parameter an? a: Vergrößerung bzw. Verkleinerung der Amplitude b: Steckung / Stauchung / Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse");
-        else if(level == 5)
-            t_help.setText("Weißt du noch in welchem Punkt sich alle log-Funktionen schneiden?");
-
+        // entsprechende Info zum jeweiligen Level wird aus der Klasse Spiel übergeben
+        // TODO static Instanzen und Methoden non-static machen!!
+        t_help.setText(Spiel.getInfo());
 
         b_close.setOnClickListener(new View.OnClickListener() {
             @Override
