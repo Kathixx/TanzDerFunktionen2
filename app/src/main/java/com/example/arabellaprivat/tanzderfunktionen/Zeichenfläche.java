@@ -124,7 +124,7 @@ public class Zeichenfläche extends View {
 
 
 
-    public void loescheView(){
+    public void deleteView(){
         path.reset();
         invalidate();
         index=0;
