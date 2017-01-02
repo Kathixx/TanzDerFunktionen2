@@ -69,10 +69,9 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/check"
+        android:layout_below="@+id/zeichenfläche"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textAllCaps="false" />
 
     <Button
