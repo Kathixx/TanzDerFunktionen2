@@ -145,11 +145,9 @@ public class Spiel extends AppCompatActivity {
                 // Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
                 // werden unterschiedliche Aktionen von diesem Button hervorgerufen
                 // die Zeichenfläche die Sichtbar ist wird geleert
-<<<<<<< HEAD
+
                 if (z.getVisibility()==View.INVISIBLE)h.deleteLast();
-=======
-                if (z.getVisibility()==View.INVISIBLE)h.deleteView();
->>>>>>> origin/master
+
                 else z.deleteView();
             }
         });
