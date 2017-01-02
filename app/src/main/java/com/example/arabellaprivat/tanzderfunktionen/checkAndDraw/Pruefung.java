@@ -1,11 +1,8 @@
-package com.example.arabellaprivat.tanzderfunktionen;
+package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 /**
  * Created by Kathi on 09.12.2016.
@@ -33,7 +30,7 @@ public class Pruefung {
     /**
      *Constructor
      */
-    Pruefung (Zeichenfläche zf, Hilfspunkte hp){
+    public Pruefung(Zeichenfläche zf, Hilfspunkte hp){
         z=zf;
         h=hp;
         listeX=z.getListX();
@@ -50,7 +47,7 @@ public class Pruefung {
     */
 
 
-    int check(int level, float [] fl, TextView text) {
+    public int check(int level, float [] fl, TextView text) {
         double xWert;
         double yWert;
         // index i wird fortlaufend hochgezählt, bis zum Ende der Liste

@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen;
+package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.arabellaprivat.tanzderfunktionen.R;
+
 import java.util.ArrayList;
 
 /**
@@ -79,6 +82,18 @@ public class Bewertung extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * regelt das Verhalten der Activity für den Fall dass sie wieder aufgerufen wird
+     */
+    /*@Override
+    public void onPause(){
+        super.onPause();
+        Log.v(LOG_TAG, "Callback-Methode: onPause()");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }*/
+
     // Visualisierung der Punkte wie in der Activity Spiel
     /**
      * koordiniert das Zeichnen der Punkteanzeige
@@ -138,8 +153,11 @@ public class Bewertung extends AppCompatActivity {
     }
 
     public void sendMessage(View view){
-        if(view.getId() == R.id.restart) {
+        if(view.getId() == R.id.restart)
             startActivity(new Intent(this, MainActivity.class));
-        }
-}
+    }
+
+    // disable Back-Button
+    @Override
+    public void onBackPressed(){}
 }

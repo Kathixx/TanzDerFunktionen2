@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.arabellaprivat.tanzderfunktionen.Spiel">
+    tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Spiel">
 
     <TextView
         android:id="@+id/functionText"
@@ -42,16 +42,6 @@
         android:textAllCaps="false"
         android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/level"
-        android:text="Level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp" />
-
     <Button
         android:id="@+id/delete"
         android:text="Löschen"
@@ -82,8 +72,8 @@
         android:layout_above="@+id/check"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="75dp"
-        android:textSize="15sp"
-        android:textAllCaps="true" />
+        android:textSize="24sp"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/next"
@@ -95,16 +85,7 @@
         android:textSize="25sp"
         android:textAllCaps="false" />
 
-    <ImageView
-        android:id="@+id/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:layout_below="@+id/functionText"
-        android:layout_alignParentStart="true"
-         />
-
-    <com.example.arabellaprivat.tanzderfunktionen.Hilfspunkte
+    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte
         android:id="@+id/hilfspunkte"
         android:layout_width="568px"
         android:layout_height="400px"
@@ -113,7 +94,7 @@
         android:layout_below="@+id/menu"
         android:layout_marginTop="25dp" />
 
-    <com.example.arabellaprivat.tanzderfunktionen.Zeichenfläche
+    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche
         android:id="@+id/zeichenfläche"
         android:layout_width="568px"
         android:layout_height="400px"
@@ -133,6 +114,24 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp" />
+
+    <TextView
+        android:id="@+id/level"
+        android:text="Level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/fragment" />
+
+    <ImageView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/functionText"
+        android:layout_alignStart="@+id/level" />
 
 
 </RelativeLayout>

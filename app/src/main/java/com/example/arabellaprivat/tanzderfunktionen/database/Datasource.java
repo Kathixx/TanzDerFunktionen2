@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen;
+package com.example.arabellaprivat.tanzderfunktionen.database;
 
 import android.content.Context;
 import android.database.Cursor;

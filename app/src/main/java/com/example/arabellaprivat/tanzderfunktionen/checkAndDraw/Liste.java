@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen;
+package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
 import java.util.ArrayList;
 
@@ -6,11 +6,11 @@ import java.util.ArrayList;
  * Created by Kathi on 10.11.2016.
  */
 
-class StringListe extends ArrayList <String>  {
+class Liste extends ArrayList <Float> {
 
 
     /** Constructor */
-    StringListe(){
+    Liste (){
     };
 
     /*
@@ -27,7 +27,7 @@ class StringListe extends ArrayList <String>  {
      * gibt Liste zurück
      * @return Liste
      */
-    public StringListe getList (){
+    public Liste getList (){
         return this;
     }
 }

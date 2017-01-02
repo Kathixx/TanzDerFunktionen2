@@ -8,41 +8,39 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.arabellaprivat.tanzderfunktionen.Menu">
+    tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Menu">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <Button
+            android:text="X"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/close"
+            android:textSize="36sp" />
+
+        <TextView
+            android:text="Levelauswahl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="68dp"
+            android:id="@+id/u_levelauswahl"
+            android:textSize="50sp"
+            android:textAlignment="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:text="X"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:id="@+id/close"
-                    android:textSize="36sp" />
-
-                <TextView
-                    android:text="Levelauswahl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="68dp"
-                    android:id="@+id/u_levelauswahl"
-                    android:textSize="50sp"
-                    android:textAlignment="center" />
-            </RelativeLayout>
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/list">
 
             <Button
                 android:text="Lineare Funktionen"
@@ -97,16 +95,18 @@
                 android:textAllCaps="false" />
 
         </LinearLayout>
-    </ScrollView>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/u_levelauswahl"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="186dp">
+        <Button
+            android:text="Home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="82dp"
+            android:id="@+id/home"
+            android:textAllCaps="false"
+            android:textSize="36sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

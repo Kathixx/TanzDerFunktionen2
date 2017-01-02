@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen;
+package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
 import android.content.Context;
 import android.graphics.Canvas;

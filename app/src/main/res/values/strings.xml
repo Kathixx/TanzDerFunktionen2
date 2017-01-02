@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TanzDerFunktionen</string>
+    <string name="t1">Tipp1</string>
+    <string name="t2">Tipp2</string>
 </resources>

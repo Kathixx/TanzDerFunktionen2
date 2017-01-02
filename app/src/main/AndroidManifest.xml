@@ -8,18 +8,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Anleitung" />
-        <activity android:name=".Spiel" />
-        <activity android:name=".Info" />
-        <activity android:name=".Menu" />
-        <activity android:name=".Bewertung" />
+        <activity android:name=".activities.Anleitung" />
+        <activity android:name=".activities.Spiel" />
+        <activity android:name=".activities.Info" />
+        <activity android:name=".activities.Menu" />
+        <activity android:name=".activities.Bewertung" />
     </application>
 
 </manifest>
