@@ -7,11 +7,12 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**Klasse Datasource
- *->Datenquelle
- *hält die Verbindung zur Datenbank aufrecht
- *fragt Referenz zu dem Datenbankobjekt an
- *startet Erstellungsprozess der Tabelle
+/**
+ * Klasse Datasource
+ * ->Datenquelle
+ * hält die Verbindung zur Datenbank aufrecht
+ * fragt Referenz zu dem Datenbankobjekt an
+ * startet Erstellungsprozess der Tabelle
  * erstellt Listen mit Datensätzen
  */
 public class Datasource {
