@@ -122,8 +122,7 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:layout_marginLeft="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/fragment" />
+        android:layout_alignParentTop="true" />
 
     <ImageView
         android:id="@+id/score"
