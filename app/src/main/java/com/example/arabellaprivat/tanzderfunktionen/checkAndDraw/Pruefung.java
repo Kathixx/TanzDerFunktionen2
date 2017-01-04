@@ -88,8 +88,9 @@ public class Pruefung {
                         yWert = quadratFunction(xWert, a,b,c);
                         break;
                     case 3:
-
-                        yWert = rationalFunction(xWert);
+                        // hier nicht allgemeine Funktion, sondern angepasst an unsere Funktion: (3)/(x-2)+1
+                        // da allgemeine Funktion: rationale Funktion/rationale Funktion
+                        yWert = rationalFunction(xWert, a,b,c,d);
                         break;
                     case 4:
                         yWert= trigonometricFunction(xWert, a,b,c,d);
@@ -145,17 +146,19 @@ public class Pruefung {
     }
 
     /**
+     * allgemein: rationale Funktion /rationale funktion
+     * hier auf unsere Funktion angepasst
      * gebrochenrationale Funktion: (3)/(x-2)+1
-     * TODO VICKY Datenbank auslesen
+     *
      */
-    private double rationalFunction (double x) {
-        double yWert = 3/(x-2)+1;
+    private double rationalFunction (double x, float a, float b, float c, float d) {
+        double yWert = a/(b*x-c)+d;
         return round(yWert);
     }
 
     /** allgemeine Funktion: a*sin(bx+x)+d
      * trigonometrische Funktion: 3cos(x+1)
-     * TODO bei cosinus muss in der Tabelle bereits ein Parameter mit -90 sein, sodass man mit Sinus rechnen kann!
+     * Cosinus wird erreicht, indem in die Datenbank der Wert des sinus um 90 reduziert wird
      */
     private double trigonometricFunction (double x, float a, float b, float c, float d){
         double yWert = a*Math.sin(b*x+c)+d;

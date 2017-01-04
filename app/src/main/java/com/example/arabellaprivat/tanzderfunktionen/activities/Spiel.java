@@ -193,7 +193,7 @@ public class Spiel extends AppCompatActivity {
 				if (p.check(level,para, t_result)==1){
 					 t_result.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
 					 levelpoints.set(level,1);}
-                else{
+              /*  else{
                     if (p.check(level,para,t_result)==-1)
                         t_result.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
                          "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
@@ -201,7 +201,7 @@ public class Spiel extends AppCompatActivity {
                     else t_result.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
                             "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
                     levelpoints.set(level,0);
-                }
+                }*/
 
                 // Button, der zum nächsten Level führt wird sichtbar
                 b_next.setVisibility(View.VISIBLE);
