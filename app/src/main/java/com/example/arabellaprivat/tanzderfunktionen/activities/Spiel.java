@@ -66,8 +66,8 @@ public class Spiel extends AppCompatActivity {
     // temporäres Array, in dem die Texte des jeweiligen Levels gespeichert werden
     static String [] text;
     // temporäres Array, in dem alle WErte des jeweiligen Levels gespeichert werden
-    private float [] parameters;
-    static float [] para;
+    private double [] parameters;
+    static double [] para;
 
 
     @Override
@@ -101,8 +101,8 @@ public class Spiel extends AppCompatActivity {
         float_list= MainActivity.returnFloatList();
         string_list=MainActivity.returnStringList();
         text= new String [3];
-        parameters= new float [7];
-        para= new float [7];
+        parameters= new double [7];
+        para= new double [7];
 
 
 
@@ -178,7 +178,7 @@ public class Spiel extends AppCompatActivity {
         b_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Pruefung p= new Pruefung(z, h);
+                Pruefung p = new Pruefung(z, h);
                 // ändere die Anzeige des Buttons
                 // Löschen und Prüfen Button verschwinden
                 b_delete.setVisibility(View.INVISIBLE);
@@ -188,20 +188,19 @@ public class Spiel extends AppCompatActivity {
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
-				
-				// richtig und falsch anzeigen
-				if (p.check(level,para, t_result)==1){
-					 t_result.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
+
+                // richtig und falsch anzeigen
+				if (p.check(level,para, t_result)>0){
+					 t_result.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!"+String.valueOf(p.check(level, para, t_result)));
 					 levelpoints.set(level,1);}
-              /*  else{
-                    if (p.check(level,para,t_result)==-1)
-                        t_result.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
-                         "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
+                else{
+                    if (p.check(level,para,t_result)==-1) t_result.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
+                            "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!"+String.valueOf(p.check(level, para, t_result)));
 
                     else t_result.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
-                            "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
-                    levelpoints.set(level,0);
-                }*/
+                                    "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!"+String.valueOf(p.check(level, para, t_result)));
+                levelpoints.set(level, 0);
+                }
 
                 // Button, der zum nächsten Level führt wird sichtbar
                 b_next.setVisibility(View.VISIBLE);

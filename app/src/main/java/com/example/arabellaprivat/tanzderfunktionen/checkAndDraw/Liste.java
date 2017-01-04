@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Kathi on 10.11.2016.
  */
 
-class Liste extends ArrayList <Float> {
+class Liste extends ArrayList <Double> {
 
 
     /** Constructor */

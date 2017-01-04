@@ -24,7 +24,7 @@ public class Pruefung {
     private int x;
 
     /** Array mit den aktuellen Werten der Funktion */
-    private float[] parameters;
+    private double[] parameters;
 
 
     /**
@@ -47,7 +47,7 @@ public class Pruefung {
     */
 
 
-    public int check(int level, float [] fl, TextView text) {
+    public int check(int level, double [] fl, TextView text) {
         double xWert;
         double yWert;
         // index i wird fortlaufend hochgezählt, bis zum Ende der Liste
@@ -60,17 +60,16 @@ public class Pruefung {
         // aktuelle Werte aus der Klasse Spiele holen
         parameters=fl;
         //Parameter zuweisen
-        float a=parameters[0];
-        float b=parameters[1];
-        float c= parameters[2];
-        float d=parameters [3];
-        //TODO casten wegmachen?
-        int n1= (int)parameters[4];
-        int  n2= (int)parameters[5];
-        int t= (int)parameters[6];
-        text.setText(a+" | "+b+" | "+c+" | "+d+" | "+n1+" | "+n2+" | "+t);
+        double a=parameters[0];
+        double b=parameters[1];
+        double c= parameters[2];
+        double d=parameters [3];
+        double n1= parameters[4];
+        double  n2= parameters[5];
+        double t= parameters[6];
+        //text.setText(a+" | "+b+" | "+c+" | "+d+" | "+n1+" | "+n2+" | "+t);
         // Nullstellen und Achsenabschnitte überprüfen ob diese richtig gezeichnet wurden
-        if ( compareSpecialPoints(n1,0)&&compareSpecialPoints(n2,0)&&compareSpecialPoints(0,t)) {
+        if ( compareSpecialPoints(n1,0, text) &&compareSpecialPoints(n2,0, text)&&compareSpecialPoints(0,t, text)) {
             //restliche Werte der Funktion mit dem Graphen vergleichen, inklusive Toleranzgrenze
             while (index < listLength) {
                 // x-Wert aus der Liste auslesen
@@ -112,14 +111,16 @@ public class Pruefung {
             }
             // je nach dem wie viele Vergleiche richtig sind wird der gezeichnete Pfad akzeptiert
             // falls richtig wird 1 zurückgegeben
-            if (counter > 8)return 1;
-            // sind die Nullstellen, Extremas, Achsenabschnitt ect richtig und ist nur ungenau gezeichnet worden
+            if (counter > 8)return counter;
+            // sind die Nullstellen, Extremas, Achsenabschnitt ect richtig und ist NUR UNGENAU GEZEICHNET worden
             // dann ist es leider trotzdem falsch und es wird -2 zurückgegeben
-            else return -2;
+            else return counter;//-2;
+
 
         }
-        // wenn die Nullstellen, Extremas und Achsenabschnitt nicht richtig gezeichnet wurden wird -1 zurückgegeben
+        // wenn die Nullstellen, Extremas und Achsenabschnitt NICHT richtig gezeichnet wurden wird -1 zurückgegeben
         else return -1;
+
 
     }
 
@@ -131,7 +132,7 @@ public class Pruefung {
      * @param x zu berechneter x-Wert in Koordinaten-Angaben
      * @return yWert berechneter y-Wert
      */
-    private double linearFunction (double x, float  a, float b){
+    private double linearFunction (double x, double  a, double b){
         double yWert=(a*x)+b;
         return  round(yWert);
     }// Ende linearFunction()
@@ -140,9 +141,9 @@ public class Pruefung {
      * allgemein: a*x^2+bx+c
      * quadratische Funktion: 0.25*x^2+1x-4
      */
-    private double quadratFunction (double x, float a, float b, float c){
-        double yWert=(a*x*x)+b*x-c;
-        return round(yWert);
+    private double quadratFunction (double x, double a, double b, double c){
+        double yWert=(a*x*x)+b*x+c;
+        return round (yWert);
     }
 
     /**
@@ -151,8 +152,8 @@ public class Pruefung {
      * gebrochenrationale Funktion: (3)/(x-2)+1
      *
      */
-    private double rationalFunction (double x, float a, float b, float c, float d) {
-        double yWert = a/(b*x-c)+d;
+    private double rationalFunction (double x, double a, double b, double c, double d) {
+        double yWert = a/(b*x+c)+d;
         return round(yWert);
     }
 
@@ -160,7 +161,7 @@ public class Pruefung {
      * trigonometrische Funktion: 3cos(x+1)
      * Cosinus wird erreicht, indem in die Datenbank der Wert des sinus um 90 reduziert wird
      */
-    private double trigonometricFunction (double x, float a, float b, float c, float d){
+    private double trigonometricFunction (double x, double a, double b, double c, double d){
         double yWert = a*Math.sin(b*x+c)+d;
         return round (yWert);
     }
@@ -170,8 +171,9 @@ public class Pruefung {
      * logharitmische Funktionen: ln(x+5)
      * TODO welche anderen logharitmischen FUnktion gibt es noch? wie könnte man die miteinander vereinbaren?
      */
-    private double logarithmicFunction (double x, float a, float b, float c, float d){
+    private double logarithmicFunction (double x, double a, double b, double c, double d){
         double yWert= a*Math.log(b*x+c)+d;
+
         return round (yWert);
     }
 
@@ -191,11 +193,11 @@ public class Pruefung {
         double xWert;
         // Liest die maximalen Pixelwerte des Views zurück
         //float maxXPixel = v. getRight-getLeft??
-        float widthView=z.getRight()-z.getLeft();
+        double widthView=z.getRight()-z.getLeft();
         // Länge von x=0 bis x=xMax
-        float halfView=widthView/2;
+        double halfView=widthView/2;
         // LängenMaß einer Koordinate
-        float stepPixels= widthView/(2*xMax);
+        double stepPixels= widthView/(2*xMax);
         xWert=(pixel-halfView)/stepPixels;
         return  round(xWert);
     }// Ende pixelToCoordinate
@@ -222,10 +224,10 @@ public class Pruefung {
      * @param yMax
      * @return
      */
-    private double coordinateToPixel (double coordinate, Zeichenfläche z, float yMax){
+    private double coordinateToPixel (double coordinate, Zeichenfläche z, double yMax){
         double yWert;
-        float widthView=z.getBottom()-z.getTop();
-        float stepPixels=widthView/(2*yMax);
+        double widthView=z.getBottom()-z.getTop();
+        double stepPixels=widthView/(2*yMax);
         coordinate=yMax-coordinate;
         yWert=coordinate*stepPixels;
         return yWert;
@@ -233,11 +235,11 @@ public class Pruefung {
 
 
     //berechnet x Koordinate
-    private double xCoordinateToPixel (double coordinate, Zeichenfläche z, float xMax){
+    private double xCoordinateToPixel (double coordinate, Zeichenfläche z, double xMax){
         double xWert;
-        float widthView=z.getRight()-z.getLeft();
+        double widthView=z.getRight()-z.getLeft();
         // nach wie vielen Pixeln kommt 1 x Wert
-        float stepPixels=widthView/(2*xMax);
+        double stepPixels=widthView/(2*xMax);
         coordinate=xMax+coordinate;
         xWert=coordinate*stepPixels;
         return xWert;
@@ -246,22 +248,22 @@ public class Pruefung {
     /** Methode compare()
      * vergleicht den mitgegebenen Wert, mit dem Wert an ensprechender Stelle in der Liste
      * in Pixel-Werten
-     * @param d  zu vergleichender Wert (berechnet)
+     * @param f  zu vergleichender Wert (berechnet)
      * @param l  Liste, in der Vergleichswerte gespeichert sind
      * @param index Stelle in der Liste, an der Vergleichswert steht
      * @return true falls Vergleich der zwei Werte übereinstimmt
      */
-    private boolean compare (double d, Liste l, int index){
+    private boolean compare (double f, Liste l, int index){
         double tolerance=15;
-        float compareValue=l.get(index);
-        if (d>=compareValue-tolerance && d<=compareValue+tolerance ) return true;
-        else return false;
+        double compareValue=l.get(index);
+        return (f>=compareValue-tolerance && f<=compareValue+tolerance );
     }//Ende compare
 
-//TODO  Umwandlung von View zu Bitmap
 
     /** Methode
-     * wandelt View in eine Bitmap um
+     * wandelt View inklusive gezeichneten Graph in eine Bitmap um
+     * Koordinatensystem ist dabei nicht enthalten, da Koordinatensystem als Hintergrund des Hilfspunkt-Views hinterlegt ist!
+     * d.h. Bitmap besteht aus lediglich weißen/transparenten Hintergrund und einer/mehrerer schwarzer Linien
      * @param v View die umgewandelt werden soll
      * @return Bitmap
      */
@@ -272,19 +274,53 @@ public class Pruefung {
         return map=v.getDrawingCache();
     }
 
-    boolean comparePoints (Bitmap map, int x, int y){
-        int  xVergleichswert=  (int)xCoordinateToPixel(x, z, 10);
-        int yVergleichswert=  (int)coordinateToPixel(y, z, 6);
-        int pixel=map.getPixel(xVergleichswert, yVergleichswert);
+    /** Methode die zwei Punkte zwischen dem gezichneten Pfad als Bitmap und dem original Pfad vergleicht
+     * gezeichneter Pfad wird dabei als Bitmap umgewandelt
+     * @param map Bitmap die aus dem gezeichneten Pfad entstanden ist
+     * @param x  x-Wert in Koordinatenangaben an dem überpüft werden soll
+     * @param y  y-Wert in Koordinatenangaben an dem überpüft werden soll
+     * @return blackPixel true wenn Pixel an gewünschter STelle schwarz ist, also der gezeichnete Graph über gewünschte Stelle verläuft
+     */
+    boolean compareBitmapPoints (Bitmap map, double x, double y, TextView t){
+        boolean blackPixel=false;
+        double tolerance=5;
+        // berechnete bzw. in der Datenbank stehende Koordinatenwerte werden zum weiteren Vergleich in Pixelwerte umgerechnet
+        double  xVergleichswert=  xCoordinateToPixel(x, z, 10);
+        double yVergleichswert=  coordinateToPixel(y, z, 6);
+
+        //Kontrolle
+        //String s="X-WErt: "+x+" Y-Wert: "+y+" ausgerechnete Pixel x: "+ xVergleichswert+" ausgerechnete Pixel y: "+yVergleichswert;
+
+        // Toleranzbereich für Kontrollzone
+        // d.h. nicht nur an exakt berechneten Pixelwert wird kontrolliert ob der Pfad gezeichnet wurde, also die Pixel schwarz sind
+        // sondern auch im nahen Bereich um den genauen Pixelwert herum
+        for (double i=xVergleichswert-tolerance; i<=xVergleichswert+tolerance; i++){
+            for (double j= yVergleichswert-tolerance; j<=yVergleichswert+tolerance; j++){
+                // der Farbwert, der die Bitmap an den zuvor berechneten Pixelwerten hat, wird ausgelesen
+                int pixel=map.getPixel((int)i, (int)j);
+                // Überprüfung, ob an der gewünschten Stelle die Pixel schwarz sind, d.h. dort wurde gezeichnet
+                //Wert 0xff000000 entspricht der Farbe Schwarz -16777216
+                if (pixel==-16777216) blackPixel=true;
+                //Kontrolle
+                //s+=blackPixel;
+            }
+        }
         // Kontrolle
-        // t.setText("X-WErt: "+x+" Y-Wert: "+y+" ausgerechnete Pixel x: "+ xVergleichswert+" ausgerechnete Pixel y: "+yVergleichswert+" Farbwert: "+pixel);
-        //Wert 0xff000000 entspricht der Farbe Schwarz -16777216
-         return  (pixel==-16777216);
+         //t.setText(s);
+       return  blackPixel;
     }
 
-    private boolean compareSpecialPoints(int x, int y){
-        // wenn es beispielsweise nur eine Nullstelle gibt, steht in der LIste der Wert 99 drin, dann soll dies automatisch auf true also ungewertet bleiben
+
+    /** Methode die Nullstellen und Achsenabschnitt überprüft
+     *
+     * @param x  x-Wert in Koordinatenangaben der verglichen werden soll
+     * @param y  y-Wert in Koordinatenangaben der verglichen werden soll
+     * @return true, falls Vergleich richtig ist
+     */
+    private boolean compareSpecialPoints(double x, double y, TextView t){
+        // wenn es beispielsweise nur eine Nullstelle gibt, steht in der Liste der Wert 99 drin, dann soll dies automatisch auf true also ungewertet bleiben
         if (x==99||y==99)return true;
-        else return comparePoints(convertViewToBitmap(z),x,y);
+        // übergeben wird die Zeichenfläche, die zuvor noch zu einer Bitmap umgewandelt wird und die zwei Koordinatenwerte
+        else return compareBitmapPoints(convertViewToBitmap(z),x,y, t);
     }
 }

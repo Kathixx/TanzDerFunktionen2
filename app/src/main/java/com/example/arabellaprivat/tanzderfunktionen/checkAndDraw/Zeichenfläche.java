@@ -46,7 +46,7 @@ public class Zeichenfläche extends View {
         paint.setColor(Color.BLACK);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(12f);
+        paint.setStrokeWidth(10);
         distance =0;
 
     }
@@ -105,9 +105,10 @@ public class Zeichenfläche extends View {
             // x-WErt wird durch step vorgegeben
             //FRAGE: Path beginnt nciht immer gleich, x-Wert richtet sich an gemalten path nicht am koordniatensystem!?
             // xPixel einspeicher
-            listX.add (index, pos [0]);
+            // TODO casten weg
+            listX.add (index, (double)pos [0]);
             //yPixel einspeichern
-            listY.add(index, pos[1]);
+            listY.add(index, (double)pos[1]);
             index++;
             distance +=step;
         }
