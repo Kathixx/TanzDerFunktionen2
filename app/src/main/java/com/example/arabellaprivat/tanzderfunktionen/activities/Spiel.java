@@ -1,5 +1,6 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Pruefung;
@@ -171,6 +173,13 @@ public class Spiel extends AppCompatActivity {
                 b_check.setVisibility(View.VISIBLE);
                 // Text ausblenden
                 t_result.setVisibility(View.INVISIBLE);
+
+                //Toast als Hinweis, dass nun der Funktionsgraph eingezeichnet werden soll
+                Context context = getApplicationContext();
+                CharSequence text = "Zeichne jetzt den Funktionsgraph ein.";
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         });
 
@@ -192,6 +201,7 @@ public class Spiel extends AppCompatActivity {
                 // richtig und falsch anzeigen
 				if (p.check(level,para, t_result)>0){
 					 t_result.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!"+String.valueOf(p.check(level, para, t_result)));
+                     z.redrawInColor(Color.GREEN);
 					 levelpoints.set(level,1);}
                 else{
                     if (p.check(level,para,t_result)==-1) t_result.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
@@ -199,6 +209,7 @@ public class Spiel extends AppCompatActivity {
 
                     else t_result.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
                                     "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!"+String.valueOf(p.check(level, para, t_result)));
+                    z.redrawInColor(Color.RED);
                 levelpoints.set(level, 0);
                 }
 

@@ -1,6 +1,8 @@
 package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -111,17 +113,22 @@ public class Pruefung {
             }
             // je nach dem wie viele Vergleiche richtig sind wird der gezeichnete Pfad akzeptiert
             // falls richtig wird 1 zurückgegeben
-            if (counter > 8)return counter;
+            if (counter > 8){
+                return counter;
+
+            }
             // sind die Nullstellen, Extremas, Achsenabschnitt ect richtig und ist NUR UNGENAU GEZEICHNET worden
             // dann ist es leider trotzdem falsch und es wird -2 zurückgegeben
-            else return counter;//-2;
+            else {
+                return counter;//-2;
 
-
+            }
         }
         // wenn die Nullstellen, Extremas und Achsenabschnitt NICHT richtig gezeichnet wurden wird -1 zurückgegeben
-        else return -1;
+        else {
+            return -1;
 
-
+        }
     }
 
 
