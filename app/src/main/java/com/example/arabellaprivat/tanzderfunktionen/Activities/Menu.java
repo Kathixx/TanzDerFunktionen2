@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,21 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+
+        /*TODO falls du magst könnten wir das Menü auch als Pop up gestalten
+        *
+        //Größe beeinflussen
+        DisplayMetrics dm= new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width =dm.widthPixels;
+        int heigth= dm.heightPixels;
+
+        getWindow().setLayout((int)(width*0.8),(int)(heigth*0.8));
+        */
+
+
+
         // Intent, das diese Activity geöffnet hat holen
         Intent i_old = getIntent();
         Bundle b_old = i_old.getExtras();
@@ -59,18 +75,6 @@ public class Menu extends AppCompatActivity {
         b_close = (Button) findViewById(R.id.close);
         b_home = (Button) findViewById(R.id.home);
 
-        // We need to get the instance of the LayoutInflater
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
-        w_unallowed_choice = new PopupWindow(layout, 300, 370, true);
-
-        b_ok = (Button) layout.findViewById(R.id.ok);
-        b_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                w_unallowed_choice.dismiss();
-            }
-        });
 
 
 

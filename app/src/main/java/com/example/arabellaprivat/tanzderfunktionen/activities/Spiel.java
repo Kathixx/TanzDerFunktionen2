@@ -23,6 +23,9 @@ import java.util.ArrayList;
 
 /**
  * hier fidet das Spiel / das Zeichnen statt
+ *
+ * Quellen:
+ * Bundle   https://www.youtube.com/watch?v=KRN7EYvorZY
  */
 public class Spiel extends AppCompatActivity {
 
@@ -58,6 +61,12 @@ public class Spiel extends AppCompatActivity {
     private Hilfspunkte h;
     /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
     private Button b_draw;
+    /** zeigt an, ob das Level richtig oder Falsch ist*/
+    private TextView t_result2;
+    /** zeigt, wie viele Punkte man gesammelt hat */
+    private TextView t_points;
+    /** zeigt, die Erklärung an */
+    private TextView t_conclusion;
 
     /** Listen zum Auslesen aus der Datenbank */
     // float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionen
@@ -98,6 +107,9 @@ public class Spiel extends AppCompatActivity {
         z = (Zeichenfläche) findViewById(R.id.zeichenfläche);
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
         b_draw=(Button) findViewById(R.id.draw);
+        t_result2= (TextView)findViewById(R.id.Ergebnis);
+        t_points=(TextView)findViewById(R.id.Punkte);
+        t_conclusion=(TextView)findViewById(R.id.Erklärung);
 
         // Listen aus der Main Activity holen
         float_list= MainActivity.returnFloatList();
@@ -198,26 +210,89 @@ public class Spiel extends AppCompatActivity {
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
 
-                // richtig und falsch anzeigen
-				if (p.check(level,para, t_result)>0){
-					 t_result.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!"+String.valueOf(p.check(level, para, t_result)));
-                     z.redrawInColor(Color.GREEN);
-					 levelpoints.set(level,1);}
-                else{
-                    if (p.check(level,para,t_result)==-1) t_result.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
-                            "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!"+String.valueOf(p.check(level, para, t_result)));
+                int points=p.check(level,para);
 
-                    else t_result.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
-                                    "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!"+String.valueOf(p.check(level, para, t_result)));
-                    z.redrawInColor(Color.RED);
-                levelpoints.set(level, 0);
+                // Variablen für die visuelle und textuelle Ergebnisanzeige
+                String result2;
+                String conclusion;
+                int color;
+
+                // Ergebnistext je nach PUnktanzahl verändern
+                // macimal erreichte PUnktzahl in einem Level sind 45
+                // falsch gezeichnet
+                if (points<10){
+                    result2="Falsch!";
+                    conclusion="Leider hast du nicht gut genug gezeichnet. \n " +
+                            "Um ein Level zu bestehen, musst du mindestens 10 Punkte erreichen. \n" +
+                            "Leider hast du nur "+String.valueOf(points)+" Punkte erreicht." +
+                            "\n Du kannst trotzdem weiterspielen";
+                    // Rot
+                    color=Color.rgb(153,2,14);
                 }
+                else {
+
+                    if (points <= 20) {
+                        result2 = "Gerade nochmal gut gegangen!";
+                        conclusion = " Puh da hast du ja nochmal Glück gehabt. \n" +
+                                "Versuche das nächste Mal genauer zu zeichnen,\n" +
+                                " vielleicht helfen dir mehr Hilfspunkte am Anfang?" +
+                                " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
+                                "Auf ins nächste Level, dann kannst du noch mehr Punkte sammeln";
+                        // Orange
+                        color = Color.rgb(255, 127, 39);
+                    } else {
+                        if (points <= 30) {
+                            result2 = "Ganz ok";
+                            conclusion = " Das war doch gar nicht mal so schlecht \n" +
+                                    "Aber Übung macht den Meister! \n" +
+                                    "Du bekommst es das nächste Mal bestimmt noch etwas besser hin!" +
+                                    " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
+                                    "Ab ins nächste Level";
+                            // Gelb
+                            color = Color.rgb(255, 201, 14);
+                        } else {
+                            if (points <= 30) {
+                                result2 = "Gut gemacht!";
+                                conclusion = " Das war schon ziemlich gut! \n" +
+                                        "Glückwunsch, du konntest schon " + String.valueOf(points) + " Punkte sammeln. \n " +
+                                        "Schaffst du es im nächsten Level noch besser?";
+                                // hellgrün
+                                color = Color.rgb(181, 230, 29);
+                            } else {
+                                result2 = "Sehr gut";
+                                conclusion = " Bravo, du hast den Funktionsgraph ziemlich gut gezeichnet \n" +
+                                        "und konntest in diesem Level fabelhaft " + String.valueOf(points) + " Punkte erreichen. \n " +
+                                        "Beweise dich im neuen Level!";
+                                // Grün
+                                color = Color.rgb(34, 177, 76);
+                            }
+                        }
+                    }
+                }// Ende if-else
+                z.redrawInColor(color);
+                levelpoints.set(level, points);
+
+
+
 
                 // Button, der zum nächsten Level führt wird sichtbar
                 b_next.setVisibility(View.VISIBLE);
 
                 //  Korrekturbild soll über die Zeichnung gelegt werden
                 z.changeBackground(level);
+
+                // Pop-Up Window
+
+                Intent intent = new Intent(Spiel.this, Punkte.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("result2", result2);
+                bundle.putString("conclusion",conclusion);
+                bundle.putInt("color",color);
+                bundle.putInt("points",points);
+                intent.putExtras(bundle);
+                startActivity (intent);
+
+
             }
         });
 
