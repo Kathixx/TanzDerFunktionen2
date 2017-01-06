@@ -3,8 +3,10 @@ package com.example.arabellaprivat.tanzderfunktionen.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcelable;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -15,14 +17,14 @@ import java.util.ArrayList;
  * startet Erstellungsprozess der Tabelle
  * erstellt Listen mit Datensätzen
  */
-public class Datasource {
+public class Datasource  {
 
     private static final String LOG_TAG = Datasource.class.getSimpleName();
 
     private SQLiteDatabase database;
     private DatabaseHelper databaseHelper;
     private ArrayList<String> string_list = new ArrayList<String>();
-    private ArrayList<Float> float_list = new ArrayList<Float>();
+    private ArrayList<Float > float_list = new ArrayList<Float>();
 
     /* Konstruktor */
     public Datasource(Context context) {
@@ -112,6 +114,7 @@ public class Datasource {
             c.moveToNext();
         }
 
+        c.close();
 
         return float_list;
     }

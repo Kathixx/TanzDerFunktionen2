@@ -1,12 +1,15 @@
 package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Kathi on 10.11.2016.
  */
 
-class Liste extends ArrayList <Double> {
+class Liste extends ArrayList <Double> implements Serializable{
 
 
     /** Constructor */

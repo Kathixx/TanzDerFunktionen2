@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Pruefung;
 import com.example.arabellaprivat.tanzderfunktionen.R;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche;
+import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
 import java.util.ArrayList;
 
@@ -26,11 +29,11 @@ import java.util.ArrayList;
  *
  * Quellen:
  * Bundle   https://www.youtube.com/watch?v=KRN7EYvorZY
+ * DoubleClick: http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button
  */
 public class Spiel extends AppCompatActivity {
 
     // IV
-    MainActivity m;
     /** Info-Button */
     private Button b_info;
     /** Button zum Löschen der View */
@@ -79,7 +82,11 @@ public class Spiel extends AppCompatActivity {
     // temporäres Array, in dem alle WErte des jeweiligen Levels gespeichert werden
     private double [] parameters;
     static double [] para;
+    /** Zeitstempel für das Abfangen von DoppelKlick */
+    private long lastClick=0;
 
+    /** Media Player für Musik */
+    MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +125,11 @@ public class Spiel extends AppCompatActivity {
         parameters= new double [7];
         para= new double [7];
 
+        // MediaPlayer für Musik
+        mp= MediaPlayer.create(this, R.raw.pad_confirm);
+
+
+
 
 
         // Text reinschreiben
@@ -155,14 +167,25 @@ public class Spiel extends AppCompatActivity {
         b_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
                 // werden unterschiedliche Aktionen von diesem Button hervorgerufen
                 // die Zeichenfläche die Sichtbar ist wird geleert
-
-                if (z.getVisibility()==View.INVISIBLE)h.deleteLast();
-
+                if (z.getVisibility() == View.INVISIBLE) {
+                    // bei DoubleKlick werden alle Hilfspunkte gelöscht
+                    // elapsedRealtime() gibt die Sekunden (nano!) zurück, seid dem letzten boot
+                    // 500 gibt die Sekunden an inherhalb denen man doppelt geklickt haben muss
+                    if (SystemClock.elapsedRealtime() - lastClick < 500) {
+                        h.deleteView();
+                    }
+                    // bei einfachen Klick nur den letzten Hilfspunkt löschen
+                    else h.deleteLast();
+                }
+                // wenn man bereits beim Zeichnen ist,
+                // sollen die Hilfspunkte nicht mehr verändert werden
+                // nur der Graph soll gelöscht werden
+                // hier nur einfacher Klick möglich
                 else z.deleteView();
+                lastClick = SystemClock.elapsedRealtime();
             }
         });
 
@@ -265,6 +288,7 @@ public class Spiel extends AppCompatActivity {
                                         "Beweise dich im neuen Level!";
                                 // Grün
                                 color = Color.rgb(34, 177, 76);
+                                mp.start();
                             }
                         }
                     }

@@ -47,6 +47,7 @@ public class Menu extends AppCompatActivity {
 
 
         /*TODO falls du magst könnten wir das Menü auch als Pop up gestalten
+         * das kann auch oben rechts an die seite so aufgeklappt werden
         *
         //Größe beeinflussen
         DisplayMetrics dm= new DisplayMetrics();
