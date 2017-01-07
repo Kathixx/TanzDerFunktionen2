@@ -1,6 +1,8 @@
 package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,7 +49,7 @@ public class Pruefung {
     */
 
 
-    public int check(int level, double [] fl, TextView text) {
+    public int check(int level, double [] fl) {
         double xWert;
         double yWert;
         // index i wird fortlaufend hochgezählt, bis zum Ende der Liste
@@ -67,62 +69,70 @@ public class Pruefung {
         double n1= parameters[4];
         double  n2= parameters[5];
         double t= parameters[6];
-        //text.setText(a+" | "+b+" | "+c+" | "+d+" | "+n1+" | "+n2+" | "+t);
-        // Nullstellen und Achsenabschnitte überprüfen ob diese richtig gezeichnet wurden
-        if ( compareSpecialPoints(n1,0, text) &&compareSpecialPoints(n2,0, text)&&compareSpecialPoints(0,t, text)) {
-            //restliche Werte der Funktion mit dem Graphen vergleichen, inklusive Toleranzgrenze
-            while (index < listLength) {
-                // x-Wert aus der Liste auslesen
-                xWert = (listeX.get(index));
-                // in x-Koordinaten-Werte umwandeln
-                xWert = pixelToCoordinate(xWert, z, 10);
-                // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
-                switch (level) {
-                    case 1:
-                        // allgemeine Funktion a*x+b also zwei Parameter übergeben
-                       yWert = linearFunction(xWert, a, b);
-                        break;
-                    case 2:
-                        //allgemeine Funktion ax^2+bx+c also drei Parameter übergeben
-                        yWert = quadratFunction(xWert, a,b,c);
-                        break;
-                    case 3:
-                        // hier nicht allgemeine Funktion, sondern angepasst an unsere Funktion: (3)/(x-2)+1
-                        // da allgemeine Funktion: rationale Funktion/rationale Funktion
-                        yWert = rationalFunction(xWert, a,b,c,d);
-                        break;
-                    case 4:
-                        yWert= trigonometricFunction(xWert, a,b,c,d);
-                        break;
-                    case 5:
-                        yWert= logarithmicFunction(xWert, a,b,c,d);
-                        break;
-                    default:
-                        yWert = 0;
+
+        int points=0;
+        // Punkte für Nullstellen und Achsenabschnitte berechnen und zum Punktestand dazu zählen
+        // pro richtig gezeichnete Nullstelle bzw. Achsenabschnitt gibt es 4 Punkte
+        // eine Abstufung gibt es hier nicht, entweder richtig oder falsch
+        points+=compareSpecialPoints(n1,0)+compareSpecialPoints(n2,0)+compareSpecialPoints(0,t);
+
+        // Punkte für die "restlichen" Punkte berechnen
+        // hängt von der Genauigkeit (Toleranzbereich) ab
+        // es gibt drei Abstufungen
+        // ist der PUnkt exakt gezeichnet gibt es höchstens 3 Punkte
+        while (index < listLength) {
+            // x-Wert aus der Liste auslesen
+            xWert = (listeX.get(index));
+            // in x-Koordinaten-Werte umwandeln
+            xWert = pixelToCoordinate(xWert, z, 10);
+            // Berechnet den y-Wert, Funktionstyp ist abhängig vom Level
+            yWert = calculateYValue(level, xWert, a, b, c, d);
+            // y-Koordinaten-Wert in Pixel umrechnen
+            yWert = coordinateToPixel(yWert, z, 6);
+            // berechneten y-Wert mit y-Wert aus der Liste vergleichen
+            // 3 Abstufungen erzeugen in dem Toleranzbereich verändert wird, je ganuer gezeichnet wurde desto mehr PUnkte gibt es
+            if (compare(yWert, listeY, index, 10)) points += 3;
+            else {
+                if (compare(yWert, listeY, index, 20)) points += 2;
+                else {
+                    if (compare(yWert, listeY, index, 30)) points += 1;
+                    else points += 0;
                 }
-                // y-Koordinaten-Wert in Pixel umrechnen
-                yWert = coordinateToPixel(yWert, z, 6);
-                // berechneten y-Wert mit y-Wert aus der Liste vergleichen
-                boolean comparison = compare(yWert, listeY, index);
-                // counter hochzählen
-                if (comparison) counter++;
-                // index hochzählen
-                index++;
             }
-            // je nach dem wie viele Vergleiche richtig sind wird der gezeichnete Pfad akzeptiert
-            // falls richtig wird 1 zurückgegeben
-            if (counter > 8)return counter;
-            // sind die Nullstellen, Extremas, Achsenabschnitt ect richtig und ist NUR UNGENAU GEZEICHNET worden
-            // dann ist es leider trotzdem falsch und es wird -2 zurückgegeben
-            else return counter;//-2;
-
-
+            index++;
         }
-        // wenn die Nullstellen, Extremas und Achsenabschnitt NICHT richtig gezeichnet wurden wird -1 zurückgegeben
-        else return -1;
-
-
+        return  points;
     }
+
+
+    private double calculateYValue (int level,double xWert, double a, double b, double c, double d) {
+        double yWert;
+        // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
+        switch (level) {
+            case 1:
+                // allgemeine Funktion a*x+b also zwei Parameter übergeben
+                yWert = linearFunction(xWert, a, b);
+                break;
+            case 2:
+                //allgemeine Funktion ax^2+bx+c also drei Parameter übergeben
+                yWert = quadratFunction(xWert, a, b, c);
+                break;
+            case 3:
+                // hier nicht allgemeine Funktion, sondern angepasst an unsere Funktion: (3)/(x-2)+1
+                // da allgemeine Funktion: rationale Funktion/rationale Funktion
+                yWert = rationalFunction(xWert, a, b, c, d);
+                break;
+            case 4:
+                yWert = trigonometricFunction(xWert, a, b, c, d);
+                break;
+            case 5:
+                yWert = logarithmicFunction(xWert, a, b, c, d);
+                break;
+            default:
+                yWert = 0;
+        }
+        return yWert;
+    }//End calculateYValue
 
 
     /**
@@ -162,7 +172,7 @@ public class Pruefung {
      * Cosinus wird erreicht, indem in die Datenbank der Wert des sinus um 90 reduziert wird
      */
     private double trigonometricFunction (double x, double a, double b, double c, double d){
-        double yWert = a*Math.sin(b*x+c)+d;
+        double yWert = a*Math.sin(b*x+c+0.5*3.14)+d;
         return round (yWert);
     }
 
@@ -253,8 +263,7 @@ public class Pruefung {
      * @param index Stelle in der Liste, an der Vergleichswert steht
      * @return true falls Vergleich der zwei Werte übereinstimmt
      */
-    private boolean compare (double f, Liste l, int index){
-        double tolerance=15;
+    private boolean compare (double f, Liste l, int index, double tolerance){
         double compareValue=l.get(index);
         return (f>=compareValue-tolerance && f<=compareValue+tolerance );
     }//Ende compare
@@ -281,7 +290,7 @@ public class Pruefung {
      * @param y  y-Wert in Koordinatenangaben an dem überpüft werden soll
      * @return blackPixel true wenn Pixel an gewünschter STelle schwarz ist, also der gezeichnete Graph über gewünschte Stelle verläuft
      */
-    boolean compareBitmapPoints (Bitmap map, double x, double y, TextView t){
+    boolean compareBitmapPoints (Bitmap map, double x, double y){
         boolean blackPixel=false;
         double tolerance=5;
         // berechnete bzw. in der Datenbank stehende Koordinatenwerte werden zum weiteren Vergleich in Pixelwerte umgerechnet
@@ -308,7 +317,7 @@ public class Pruefung {
         // Kontrolle
          //t.setText(s);
        return  blackPixel;
-    }
+    }//End compareBitmapPoints
 
 
     /** Methode die Nullstellen und Achsenabschnitt überprüft
@@ -317,10 +326,13 @@ public class Pruefung {
      * @param y  y-Wert in Koordinatenangaben der verglichen werden soll
      * @return true, falls Vergleich richtig ist
      */
-    private boolean compareSpecialPoints(double x, double y, TextView t){
+    private int compareSpecialPoints(double x, double y) {
         // wenn es beispielsweise nur eine Nullstelle gibt, steht in der Liste der Wert 99 drin, dann soll dies automatisch auf true also ungewertet bleiben
-        if (x==99||y==99)return true;
-        // übergeben wird die Zeichenfläche, die zuvor noch zu einer Bitmap umgewandelt wird und die zwei Koordinatenwerte
-        else return compareBitmapPoints(convertViewToBitmap(z),x,y, t);
-    }
+        if (x == 99 || y == 99) return 4;
+            // übergeben wird die Zeichenfläche, die zuvor noch zu einer Bitmap umgewandelt wird und die zwei Koordinatenwerte
+        else {
+            if (compareBitmapPoints(convertViewToBitmap(z), x, y)) return 4;
+            else return 0;
+        }
+    }// Ende compareSpecialPoints
 }

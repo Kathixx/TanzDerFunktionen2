@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/tanz_der_funktionen_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -18,8 +18,11 @@
         <activity android:name=".activities.Anleitung" />
         <activity android:name=".activities.Spiel" />
         <activity android:name=".activities.Info" />
-        <activity android:name=".activities.Menu" />
+        <activity android:name=".activities.Menu"
+            android:theme="@style/AppTheme.CustomTheme"/>
         <activity android:name=".activities.Bewertung" />
+        <activity android:name=".activities.Punkte"
+            android:theme="@style/AppTheme.CustomTheme"/>
     </application>
 
 </manifest>

@@ -130,9 +130,12 @@ public class Zeichenfläche extends View {
         path.reset();
         invalidate();
         index=0;
+    }
 
 
-
+    public void redrawInColor (int color){
+        paint.setColor(color);
+        invalidate();
     }
 
 

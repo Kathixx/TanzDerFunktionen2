@@ -30,7 +30,8 @@
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
-        android:layout_marginStart="33dp" />
+        android:layout_marginStart="33dp"
+        android:soundEffectsEnabled="false"/>
 
     <Button
         android:id="@+id/info"

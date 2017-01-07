@@ -1,8 +1,13 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -46,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     /** Listen mit Datena aus der Datenbank */
     static ArrayList <Float> float_list;
     static ArrayList <String> string_list;
+
+    /** Variable ob Sound an oder off ist */
+    boolean soundIsOn= true;
 
 
     /**
@@ -114,7 +122,33 @@ public class MainActivity extends AppCompatActivity {
                 sendMessage(v);
             }
         });
+    }//Ende OnCreate
+
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actions, menu);
+        int i=R.id.sound;
+
+        return true;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.sound:
+                changeSound(item);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
 
     /**
      * wird beim Click auf einen Button aufgerufen
@@ -129,6 +163,10 @@ public class MainActivity extends AppCompatActivity {
 
             // starte in Level 1
             b.putInt("Level", 1);
+            // je nach dem ob Sound on oder off ist
+            if (soundIsOn) b.putBoolean("Sound",true);
+            else b.putBoolean("Sound", false);
+
 
             // erstelle eine neue Liste für die Punkte
             ArrayList<Integer> levelpoints = new ArrayList<>(5);
@@ -198,5 +236,24 @@ public class MainActivity extends AppCompatActivity {
     // disable Back-Button
     @Override
     public void onBackPressed(){}
+
+
+    private void changeSound(MenuItem item){
+        if (soundIsOn) {
+            soundIsOn=false;
+            // Icon ändern
+            item.setIcon(R.mipmap.sound_off);
+
+        }
+        else {
+            soundIsOn=true;
+            item.setIcon(R.mipmap.sound_on_white);
+        }
+    }
+
+
+
 }
+
+
 

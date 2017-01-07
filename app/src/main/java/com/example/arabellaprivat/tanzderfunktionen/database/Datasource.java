@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * startet Erstellungsprozess der Tabelle
  * erstellt Listen mit Datensätzen
  */
-public class Datasource {
+public class Datasource  {
 
     private static final String LOG_TAG = Datasource.class.getSimpleName();
 
@@ -29,6 +30,7 @@ public class Datasource {
     private ArrayList<Float> float_list = new ArrayList<Float>();
     //Liste für die Daten aus dem Zwischenspeicher
     private ArrayList<Integer> integer_list = new ArrayList<>();
+
 
     /** Konstruktor */
     public Datasource(Context context) {
