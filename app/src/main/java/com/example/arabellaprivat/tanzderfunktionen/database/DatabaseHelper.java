@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1; //muss bei Änderung incrementiert werden
     //Tabellennamen
     public static final String DB_TABLE_1 = "Level";
+    public static final String DB_TABLE_2 = "Zwischenspeicher";
 
     //Tabellenspalten_LEVEL
     public static final String LEVEL_LEVEL = "level_level";
@@ -31,8 +32,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String NULLSTELLE_1 = "x1";
     public static final String NULLSTELLE_2 = "x2";
     public static final String ACHSENABSCHNITT = "y";
-    public static final String MIN = "min";
-    public static final String MAX = "max";
+
+    //Tabellenspalten ZWISCHENSPEICHER
+    public static final String LEVEL_SPEICHER = "level";
+    public static final String PUNKTE_SPEICHER1 = "punkte1";
+    public static final String PUNKTE_SPEICHER2 = "punkte2";
+    public static final String PUNKTE_SPEICHER3 = "punkte3";
+    public static final String PUNKTE_SPEICHER4 = "punkte4";
+    public static final String PUNKTE_SPEICHER5 = "punkte5";
 
     //String der die Tabelle 1: LEVEL erstellt
     public static final String SQL_CREATEDB_1 =
@@ -46,38 +53,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     PARAMETER_4 + " REAL, " +
                     NULLSTELLE_1 + " REAL, " +
                     NULLSTELLE_2 + " REAL, " +
-                    ACHSENABSCHNITT + " REAL, " +
-                    MIN + " INTEGER, " +
-                    MAX + " INTEGER);";
+                    ACHSENABSCHNITT + " REAL);";
+
+    //String der die Tabelle 2: ZWISCHENSPEICHER erstellt
+    public static final String SQL_CREATEDB_2 = "CREATE TABLE " +DB_TABLE_2+" ("+
+            LEVEL_SPEICHER + " INTEGER, " +
+            PUNKTE_SPEICHER1 + " INTEGER, " +
+            PUNKTE_SPEICHER2 + " INTEGER, " +
+            PUNKTE_SPEICHER3 + " INTEGER, " +
+            PUNKTE_SPEICHER4 + " INTEGER, " +
+            PUNKTE_SPEICHER5 + " INTEGER);";
 
     //Werte in die Tabelle schreiben
+    //Für alle 0-Werte haben wir 99 geschrieben, da dies besser raus zu filtern ist
     //TABELLE 1
     public static final String SQL_INSERTDB1_1 =
             "INSERT INTO Level"+
-                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
+                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +
                     "VALUES " +
-                    "(1, '0.5x+2', 'Erinnerst Du Dich an die Funktion der Parameter m und b in f(x)=mx+b? m steht für die Steigung und b für den Schnittpunkt mit der y-Achse', 0.5, 2, 99, 99, -4, 99, 2, -8, 8);";
+                    "(1, '0.5x+2', 'Erinnerst Du Dich an die Funktion der Parameter m und b in f(x)=mx+b? m steht für die Steigung und b für den Schnittpunkt mit der y-Achse', 0.5, 2, 99, 99, -4, 99, 2);";
     public static final String SQL_INSERTDB1_2 =
             "INSERT INTO Level"+
-                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
+                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +
                     "VALUES " +
-                    "(2, '0.25x^2+1x-4', 'Alles, was Du tun musst ist, den Scheitelpunkt und die Verschiebung abzulesen', 0.25, 1, -4, 99, -6.5, 2.5, -4, -8, 4);";
+                    "(2, '0.25x^2+1x-4', 'Alles, was Du tun musst ist, den Scheitelpunkt und die Verschiebung abzulesen', 0.25, 1, -4, 99, -6.5, 2.5, -4);";
     public static final String SQL_INSERTDB1_3 =
             "INSERT INTO Level"+
-                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
+                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +
                     "VALUES " +
-                    "(3, '3/(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -2, 1, -1, 99, -0.5, -10, 10);";
+                    "(3, '3/(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -2, 1, -1, 99, -0.5);";
     public static final String SQL_INSERTDB1_4 =
             "INSERT INTO Level"+
-                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
+                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +
                     "VALUES " +
                     // Der 3. Parameter, also das eigentliche +1, wird hier zu einem -89, da somit aus dem cosinus ein sinus gemacht wird, den wir in der Prüfung eigentlich berechnen
-                    "(4, '3cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, -89, 0, -2.571, 0.571, 1.62, -4, 4);";
+                    "(4, '3cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, -89, 0, -2.571, 0.571, 1.62);";
     public static final String SQL_INSERTDB1_5 =
             "INSERT INTO Level"+
-                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
+                    "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +
                     "VALUES " +
-                    "(5, 'ln(x+5)', 'Weisst du noch in welchem Punkt sich alle logarithmischen Funktionen schneiden ?', 1, 1, 5, 0, -4, 99, 1.5, -5, 2);";
+                    "(5, 'ln(x+5)', 'Weisst du noch in welchem Punkt sich alle logarithmischen Funktionen schneiden ?', 1, 1, 5, 0, -4, 99, 1.5);";
 
     //Constructor
     public DatabaseHelper(Context context) {
@@ -104,6 +119,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(SQL_INSERTDB1_4);
             Log.d(LOG_TAG, "Die Daten werden mit SQL-Befehl: " + SQL_INSERTDB1_5 + " in die Tabelle eingefuegt.");
             db.execSQL(SQL_INSERTDB1_5);
+
+            //Tabelle 3 in DB erstellen
+            Log.d(LOG_TAG, "Die Tabelle wird mit SQL-Befehl: " + SQL_CREATEDB_2 + " angelegt.");
+            db.execSQL(SQL_CREATEDB_2);
         }
         catch (Exception ex) {
             Log.e(LOG_TAG, "Fehler beim Anlegen der Tabellen: " + ex.getMessage());
@@ -113,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_1);
+        db.execSQL("DROP TABLE IF EXISTS "+ DB_TABLE_2);
 
         onCreate(db);
     }

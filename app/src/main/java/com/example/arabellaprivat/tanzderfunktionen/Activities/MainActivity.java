@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * legt ein Datenquellen-Objekt an
      */
-    private Datasource dataSource;
+    public static Datasource dataSource;
 
     /** Listen mit Datena aus der Datenbank */
     static ArrayList <Float> float_list;
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             // levelpoints.trimToSize();
             // Liste mit null-Werten füllen
             for (int i = 0; i <= 5; i++) {
-                levelpoints.add(i, null);
+                levelpoints.add(i, 100);
             }
             b.putIntegerArrayList("Punkte", levelpoints);
             Intent i = new Intent(this, Spiel.class);
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         Log.d(LOG_TAG, "Die Datenquelle wird geschlossen.");
-        dataSource.close();
+        //dataSource.close();
         //finish();
     }
 

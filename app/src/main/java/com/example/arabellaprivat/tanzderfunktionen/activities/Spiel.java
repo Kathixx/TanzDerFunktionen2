@@ -7,15 +7,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Pruefung;
 import com.example.arabellaprivat.tanzderfunktionen.R;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche;
+import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
 import java.util.ArrayList;
 
@@ -56,6 +61,17 @@ public class Spiel extends AppCompatActivity {
     private Hilfspunkte h;
     /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
     private Button b_draw;
+
+    //Instanz vonn Datasource
+    Datasource datasource = MainActivity.dataSource;
+
+    //Instanzen für das Speichern der Aktuellen Punktestände
+    private int levelpoint1; //= levelpoints.get(1);
+    private int levelpoint2; //= levelpoints.get(2);
+    private int levelpoint3; //= levelpoints.get(3);
+    private int levelpoint4; //= levelpoints.get(4);
+    private int levelpoint5; //= 3; //levelpoints.get(5)
+
 
     /** Listen zum Auslesen aus der Datenbank */
     // float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionen
@@ -99,7 +115,7 @@ public class Spiel extends AppCompatActivity {
 
         // Listen aus der Main Activity holen
         float_list= MainActivity.returnFloatList();
-        string_list=MainActivity.returnStringList();
+        string_list= MainActivity.returnStringList();
         text= new String [3];
         parameters= new double [7];
         para= new double [7];
@@ -231,7 +247,7 @@ public class Spiel extends AppCompatActivity {
         // mit einer Schleife gehen wir durch die DB zu den verschiedenen Levels
         for (int i=1; i<=5; i++) {
             // wenn das Level bestanden ist
-            if(levelpoints.get(i)== null){
+            if(levelpoints.get(i)== 100){
                 // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
                 paint.setColor(Color.BLACK);
                 paint.setStyle(Paint.Style.STROKE);
@@ -298,7 +314,7 @@ public class Spiel extends AppCompatActivity {
             startActivity(intent);
         } else if(view.getId() == R.id.next) {
             // wenn alle 5 Level gespielt wurden
-            if(levelpoints.get(1) != null && levelpoints.get(2) != null && levelpoints.get(3) != null && levelpoints.get(4) != null && levelpoints.get(5) != null){
+            if(levelpoints.get(1) != 100 && levelpoints.get(2) != 100 && levelpoints.get(3) != 100 && levelpoints.get(4) != 100 && levelpoints.get(5) != 100){
                 // gehe zur Endbewertung
                 Bundle bundle = new Bundle();
                 bundle.putIntegerArrayList("Punkte", levelpoints);
@@ -308,7 +324,7 @@ public class Spiel extends AppCompatActivity {
             } else {
                 // gehe in das Level, das noch nicht gespielt wurde
                 int counter = 1;
-                while(levelpoints.get(counter) != null)
+                while(levelpoints.get(counter) != 100)
                     counter++;
                 level = counter;
                 Bundle bundle = new Bundle();
@@ -398,6 +414,24 @@ public class Spiel extends AppCompatActivity {
     @Override
     public void onBackPressed(){}
 
+    /**
+     * Callback Methode
+     * speichert Zwischenstand ab
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        levelpoint1 = levelpoints.get(1);
+        levelpoint2 = levelpoints.get(2);
+        levelpoint3 = levelpoints.get(3);
+        levelpoint4 = levelpoints.get(4);
+        levelpoint5 = levelpoints.get(5);
+        //levelpoint5 = 5;
+        datasource.insert_table2(level,levelpoint1, levelpoint2, levelpoint3, levelpoint4, levelpoint5);
+        //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
+        Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
+
+    }
 
 }
 
