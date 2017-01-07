@@ -172,7 +172,7 @@ public class Pruefung {
      * Cosinus wird erreicht, indem in die Datenbank der Wert des sinus um 90 reduziert wird
      */
     private double trigonometricFunction (double x, double a, double b, double c, double d){
-        double yWert = a*Math.sin(b*x+c)+d;
+        double yWert = a*Math.sin(b*x+c+0.5*3.14)+d;
         return round (yWert);
     }
 

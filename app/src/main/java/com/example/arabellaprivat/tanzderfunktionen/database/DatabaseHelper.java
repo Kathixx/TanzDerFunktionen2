@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
                     // Der 3. Parameter, also das eigentliche +1, wird hier zu einem -89, da somit aus dem cosinus ein sinus gemacht wird, den wir in der Prüfung eigentlich berechnen
-                    "(4, '3cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, -89, 0, -2.571, 0.571, 1.62, -4, 4);";
+                    "(4, '3cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, 1, 0, -2.571, 0.571, 1.62, -4, 4);";
     public static final String SQL_INSERTDB1_5 =
             "INSERT INTO Level"+
                     "(level_level,funktion,tipp,a,b,c,d,x1,x2,y,min,max) " +
