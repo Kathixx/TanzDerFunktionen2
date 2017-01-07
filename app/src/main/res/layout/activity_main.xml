@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -14,12 +15,19 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
         android:id="@+id/willkommen"
         android:textSize="50sp"
         android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="500px"
+        android:layout_height="400px"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/tanz_der_funktionen"
+        android:layout_below="@id/willkommen"/>
 
     <Button
         android:text="Start"

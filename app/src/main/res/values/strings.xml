@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">TanzDerFunktionen</string>
+    <string name="app_name">Tanz der Funktionen</string>
     <string name="t1">Tipp1</string>
     <string name="t2">Tipp2</string>
+
+    <!-- Action Bar Strings -->
+    <string name="sound">Sound</string>
+    <string name="level1">Level 1</string>
+    <string name="logo">Logo</string>
 </resources>

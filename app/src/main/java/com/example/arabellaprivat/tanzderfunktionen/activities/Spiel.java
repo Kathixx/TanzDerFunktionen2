@@ -1,5 +1,6 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,8 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -87,6 +90,8 @@ public class Spiel extends AppCompatActivity {
 
     /** Media Player für Musik */
     MediaPlayer mp;
+    /** Variable für Sound */
+    private boolean soundIsOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,13 +132,16 @@ public class Spiel extends AppCompatActivity {
 
         // MediaPlayer für Musik
         mp= MediaPlayer.create(this, R.raw.pad_confirm);
+        // Variable ob Sound on oder of ist
+        soundIsOn=bundle.getBoolean("Sound");
+
 
 
 
 
 
         // Text reinschreiben
-        t_result.setText("Berechne Schnittpunkte mit den Achsen und ggf. Extremstellen auf einem Blatt Papier, denn darauf wird bei der Überprüfung besonders Wert gelegt. Zeichne dann Deine Hilfspunkte ein.");
+        t_result.setText("Berechne Schnittpunkte mit den Achsen und ggf. Extremstellen auf einem Blatt Papier, denn darauf wird bei der Überprüfung besonders Wert gelegt. Zeichne dann Deine Hilfspunkte ein."+String.valueOf(soundIsOn));
         //  Weiter Button ist erstmal unsichtbar
         b_next.setVisibility(View.INVISIBLE);
         // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
@@ -288,7 +296,7 @@ public class Spiel extends AppCompatActivity {
                                         "Beweise dich im neuen Level!";
                                 // Grün
                                 color = Color.rgb(34, 177, 76);
-                                mp.start();
+                                if(soundIsOn) mp.start();
                             }
                         }
                     }
@@ -326,6 +334,27 @@ public class Spiel extends AppCompatActivity {
                 sendMessage(v);
             }
         });
+    }// Ende onCreate
+
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actions, menu);
+        if (!soundIsOn) changeIcon(menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.sound:
+                changeSound(item);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -412,6 +441,7 @@ public class Spiel extends AppCompatActivity {
                 // gehe zur Endbewertung
                 Bundle bundle = new Bundle();
                 bundle.putIntegerArrayList("Punkte", levelpoints);
+                bundle.putBoolean("Sound", soundIsOn);
                 Intent intent = new Intent(this, Bewertung.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -424,6 +454,7 @@ public class Spiel extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putIntegerArrayList("Punkte", levelpoints);
                 bundle.putInt("Level", level);
+                bundle.putBoolean("Sound",soundIsOn);
                 Intent intent = new Intent(this, Spiel.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -507,6 +538,25 @@ public class Spiel extends AppCompatActivity {
     // disable Back-Button
     @Override
     public void onBackPressed(){}
+
+
+    private void changeSound(MenuItem item){
+        if (soundIsOn) {
+            soundIsOn=false;
+            // Icon ändern
+            item.setIcon(R.mipmap.sound_off);
+        }
+        else {
+            soundIsOn=true;
+            item.setIcon(R.mipmap.sound_on_white);
+        }
+    }
+
+    private void changeIcon(android.view.Menu m){
+        MenuItem item =m.findItem(R.id.sound);
+        item.setIcon(R.mipmap.sound_off);
+    }
+
 
 
 }

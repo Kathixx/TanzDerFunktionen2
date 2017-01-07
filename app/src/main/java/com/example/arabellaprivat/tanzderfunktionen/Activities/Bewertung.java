@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ public class Bewertung extends AppCompatActivity {
     private Button b_restart;
     private ArrayList<Integer> levelpoints;
     private int score = 0;
+    private boolean soundIsOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class Bewertung extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         // daraus die übergebenen Daten holen
         this.levelpoints = bundle.getIntegerArrayList("Punkte");
+        soundIsOn=bundle.getBoolean("Sound");
 
         // Score berechnen
         for(int i=1; i<=5; i++){
@@ -81,6 +85,28 @@ public class Bewertung extends AppCompatActivity {
                 sendMessage(v);
             }
         });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actions, menu);
+        if (!soundIsOn) changeIcon(menu);
+        return true;
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.sound:
+                changeSound(item);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -160,4 +186,23 @@ public class Bewertung extends AppCompatActivity {
     // disable Back-Button
     @Override
     public void onBackPressed(){}
+
+    private void changeSound(MenuItem item){
+        if (soundIsOn) {
+            soundIsOn=false;
+            // Icon ändern
+            item.setIcon(R.mipmap.sound_off);
+        }
+        else {
+            soundIsOn=true;
+            item.setIcon(R.mipmap.sound_on_white);
+        }
+    }
+
+    private void changeIcon(android.view.Menu m){
+        MenuItem item =m.findItem(R.id.sound);
+        item.setIcon(R.mipmap.sound_off);
+    }
+
+
 }
