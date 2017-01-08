@@ -11,13 +11,17 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +43,18 @@ import java.util.ArrayList;
 public class Spiel extends AppCompatActivity {
 
     // IV
+    /** gibt es einen Zwischenstand?
+     * wird auf true gesetzt, wenn der Zwischenstand gespeichert wird
+     */
+    static boolean isBuffered = false;
     /** Info-Button */
     private Button b_info;
+    /** schließt das Popup Window im Menü */
+    private Button b_ok;
+    /** zeigt den aktuellen Punktestand an */
+    private TextView t_temp_score;
     /** Button zum Löschen der View */
     private Button b_delete;
-    /** Menü Button */
-    private Button b_menu;
     /** Button zum prüfen der gemalten Funktion */
     private Button b_check;
     /** führt zum nächsten Level oder zur Endbewertung */
@@ -57,14 +67,16 @@ public class Spiel extends AppCompatActivity {
     private TextView t_level;
     /** zeigt, wie viele Level absolviert wurden */
     private ImageView i_score;
-    /** Level */
+    /** zeigt das aktuelle Level an */
     private int level;
     /** speichert die Punkte jedes Levels */
-    private ArrayList<Integer> levelpoints;
-    /** Gesamtpunkte */
-    private int score;
-    /** Zeichenfläche */
+    private ArrayList<Integer> levelinfo;
+    /** informiert, wenn das angeklicckte Level nicht ausgewählt werden darf */
+    PopupWindow w_unallowed_choice;
+    /** Zeichenfläche, auf der die Funktionen gezeichnet werden */
     private Zeichenfläche z;
+    /** hier wird das Popup Window eingefügt */
+    private View layout;
     /** Touchfläche für Hilfspunkt */
     private Hilfspunkte h;
     /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
@@ -80,11 +92,11 @@ public class Spiel extends AppCompatActivity {
     Datasource datasource = MainActivity.dataSource;
 
     //Instanzen für das Speichern der Aktuellen Punktestände
-    private int levelpoint1; //= levelpoints.get(1);
-    private int levelpoint2; //= levelpoints.get(2);
-    private int levelpoint3; //= levelpoints.get(3);
-    private int levelpoint4; //= levelpoints.get(4);
-    private int levelpoint5; //= 3; //levelpoints.get(5)
+    private int levelpoint1; //= levelinfo.get(1);
+    private int levelpoint2; //= levelinfo.get(2);
+    private int levelpoint3; //= levelinfo.get(3);
+    private int levelpoint4; //= levelinfo.get(4);
+    private int levelpoint5; //= 3; //levelinfo.get(5)
 
 
     /** Listen zum Auslesen aus der Datenbank */
@@ -93,6 +105,7 @@ public class Spiel extends AppCompatActivity {
     // string_list enthält alle Text, also Funktion als Ganzes und Tipps
     // Texte eines Levels in einem Array mit Komma getrennt
     private ArrayList <String> string_list;
+    private ArrayList<Integer> integer_list;
     // temporäres Array, in dem die Texte des jeweiligen Levels gespeichert werden
     static String [] text;
     // temporäres Array, in dem alle WErte des jeweiligen Levels gespeichert werden
@@ -111,20 +124,12 @@ public class Spiel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
 
-
-        // Intent, das diese Activity geöffnet hat, holen
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        // daraus die übergebenen Daten holen
-        this.level = bundle.getInt("Level");
-        this.levelpoints = bundle.getIntegerArrayList("Punkte");
-
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
         b_delete = (Button) findViewById(R.id.delete);
-        b_menu = (Button) findViewById(R.id.menu);
         b_check = (Button) findViewById(R.id.check);
         b_next = (Button) findViewById(R.id.next);
+        t_temp_score = (TextView) findViewById(R.id.temp_score);
         t_result = (TextView) findViewById(R.id.review);
         t_function = (TextView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
@@ -136,9 +141,29 @@ public class Spiel extends AppCompatActivity {
         t_points=(TextView)findViewById(R.id.Punkte);
         t_conclusion=(TextView)findViewById(R.id.Erklärung);
 
+
+        // We need to get the instance of the LayoutInflater
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
+        w_unallowed_choice = new PopupWindow(layout, 300, 370, true);
+
+        b_ok = (Button) layout.findViewById(R.id.ok);
+        b_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                w_unallowed_choice.dismiss();
+            }
+        });
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        levelinfo = bundle.getIntegerArrayList("Infos");
+        level = levelinfo.get(0);
+
         // Listen aus der Main Activity holen
         float_list= MainActivity.returnFloatList();
         string_list= MainActivity.returnStringList();
+
         text= new String [3];
         parameters= new double [7];
         para= new double [7];
@@ -148,13 +173,10 @@ public class Spiel extends AppCompatActivity {
         // Variable ob Sound on oder of ist
         soundIsOn=bundle.getBoolean("Sound");
 
-
-
-
-
-
         // Text reinschreiben
         t_result.setText("Berechne Schnittpunkte mit den Achsen und ggf. Extremstellen auf einem Blatt Papier, denn darauf wird bei der Überprüfung besonders Wert gelegt. Zeichne dann Deine Hilfspunkte ein."+String.valueOf(soundIsOn));
+
+
         //  Weiter Button ist erstmal unsichtbar
         b_next.setVisibility(View.INVISIBLE);
         // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
@@ -166,6 +188,14 @@ public class Spiel extends AppCompatActivity {
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
         this.visualizeScore();
+
+        // Zwischenstand der Punkte anzeigen
+        int score = 0;
+        for(int i=1; i<=5; i++) {
+            if (levelinfo.get(i) != 100)
+                score += levelinfo.get(i);
+        }
+        t_temp_score.setText("Punktestand: " + score);
 
 
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
@@ -207,13 +237,6 @@ public class Spiel extends AppCompatActivity {
                 // hier nur einfacher Klick möglich
                 else z.deleteView();
                 lastClick = SystemClock.elapsedRealtime();
-            }
-        });
-
-        b_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage(v);
             }
         });
 
@@ -315,7 +338,7 @@ public class Spiel extends AppCompatActivity {
                     }
                 }// Ende if-else
                 z.redrawInColor(color);
-                levelpoints.set(level, points);
+                levelinfo.set(level, points);
 
 
 
@@ -327,7 +350,6 @@ public class Spiel extends AppCompatActivity {
                 z.changeBackground(level);
 
                 // Pop-Up Window
-
                 Intent intent = new Intent(Spiel.this, Punkte.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("result2", result2);
@@ -353,7 +375,7 @@ public class Spiel extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actions, menu);
+        inflater.inflate(R.menu.sound_level, menu);
         if (!soundIsOn) changeIcon(menu);
         return true;
 
@@ -366,8 +388,53 @@ public class Spiel extends AppCompatActivity {
             case R.id.sound:
                 changeSound(item);
                 break;
+            case R.id.level1:
+                chooseLevel(1);
+                break;
+            case R.id.level2:
+                chooseLevel(2);
+                break;
+            case R.id.level3:
+                chooseLevel(3);
+                break;
+            case R.id.level4:
+                chooseLevel(4);
+                break;
+            case R.id.level5:
+                chooseLevel(5);
+                break;
+            case R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.anleitung:
+                Intent in = new Intent(this, Anleitung.class);
+                startActivity(in);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * navigiert zum ausgewähltem Level
+     * @param chosenLevel   Level, auf das geklickt wurde
+     */
+    public void chooseLevel(int chosenLevel){
+        // wenn das Level ausgewählt werden darf
+        if(levelinfo.get(chosenLevel) == 100){
+            // speicher das Level in einem Bundle
+            Bundle bundle = new Bundle();
+            bundle.putInt("Level", chosenLevel);
+            bundle.putIntegerArrayList("Punkte", levelinfo);
+            // neues Intent
+            Intent i_new = new Intent(this, Spiel.class);
+            i_new.putExtras(bundle);
+            // Activity starten
+            startActivity(i_new);
+        } else {
+            w_unallowed_choice.showAtLocation(layout, Gravity.CENTER, 0, 0);
+        }
     }
 
     /**
@@ -380,28 +447,36 @@ public class Spiel extends AppCompatActivity {
         int abstand_x = 0;
         // Style und Farbe hängen von der Bewertung der Level ab
         Paint paint = new Paint();
-        // mit einer Schleife gehen wir durch die DB zu den verschiedenen Levels
+        paint.setStyle(Paint.Style.FILL);
+        // mit einer Schleife gehen wir durch die Liste zu den verschiedenen Levels
         for (int i=1; i<=5; i++) {
-            // wenn das Level bestanden ist
-            if(levelpoints.get(i)== 100){
+            // 5. Stufe 0-9: rot
+            if(levelinfo.get(i) >= 0 && levelinfo.get(i) <= 9){
+                // sei der Kreis rot ausgemalt
+                paint.setColor(Color.RED);
+            }
+            // 4. Stufe 10-19: orange
+            else if(levelinfo.get(i) >= 10 && levelinfo.get(i) <= 19){
+                paint.setColor(Color.rgb(255, 127, 39));
+            }
+            // 3. Stufe 20-29: gelb
+            else if(levelinfo.get(i) >= 20 && levelinfo.get(i) <= 29){
+                paint.setColor(Color.YELLOW);
+            }
+            // 2. Stufe 30-39: hellgrün
+            else if(levelinfo.get(i) >= 30 && levelinfo.get(i) <= 39){
+                paint.setColor(Color.rgb(181, 230, 29));
+            }
+            // 1. Stufe 10-19: grün
+            else if(levelinfo.get(i) >= 40 && levelinfo.get(i) <= 45){
+                paint.setColor(Color.GREEN);
+            }
+            // wenn das Level noch nicht gemacht wurde
+            else if(levelinfo.get(i)== 100){
                 // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
                 paint.setColor(Color.BLACK);
                 paint.setStyle(Paint.Style.STROKE);
             }
-            // wenn das Level nicht bestanden ist
-            else if(levelpoints.get(i)==0){
-                // sei der Kreis rot ausgemalt
-                paint.setColor(Color.RED);
-                paint.setStyle(Paint.Style.FILL);
-            }
-            else {
-                // sei der Kreis grün ausgemalt
-                paint.setColor(Color.GREEN);
-                paint.setStyle(Paint.Style.FILL);
-            }
-            // wenn das 1. Level noch nicht gespielt wurde
-            // also wenn in der DB nichts oder null steht
-            // bleiben die Einstellungen wie am Anfang
 
             // Abstand zum linken Nachbarkreis vergrößern
             abstand_x += 15;
@@ -436,24 +511,19 @@ public class Spiel extends AppCompatActivity {
      * @param view  Button, der geklickt wurde
      */
     public void sendMessage(View view){
+        Bundle bundle = new Bundle();
         if(view.getId() == R.id.info) {
-            Bundle bundle = new Bundle();
+            // die Klasse Info braucht nur das aktuelle Level
             bundle.putInt("Level", level);
             Intent intent = new Intent(this, Info.class);
             intent.putExtras(bundle);
             startActivity(intent);
-        } else if(view.getId() == R.id.menu) {
-            Bundle bundle = new Bundle();
-            bundle.putIntegerArrayList("Punkte", levelpoints);
-            Intent intent = new Intent(this, Menu.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
         } else if(view.getId() == R.id.next) {
             // wenn alle 5 Level gespielt wurden
-            if(levelpoints.get(1) != 100 && levelpoints.get(2) != 100 && levelpoints.get(3) != 100 && levelpoints.get(4) != 100 && levelpoints.get(5) != 100){
+            // Level die noch nicht gemacht wurden haben von Beginn an den Wert 100
+            if(levelinfo.get(1) != 100 && levelinfo.get(2) != 100 && levelinfo.get(3) != 100 && levelinfo.get(4) != 100 && levelinfo.get(5) != 100){
                 // gehe zur Endbewertung
-                Bundle bundle = new Bundle();
-                bundle.putIntegerArrayList("Punkte", levelpoints);
+                bundle.putIntegerArrayList("Infos", levelinfo);
                 bundle.putBoolean("Sound", soundIsOn);
                 Intent intent = new Intent(this, Bewertung.class);
                 intent.putExtras(bundle);
@@ -461,12 +531,11 @@ public class Spiel extends AppCompatActivity {
             } else {
                 // gehe in das Level, das noch nicht gespielt wurde
                 int counter = 1;
-                while(levelpoints.get(counter) != 100)
+                while(levelinfo.get(counter) != 100)
                     counter++;
-                level = counter;
-                Bundle bundle = new Bundle();
-                bundle.putIntegerArrayList("Punkte", levelpoints);
-                bundle.putInt("Level", level);
+                // in dieses Level gehen
+                levelinfo.set(0, counter);
+                bundle.putIntegerArrayList("Infos", levelinfo);
                 bundle.putBoolean("Sound",soundIsOn);
                 Intent intent = new Intent(this, Spiel.class);
                 intent.putExtras(bundle);
@@ -474,12 +543,6 @@ public class Spiel extends AppCompatActivity {
             }
         }
     }
-
-    /*@Override
-    public void onDestroy(){
-        // TODO Daten in der Datenbank speichern
-        // sodass beim wieder Öffnen an der gleichen Stelle weiter gemacht werden kann
-    }*/
 
     /**
      * Teilt die Texte des ersten Levels, die nur mit einem Komma getrennt sind und gibt sie als einzelnes Array zurück
@@ -559,16 +622,16 @@ public class Spiel extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        levelpoint1 = levelpoints.get(1);
-        levelpoint2 = levelpoints.get(2);
-        levelpoint3 = levelpoints.get(3);
-        levelpoint4 = levelpoints.get(4);
-        levelpoint5 = levelpoints.get(5);
+        isBuffered = true;
+        levelpoint1 = levelinfo.get(1);
+        levelpoint2 = levelinfo.get(2);
+        levelpoint3 = levelinfo.get(3);
+        levelpoint4 = levelinfo.get(4);
+        levelpoint5 = levelinfo.get(5);
         //levelpoint5 = 5;
         datasource.insert_table2(level,levelpoint1, levelpoint2, levelpoint3, levelpoint4, levelpoint5);
         //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
         Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
-
     }
 
     private void changeSound(MenuItem item){

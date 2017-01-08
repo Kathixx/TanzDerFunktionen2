@@ -66,10 +66,4 @@ public class Info extends Activity {
             }
         });
     }
-
-    /*@Override
-    public void onPause(){
-        super.onPause();
-        finish();
-    }*/
 }

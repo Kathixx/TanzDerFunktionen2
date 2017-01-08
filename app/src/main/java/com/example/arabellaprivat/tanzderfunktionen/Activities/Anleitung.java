@@ -37,10 +37,4 @@ public class Anleitung extends AppCompatActivity {
             }
         });
     }
-
-    /*@Override
-    public void onPause(){
-        super.onPause();
-        finish();
-    }*/
 }
