@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.util.Log;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 /**
  * Startbildschirm
  * wird beim Start der App automatisch aufgerufen
+ * Quelle Font setzen: https://coderwall.com/p/qxxmaa/android-use-a-custom-font-everywhere
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -67,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Schriftart
-        //FontOverride.setDefaultFont(this, "DEFAULT", "Brandon_reg.otf");
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+
+
 
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);

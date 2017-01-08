@@ -1,6 +1,5 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,10 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,6 +120,9 @@ public class Spiel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
+        // Schriftart
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
@@ -138,22 +138,8 @@ public class Spiel extends AppCompatActivity {
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
         b_draw=(Button) findViewById(R.id.draw);
         t_result2= (TextView)findViewById(R.id.Ergebnis);
-        t_points=(TextView)findViewById(R.id.Punkte);
+        t_points=(TextView)findViewById(R.id.text);
         t_conclusion=(TextView)findViewById(R.id.Erklärung);
-
-
-        // We need to get the instance of the LayoutInflater
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
-        w_unallowed_choice = new PopupWindow(layout, 300, 370, true);
-
-        b_ok = (Button) layout.findViewById(R.id.ok);
-        b_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                w_unallowed_choice.dismiss();
-            }
-        });
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -355,7 +341,7 @@ public class Spiel extends AppCompatActivity {
                 bundle.putString("result2", result2);
                 bundle.putString("conclusion",conclusion);
                 bundle.putInt("color",color);
-                bundle.putInt("points",points);
+                bundle.putString("points",String.valueOf(points));
                 intent.putExtras(bundle);
                 startActivity (intent);
 
@@ -426,14 +412,22 @@ public class Spiel extends AppCompatActivity {
             // speicher das Level in einem Bundle
             Bundle bundle = new Bundle();
             bundle.putInt("Level", chosenLevel);
-            bundle.putIntegerArrayList("Punkte", levelinfo);
+            bundle.putIntegerArrayList("Infos", levelinfo);
             // neues Intent
             Intent i_new = new Intent(this, Spiel.class);
             i_new.putExtras(bundle);
             // Activity starten
             startActivity(i_new);
         } else {
-            w_unallowed_choice.showAtLocation(layout, Gravity.CENTER, 0, 0);
+            // Pop-Up Window
+            Intent intent = new Intent(Spiel.this, Punkte.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("result2", "Halt!");
+            bundle.putString("conclusion","Das Level hast Du schon gemacht. Bitte such Dir ein anderes Level aus.");
+            bundle.putInt("color", Color.RED);
+            bundle.putString("points", "X");
+            intent.putExtras(bundle);
+            startActivity (intent);
         }
     }
 
