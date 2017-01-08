@@ -52,10 +52,4 @@ public class Info extends AppCompatActivity {
             }
         });
     }
-
-    /*@Override
-    public void onPause(){
-        super.onPause();
-        finish();
-    }*/
 }
