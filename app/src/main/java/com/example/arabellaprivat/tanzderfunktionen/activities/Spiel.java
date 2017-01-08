@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen.activities;
+﻿package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +10,18 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -645,6 +648,7 @@ public class Spiel extends AppCompatActivity {
         item.setIcon(R.mipmap.sound_off);
     }
 
+   
 
 
 }

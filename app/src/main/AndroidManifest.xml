@@ -16,7 +16,6 @@
         </activity>
         <activity android:name=".activities.Anleitung" />
         <activity android:name=".activities.Spiel" />
-
         <activity android:name=".activities.Info"
             android:theme="@style/AppTheme.CustomTheme"/>
 
