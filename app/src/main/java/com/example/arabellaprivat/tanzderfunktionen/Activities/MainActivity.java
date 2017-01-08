@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity {
                 // als erstes kommt das Level
                 levelinfo.add(1);
                 // dann folgen die Punkte der Level 1-5
-                // default 100
+                // default 200
                 for(int i=1; i<=5; i++){
-                    levelinfo.add(i, 100);
+                    levelinfo.add(i, 200);
                 }
                 sendMessage(v);
             }

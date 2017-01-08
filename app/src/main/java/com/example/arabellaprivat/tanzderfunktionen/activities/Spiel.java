@@ -193,7 +193,7 @@ public class Spiel extends AppCompatActivity {
         // Zwischenstand der Punkte anzeigen
         int score = 0;
         for(int i=1; i<=5; i++) {
-            if (levelinfo.get(i) != 100)
+            if (levelinfo.get(i) != 200)
                 score += levelinfo.get(i);
         }
         t_temp_score.setText("Punktestand: " + score);
@@ -277,9 +277,7 @@ public class Spiel extends AppCompatActivity {
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
-
                 int points=p.check(level,para);
-
                 // Variablen für die visuelle und textuelle Ergebnisanzeige
                 String result2;
                 String conclusion;
@@ -288,18 +286,17 @@ public class Spiel extends AppCompatActivity {
                 // Ergebnistext je nach PUnktanzahl verändern
                 // macimal erreichte PUnktzahl in einem Level sind 45
                 // falsch gezeichnet
-                if (points<10){
+                if (points<=40){
+                    points=0;
                     result2="Falsch!";
                     conclusion="Leider hast du nicht gut genug gezeichnet. \n " +
-                            "Um ein Level zu bestehen, musst du mindestens 10 Punkte erreichen. \n" +
-                            "Leider hast du nur "+String.valueOf(points)+" Punkte erreicht." +
-                            "\n Du kannst trotzdem weiterspielen";
+                            "Probier dein Glück im nächsten Level.";
                     // Rot
                     color=Color.rgb(153,2,14);
                 }
                 else {
 
-                    if (points <= 20) {
+                    if (points <= 50) {
                         result2 = "Gerade nochmal gut gegangen!";
                         conclusion = " Puh da hast du ja nochmal Glück gehabt. \n" +
                                 "Versuche das nächste Mal genauer zu zeichnen,\n" +
@@ -309,7 +306,7 @@ public class Spiel extends AppCompatActivity {
                         // Orange
                         color = Color.rgb(255, 127, 39);
                     } else {
-                        if (points <= 30) {
+                        if (points <=70) {
                             result2 = "Ganz ok";
                             conclusion = " Das war doch gar nicht mal so schlecht \n" +
                                     "Aber Übung macht den Meister! \n" +
@@ -319,7 +316,7 @@ public class Spiel extends AppCompatActivity {
                             // Gelb
                             color = Color.rgb(255, 201, 14);
                         } else {
-                            if (points <= 30) {
+                            if (points <= 90) {
                                 result2 = "Gut gemacht!";
                                 conclusion = " Das war schon ziemlich gut! \n" +
                                         "Glückwunsch, du konntest schon " + String.valueOf(points) + " Punkte sammeln. \n " +
@@ -340,6 +337,7 @@ public class Spiel extends AppCompatActivity {
                 }// Ende if-else
                 z.redrawInColor(color);
                 levelinfo.set(level, points);
+
 
 
 
@@ -423,7 +421,7 @@ public class Spiel extends AppCompatActivity {
      */
     public void chooseLevel(int chosenLevel){
         // wenn das Level ausgewählt werden darf
-        if(levelinfo.get(chosenLevel) == 100){
+        if(levelinfo.get(chosenLevel) == 200){
             // speicher das Level in einem Bundle
             Bundle bundle = new Bundle();
             bundle.putInt("Level", chosenLevel);
@@ -473,7 +471,7 @@ public class Spiel extends AppCompatActivity {
                 paint.setColor(Color.GREEN);
             }
             // wenn das Level noch nicht gemacht wurde
-            else if(levelinfo.get(i)== 100){
+            else if(levelinfo.get(i)== 200){
                 // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
                 paint.setColor(Color.BLACK);
                 paint.setStyle(Paint.Style.STROKE);
@@ -521,8 +519,8 @@ public class Spiel extends AppCompatActivity {
             startActivity(intent);
         } else if(view.getId() == R.id.next) {
             // wenn alle 5 Level gespielt wurden
-            // Level die noch nicht gemacht wurden haben von Beginn an den Wert 100
-            if(levelinfo.get(1) != 100 && levelinfo.get(2) != 100 && levelinfo.get(3) != 100 && levelinfo.get(4) != 100 && levelinfo.get(5) != 100){
+            // Level die noch nicht gemacht wurden haben von Beginn an den Wert 200
+            if(levelinfo.get(1) != 200 && levelinfo.get(2) != 200 && levelinfo.get(3) != 200 && levelinfo.get(4) != 200 && levelinfo.get(5) != 200){
                 // gehe zur Endbewertung
                 bundle.putIntegerArrayList("Infos", levelinfo);
                 bundle.putBoolean("Sound", soundIsOn);
@@ -532,7 +530,7 @@ public class Spiel extends AppCompatActivity {
             } else {
                 // gehe in das Level, das noch nicht gespielt wurde
                 int counter = 1;
-                while(levelinfo.get(counter) != 100)
+                while(levelinfo.get(counter) != 200)
                     counter++;
                 // in dieses Level gehen
                 levelinfo.set(0, counter);

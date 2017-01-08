@@ -67,14 +67,21 @@ public class Pruefung {
         double c= parameters[2];
         double d=parameters [3];
         double n1= parameters[4];
-        double  n2= parameters[5];
+        double n2= parameters[5];
         double t= parameters[6];
+        int maxPoints=41;
 
         int points=0;
         // Punkte für Nullstellen und Achsenabschnitte berechnen und zum Punktestand dazu zählen
         // pro richtig gezeichnete Nullstelle bzw. Achsenabschnitt gibt es 4 Punkte
         // eine Abstufung gibt es hier nicht, entweder richtig oder falsch
-        points+=compareSpecialPoints(n1,0)+compareSpecialPoints(n2,0)+compareSpecialPoints(0,t);
+        points+=compareSpecialPoints(n1,0)+compareSpecialPoints(0,t);
+        // nur wenn die Funktion einen zweiten Nullpunkt hat, soll dieser überprüft werden
+        if (n2!=99) {
+            // die maximal zu erreichende Punktzahl in diesem Level erhöht sich dann auf 45
+            maxPoints=45;
+            points+=compareSpecialPoints(n2,0);
+        }
 
         // Punkte für die "restlichen" Punkte berechnen
         // hängt von der Genauigkeit (Toleranzbereich) ab
@@ -101,7 +108,8 @@ public class Pruefung {
             }
             index++;
         }
-        return  points;
+
+        return  pointsInPercent(maxPoints,points);
     }
 
 
@@ -327,12 +335,11 @@ public class Pruefung {
      * @return true, falls Vergleich richtig ist
      */
     private int compareSpecialPoints(double x, double y) {
-        // wenn es beispielsweise nur eine Nullstelle gibt, steht in der Liste der Wert 99 drin, dann soll dies automatisch auf true also ungewertet bleiben
-        if (x == 99 || y == 99) return 4;
-            // übergeben wird die Zeichenfläche, die zuvor noch zu einer Bitmap umgewandelt wird und die zwei Koordinatenwerte
-        else {
             if (compareBitmapPoints(convertViewToBitmap(z), x, y)) return 4;
             else return 0;
-        }
     }// Ende compareSpecialPoints
+
+    private int pointsInPercent (int maxPoints, int points){
+       return Math.round((points*100/maxPoints));
+    }
 }
