@@ -92,6 +92,7 @@ public class Bewertung extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Möglichkeit dann weiterzuspielen "ausschalten"
+                // MainActivity.firstTime = true;
                 sendMessage(v);
             }
         });
