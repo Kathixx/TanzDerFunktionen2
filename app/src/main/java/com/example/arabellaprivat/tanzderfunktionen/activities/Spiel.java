@@ -338,10 +338,6 @@ public class Spiel extends AppCompatActivity {
                 z.redrawInColor(color);
                 levelinfo.set(level, points);
 
-
-
-
-
                 // Button, der zum nächsten Level führt wird sichtbar
                 b_next.setVisibility(View.VISIBLE);
 
