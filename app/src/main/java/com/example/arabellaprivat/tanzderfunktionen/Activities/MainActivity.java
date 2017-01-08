@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
         b_weiterspielen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Listen aus der Klasse Datasource holen
+                float_list= dataSource.Eintraege_Float();
+                string_list= dataSource.Eintraege_String();
                 // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
                 integer_list = dataSource.Eintraege_Int();
 
