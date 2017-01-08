@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "INSERT INTO Level"+
                     "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +
                     "VALUES " +
-                    "(1, '0.5x+2', 'Erinnerst Du Dich an die Funktion der Parameter m und b in f(x)=mx+b? m steht für die Steigung und b für den Schnittpunkt mit der y-Achse', 0.5, 2, 99, 99, -4, 99, 2);";
+                    "(1, '0.5x+2', 'Erinnerst Du Dich an die Funktion der Parameter m und b in  f(x)=mx+b ? \n m steht für die Steigung und b für den Schnittpunkt mit der y-Achse', 0.5, 2, 99, 99, -4, 99, 2);";
     public static final String SQL_INSERTDB1_2 =
             "INSERT INTO Level"+
                     "(level_level,funktion,tipp,a,b,c,d,x1,x2,y) " +

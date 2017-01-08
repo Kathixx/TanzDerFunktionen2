@@ -48,10 +48,12 @@ public class Info extends Activity {
         DisplayMetrics dm= new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
+
         int width =dm.widthPixels;
         int heigth= dm.heightPixels;
 
-        getWindow().setLayout((int)(width*0.8),(int)(heigth*0.5));
+        getWindow().setLayout((int)(width*0.8),(int)(heigth*0.65));
+        getWindow().setGravity(Gravity.BOTTOM|Gravity.RIGHT);
 
 
         // entsprechende Info zum jeweiligen Level wird aus der Klasse Spiel übergeben
