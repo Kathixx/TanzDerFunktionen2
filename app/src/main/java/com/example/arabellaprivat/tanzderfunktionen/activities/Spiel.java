@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +67,8 @@ public class Spiel extends AppCompatActivity {
     private TextView t_function;
     /** diese TextView zeigt das aktuelle Level an */
     private TextView t_level;
+    /** gibt die Punkteanzahl aus */
+    private TextView t_number;
     /** zeigt, wie viele Level absolviert wurden */
     private ImageView i_score;
     /** zeigt das aktuelle Level an */
@@ -146,6 +149,7 @@ public class Spiel extends AppCompatActivity {
         t_intervall = (TextView) findViewById(R.id.review);
         t_function = (TextView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
+        t_number = (TextView) findViewById(R.id.number);
         i_score = (ImageView) findViewById(R.id.score);
         z = (Zeichenfläche) findViewById(R.id.zeichenfläche);
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
@@ -237,7 +241,28 @@ public class Spiel extends AppCompatActivity {
             if (levelinfo.get(i) != 200)
                 score += levelinfo.get(i);
         }
-        t_temp_score.setText("Punktestand: " + score);
+
+        // Punktestand anzeigen
+        t_number.setText(String.valueOf(score));
+        // Schriftart
+        Typeface fontNumber = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
+        t_number.setTypeface(fontNumber);
+
+        // Je nach Punktestand Farbe setzen
+        int c;
+        if(score <= 9){
+            c = Color.rgb(153,2,14);
+        } else if(score <= 19){
+            c = Color.rgb(255, 127, 39);
+        } else if(score <= 29){
+            c = Color.rgb(255, 201, 14);
+        } else if(score <= 39) {
+            c = Color.rgb(181, 230, 29);
+        } else {
+            c = Color.rgb(34, 177, 76);
+        }
+        t_number.setTextColor(c);
+        t_function.setTextColor(c);
 
 
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
@@ -397,7 +422,8 @@ public class Spiel extends AppCompatActivity {
         if(levelinfo.get(chosenLevel) == 200){
             // speicher das Level in einem Bundle
             Bundle bundle = new Bundle();
-            bundle.putInt("Level", chosenLevel);
+            // Level aktualisieren
+            levelinfo.set(0, chosenLevel);
             bundle.putIntegerArrayList("Infos", levelinfo);
             bundle.putBoolean("Sound", soundIsOn);
             // neues Intent

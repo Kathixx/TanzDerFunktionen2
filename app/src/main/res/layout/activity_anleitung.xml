@@ -27,7 +27,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/close"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light" />
 
     <TextView
         android:text="TextView"

@@ -31,35 +31,41 @@
 
     <Button
         android:text="Neustart"
-        android:layout_width="match_parent"
+        android:layout_width="170px"
         android:layout_height="wrap_content"
         android:id="@+id/start"
         android:textSize="36sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="158dp"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light" />
 
     <Button
         android:text="Anleitung"
-        android:layout_width="match_parent"
+        android:layout_width="170px"
         android:layout_height="wrap_content"
         android:id="@+id/anleitung"
         android:textSize="36sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light" />
 
     <Button
         android:text="Spiel fortsetzen"
-        android:layout_width="match_parent"
+        android:layout_width="170px"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="49dp"
         android:id="@+id/weiterspielen"
         android:textSize="36sp"
         android:textAllCaps="false"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light"
         android:layout_above="@+id/start"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

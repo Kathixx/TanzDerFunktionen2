@@ -124,11 +124,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
-
         // Buttonfunktion die das Spiel neu startet erstellen
         b_start.setOnClickListener(new View.OnClickListener() {
             @Override

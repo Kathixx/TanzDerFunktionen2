@@ -40,14 +40,6 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/temp_score" />
-
-    <TextView
         android:id="@+id/review"
         android:text="TextView"
         android:layout_width="wrap_content"
@@ -65,7 +57,9 @@
         android:layout_below="@+id/review"
         android:layout_centerHorizontal="true"
         android:textSize="25sp"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:backgroundTint="@color/btnColor" />
 
     <Button
         android:id="@+id/check"
@@ -78,7 +72,9 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:textColor="@android:color/background_light"
+        android:backgroundTint="@color/btnColor" />
 
     <Button
         android:id="@+id/delete"
@@ -90,7 +86,9 @@
         android:layout_alignBaseline="@+id/check"
         android:layout_alignBottom="@+id/check"
         android:layout_toStartOf="@+id/functionText"
-        android:layout_marginEnd="46dp" />
+        android:layout_marginEnd="46dp"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light" />
 
     <Button
         android:id="@+id/draw"
@@ -102,7 +100,9 @@
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
-        android:layout_marginStart="33dp" />
+        android:layout_marginStart="33dp"
+        android:textColor="@android:color/background_light"
+        android:backgroundTint="@color/btnColor" />
 
     <Button
         android:id="@+id/info"
@@ -112,7 +112,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:textAllCaps="false"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light" />
 
     <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte
         android:id="@+id/hilfspunkte"
@@ -128,5 +130,24 @@
         android:layout_height="400px"
         android:layout_below="@+id/functionText"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/number"
+        android:textSize="36sp"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:text="Punktestand: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/temp_score"
+        android:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/draw" />
 
 </RelativeLayout>

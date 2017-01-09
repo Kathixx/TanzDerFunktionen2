@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuInflater;
@@ -92,7 +94,7 @@ public class Bewertung extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Möglichkeit dann weiterzuspielen "ausschalten"
-                // MainActivity.firstTime = true;
+                MainActivity.firstTime = true;
                 sendMessage(v);
             }
         });
@@ -125,7 +127,7 @@ public class Bewertung extends AppCompatActivity {
      * hier werden Zeichen-Eigenschaften gesetzt
      */
     private void visualizeScore(){
-        Bitmap bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
 
         // Start bei 1/16 der Bitmap
         float leftBorder = bitmap.getWidth()/16;
@@ -136,15 +138,15 @@ public class Bewertung extends AppCompatActivity {
         for(int i=1; i<=category; i++){
             if(category == 1)
                 // diese Punkte werden rot gezeichnet
-                paint.setColor(Color.RED);
+                paint.setColor(Color.rgb(153,2,14));
             else if(category == 2)
                 paint.setColor(Color.rgb(255, 127, 39));
             else if(category == 3)
-                paint.setColor(Color.YELLOW);
+                paint.setColor(Color.rgb(255, 201, 14));
             else if(category == 4)
                 paint.setColor(Color.rgb(181, 230, 29));
             else
-                paint.setColor(Color.GREEN);
+                paint.setColor(Color.rgb(34, 177, 76));
             paint.setStyle(Paint.Style.FILL);
 
             // der Abstand zwischen den Kreisen beträgt 1/8 der gesamten Breite der Bitmap
@@ -158,6 +160,7 @@ public class Bewertung extends AppCompatActivity {
             // diese Punkte werden schwarz umrandet
             paint.setColor(Color.BLACK);
             paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(5);
 
             // der Abstand zwischen den Kreisen beträgt 1/8 der gesamten Breite der Bitmap
             leftBorder += bitmap.getWidth()/8;
@@ -171,17 +174,53 @@ public class Bewertung extends AppCompatActivity {
      * zeichnet einen Punkt
      * @param bitmap        Hier wird gezeichnet
      * @param paint         Zeichen-Eigenschaften
-     * @param linkerAbstand     Abstand zum linken Bildschirmrand, bzw. zum linken Nachbar-Kreis
+     * @param leftBorder     Abstand zum linken Bildschirmrand, bzw. zum linken Nachbar-Kreis
      */
-    private void paintCircle(Bitmap bitmap, Paint paint, float linkerAbstand){
+    private void paintCircle(Bitmap bitmap, Paint paint, float leftBorder){
         Canvas canvas = new Canvas(bitmap);
         // Kreis zeichnen
         // linker Abstand vergrößert sich nach jedem Kreis
         // auf Höhe der Hälfte der Bitmap
         // Radius 50 px
         // mit den "Stift"-Eigenschaften, die je nach Level verändert wurden
-        canvas.drawCircle(linkerAbstand, bitmap.getHeight()/2, 45, paint);
+        // canvas.drawCircle(leftBorder, bitmap.getHeight()/2, 45, paint);
 
+        // Stern zeichnen
+        // Eckpunkte
+        // Point besteht aus (x, y)-Werten
+        // x und y sind die obere, linke Ecke in dem Bereich, in dem der Stern gezeichnet wird
+        int x = (int) leftBorder;
+        int y = bitmap.getHeight()/3;
+        // size ist die Größe und Höhe des (den Stern umgebenden) Rechtecks
+        int size = bitmap.getWidth()/8;
+        int hMargin = size/9;
+        int vMargin = size/4;
+        Point a = new Point((x + size/2),               y);
+        Point b = new Point((x + size/2 + hMargin),     (y + vMargin));
+        Point c = new Point((x + size),                 (y + vMargin));
+        Point d = new Point((x + size/2 + 2*hMargin),   (y + size/2 + vMargin/2));
+        Point e = new Point((x + size/2 + 3*hMargin),   (y + size));
+        Point f = new Point((x + size/2),               (y + size - vMargin));
+        Point g = new Point((x + size/2 - 3*hMargin),   (y + size));
+        Point h = new Point((x + size/2 - 2*hMargin),   (y + size/2 + vMargin/2));
+        Point i = new Point(x,                          (y + vMargin));
+        Point j = new Point((x + size/2 - hMargin),     (y + vMargin));
+
+        Path path = new Path();
+        path.moveTo(a.x, a.y);
+        path.lineTo(b.x, b.y);
+        path.lineTo(c.x, c.y);
+        path.lineTo(d.x, d.y);
+        path.lineTo(e.x, e.y);
+        path.lineTo(f.x, f.y);
+        path.lineTo(g.x, g.y);
+        path.lineTo(h.x, h.y);
+        path.lineTo(i.x, i.y);
+        path.lineTo(j.x, j.y);
+        path.lineTo(a.x, a.y);
+
+        path.close();
+        canvas.drawPath(path, paint);
 
         // in die ImageView einfügen
         i_points.setImageBitmap(bitmap);
