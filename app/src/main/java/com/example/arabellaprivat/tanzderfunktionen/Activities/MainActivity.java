@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Schriftart
-        //FontOverride.setDefaultFont(this, "DEFAULT", "Brandon_reg.otf");
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);

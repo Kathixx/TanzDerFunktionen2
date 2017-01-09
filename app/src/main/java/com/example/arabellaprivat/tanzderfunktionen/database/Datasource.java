@@ -170,7 +170,7 @@ public class Datasource  {
      */
     public ArrayList<Integer> Int_Entries () {
         //Cursor der level und punkte der tabelle zwischenspeicher durchläuft
-        Cursor c = database.rawQuery("SELECT level, punkte1, punkte2, punkte3, punkte4, punkte5 FROM " + DatabaseHelper.DB_TABLE_2, null);
+        Cursor c = database.rawQuery("SELECT level, points1, points2, points3, points4, points5 FROM " + DatabaseHelper.DB_TABLE_2, null);
         //auslesen der Indices
         int akt_level = c.getColumnIndex(DatabaseHelper.STORE_LEVEL);
         int akt_punkte_1 = c.getColumnIndex(DatabaseHelper.STORE_POINTS_1);
