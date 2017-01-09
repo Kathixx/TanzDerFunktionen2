@@ -31,8 +31,11 @@ public class Bewertung extends AppCompatActivity {
     private TextView t_score;
     /** Button startet das Spiel von vorne */
     private Button b_restart;
-    private ArrayList<Integer> levelpoints;
+    private ArrayList<Integer> levelinfo;
     private int score = 0;
+    /** Bewertungskategorie */
+    private int category;
+    /** ist der Sound eingeschaltet? */
     private boolean soundIsOn;
 
     @Override
@@ -44,13 +47,13 @@ public class Bewertung extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         // daraus die übergebenen Daten holen
-        this.levelpoints = bundle.getIntegerArrayList("Punkte");
+        this.levelinfo = bundle.getIntegerArrayList("Infos");
         soundIsOn=bundle.getBoolean("Sound");
 
         // Score berechnen
         for(int i=1; i<=5; i++){
-            if(levelpoints.get(i) != null)
-                score += levelpoints.get(i);
+            if(levelinfo.get(i) != 100)
+                score += levelinfo.get(i);
         }
 
         // Variablen belegen
@@ -62,26 +65,34 @@ public class Bewertung extends AppCompatActivity {
         // Bewertungstext
         // je nach Punktezahl gibt es einen anderen Text
         // bei 0 Punkten
-        if(score == 0){
+        if(score <= 100){
             t_review.setText("Leider hast du keine Funktion richtig gezeichnet. Vielleicht solltest Du Dich nochmal in das Thema einarbeiten.");
-        } else if(score == 1 || score == 2){
+            category = 1;
+        } else if(score <= 200){
+            t_review.setText("Das war noch nicht ganz überzeugend. Übe weiter, um Dich zu verbessern.");
+            category = 2;
+        } else if(score <= 300){
             t_review.setText("Das war schon ein guter Anfang. Übe weiter, um Dich zu verbessern.");
-        } else if(score == 3 || score == 4){
+            category = 3;
+        } else if(score <= 400) {
             t_review.setText("Gut gemacht. Übe weiter, um Dein Wissen zu festigen.");
+            category = 4;
         } else {
-            t_review.setText("Perfekt! Du hast alles richtig gemacht. Weiter so!");
+            t_review.setText("Super! Du hast alles richtig gezeichnet. Du bist bereit für die nächste Prüfung.");
+            category = 5;
         }
 
         // Visualisierung der Punkte
         visualizeScore();
 
         // Wie viele Punkte wurden erreicht?
-        t_score.setText("Du erhälst " + score + " von 5 Punkten.");
+        t_score.setText("Du erhälst " + score + " von 500 Punkten.");
 
         b_restart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Datenbank zurücksetzen
+                // Möglichkeit dann weiterzuspielen "ausschalten"
+                // MainActivity.firstTime = true;
                 sendMessage(v);
             }
         });
@@ -110,18 +121,6 @@ public class Bewertung extends AppCompatActivity {
     }
 
     /**
-     * regelt das Verhalten der Activity für den Fall dass sie wieder aufgerufen wird
-     */
-    /*@Override
-    public void onPause(){
-        super.onPause();
-        Log.v(LOG_TAG, "Callback-Methode: onPause()");
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }*/
-
-    // Visualisierung der Punkte wie in der Activity Spiel
-    /**
      * koordiniert das Zeichnen der Punkteanzeige
      * hier werden Zeichen-Eigenschaften gesetzt
      */
@@ -132,11 +131,20 @@ public class Bewertung extends AppCompatActivity {
         float leftBorder = bitmap.getWidth()/16;
         // Style und Farbe
         Paint paint = new Paint();
-        // insgesamt werden 5 Punkte gezeichnet
+        // insgesamt gibt es 5 Kategorien
         // je nach dem wie hoch die Anzahl der erreichten Punkte sind, werden verschiedene Farben verwendet
-        for(int i=1; i<=score; i++){
-            // diese Punkte werden hellblau gezeichnet
-            paint.setColor(Color.rgb(158, 174, 202));
+        for(int i=1; i<=category; i++){
+            if(category == 1)
+                // diese Punkte werden rot gezeichnet
+                paint.setColor(Color.RED);
+            else if(category == 2)
+                paint.setColor(Color.rgb(255, 127, 39));
+            else if(category == 3)
+                paint.setColor(Color.YELLOW);
+            else if(category == 4)
+                paint.setColor(Color.rgb(181, 230, 29));
+            else
+                paint.setColor(Color.GREEN);
             paint.setStyle(Paint.Style.FILL);
 
             // der Abstand zwischen den Kreisen beträgt 1/8 der gesamten Breite der Bitmap
@@ -146,7 +154,7 @@ public class Bewertung extends AppCompatActivity {
             this.paintCircle(bitmap, paint, leftBorder);
         }
         // restliche nicht erreichte Punkte zeichnen
-        for(int i=score; i<=4; i++){
+        for(int i=category; i<=4; i++){
             // diese Punkte werden schwarz umrandet
             paint.setColor(Color.BLACK);
             paint.setStyle(Paint.Style.STROKE);
@@ -173,6 +181,7 @@ public class Bewertung extends AppCompatActivity {
         // Radius 50 px
         // mit den "Stift"-Eigenschaften, die je nach Level verändert wurden
         canvas.drawCircle(linkerAbstand, bitmap.getHeight()/2, 45, paint);
+
 
         // in die ImageView einfügen
         i_points.setImageBitmap(bitmap);

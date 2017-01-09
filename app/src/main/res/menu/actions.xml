@@ -7,20 +7,5 @@
         android:icon="@mipmap/sound_on_white"
         android:orderInCategory="100"
         android:title="@string/sound"
-        app:showAsAction="always"
-        />
-
-
-
-
-
-    <item android:id="@+id/level1"
-        android:orderInCategory="100"
-        android:title="@string/level1"
-        app:showAsAction="never"
-        />
-
-
-
-
+        app:showAsAction="always" />
 </menu>

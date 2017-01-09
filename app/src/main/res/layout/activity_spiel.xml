@@ -9,7 +9,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Spiel">
+
+
+    <TextView
+        android:id="@+id/level"
+        android:text="Level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/functionText"
+        android:layout_alignStart="@+id/level" />
 
     <TextView
         android:id="@+id/functionText"
@@ -20,50 +39,13 @@
         android:textColor="@android:color/holo_blue_bright"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/check"
-        android:text="Prüfen"
+    <TextView
+        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textAllCaps="false"
-        android:layout_marginBottom="164dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/functionText"
-        android:layout_marginStart="33dp"
-        android:soundEffectsEnabled="false"/>
-
-    <Button
-        android:id="@+id/info"
-        android:text="i"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:textAllCaps="false"
-        android:textSize="25sp" />
-
-    <Button
-        android:id="@+id/delete"
-        android:text="Löschen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textAllCaps="false"
-        android:layout_alignBaseline="@+id/check"
-        android:layout_alignBottom="@+id/check"
-        android:layout_toStartOf="@+id/functionText"
-        android:layout_marginEnd="46dp" />
-
-    <Button
-        android:id="@+id/menu"
-        android:text="Menü"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/functionText"
-        android:layout_alignParentEnd="true"
-        android:textAllCaps="false"
-        android:textSize="15sp" />
+        android:id="@+id/temp_score" />
 
     <TextView
         android:id="@+id/review"
@@ -85,23 +67,30 @@
         android:textSize="25sp"
         android:textAllCaps="false" />
 
-    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte
-        android:id="@+id/hilfspunkte"
-        android:layout_width="568px"
-        android:layout_height="400px"
-        android:background="@drawable/coordinate_blank"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/menu"
-        android:layout_marginTop="25dp" />
+    <Button
+        android:id="@+id/check"
+        android:text="Prüfen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:layout_marginBottom="164dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/functionText"
+        android:layout_marginStart="33dp"
+        android:soundEffectsEnabled="false"/>
 
-    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche
-        android:id="@+id/zeichenfläche"
-        android:layout_width="568px"
-        android:layout_height="400px"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/menu"
-        android:layout_marginTop="25dp"
-        />
+    <Button
+        android:id="@+id/delete"
+        android:text="Löschen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:layout_alignBaseline="@+id/check"
+        android:layout_alignBottom="@+id/check"
+        android:layout_toStartOf="@+id/functionText"
+        android:layout_marginEnd="46dp" />
 
     <Button
         android:id="@+id/draw"
@@ -115,21 +104,29 @@
         android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp" />
 
-    <TextView
-        android:id="@+id/level"
-        android:text="Level"
+    <Button
+        android:id="@+id/info"
+        android:text="i"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
 
-    <ImageView
-        android:id="@+id/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
+    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte
+        android:id="@+id/hilfspunkte"
+        android:layout_width="568px"
+        android:layout_height="400px"
+        android:background="@drawable/coordinate_blank"
         android:layout_below="@+id/functionText"
-        android:layout_alignStart="@+id/level" />
+        android:layout_alignParentEnd="true" />
+
+    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche
+        android:id="@+id/zeichenfläche"
+        android:layout_width="568px"
+        android:layout_height="400px"
+        android:layout_below="@+id/functionText"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

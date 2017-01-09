@@ -1,15 +1,22 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.util.Log;
 
@@ -27,33 +34,33 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     // IV
-    /**
-     * Begrüßungstext beim Start der App
-     */
+    /** Begrüßungstext beim Start der App */
     private TextView t_willkommen;
-    /**
-     * Button, mit dem das Spiel gestartet wird
-     */
+    /** Button, mit dem das Spiel gestartet wird */
     private Button b_start;
-    /**
-     * Button navigiert zur Anleitung
-     */
+    /** Button navigiert zur Anleitung */
     private Button b_anleitung;
-    /**
-     * setzt das Spiel an dem Punkt fort, wo man aufgehört hat
-     */
+    /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
     private Button b_weiterspielen;
-    /**
-     * legt ein Datenquellen-Objekt an
-     */
+    /** übergibt die wichtigen Daten an die nächste Activity */
+    private Bundle bundle = new Bundle();
+    /** hier werden die Punkte der einzelnen Level gespeichert und das Level selbst */
+    private ArrayList<Integer> levelinfo;
+    /** legt ein Datenquellen-Objekt an */
     public static Datasource dataSource;
-
     /** Listen mit Datena aus der Datenbank */
     static ArrayList <Float> float_list;
     static ArrayList <String> string_list;
-
+    /** enthält Level und Punkte aus dem letzten Spiel */
+    static ArrayList <Integer> integer_list;
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
+    protected static Boolean firstTime = null;
+    /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
+    private PopupWindow mainInfo;
+    private View popupLayout4;
+    private Button b_ok4;
+
 
 
     /**
@@ -69,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Schriftart
+        //FontOverride.setDefaultFont(this, "DEFAULT", "Brandon_reg.otf");
+
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);
 
@@ -78,39 +88,90 @@ public class MainActivity extends AppCompatActivity {
         b_start = (Button) findViewById(R.id.start);
         b_anleitung = (Button) findViewById(R.id.anleitung);
         b_weiterspielen = (Button) findViewById(R.id.weiterspielen);
-
-
-
-        // man kann nur weiter spielen, wenn schonmal gespielt wurde
-        // d. h. wenn in der Datenbank keine Bewertungen stehen kann man nur neu starten
-        // TODO Abfrage: stehen in der Datenbank irgendwo Werte?
-        // if(...){
-        b_weiterspielen.setVisibility(View.INVISIBLE);
-        // b_start.setText("Neustart");
+        levelinfo = new ArrayList<>(6);
 
 
         // Begrüßungstext anzeigen
-        t_willkommen.setText("Herzlich Willkommen beim Tanz der Funktionen!");
+        t_willkommen.setText("Herzlich Willkommen beim Tanz der Funktionen");
+
+
+        // LayoutInflater für alle PopUpWindows
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // Popup Window 4: Info, dass zuerst berechnet werden muss
+        popupLayout4=inflater.inflate(R.layout.popup_maininfo, (ViewGroup)findViewById(R.id.popup_element_4));
+        mainInfo= new PopupWindow(popupLayout4,300,370, true);
+        b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
+        b_ok4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainInfo.dismiss();
+                sendMessage(v);
+            }
+        });
+
+
+        /************************************************ das geht nicht, dann gibt es eine NullpointerException ***********************************
+        if(dataSource.Eintraege_Int() == null)
+            Spiel.isBuffered = false;
+         */
+
+
+        // wenn es keinen Zwischenspeicher gibt
+        // blende die Möglichkeit weiterzuspielen aus
+        if(isFirstTime()){
+            b_weiterspielen.setVisibility(View.INVISIBLE);
+            b_start.setText("Start");
+        }
+
+
+
+
+
+
 
         // Buttonfunktion die das Spiel neu startet erstellen
         b_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Datenbank zurücksetzen
-                // in sendMessage wird die neue Activity gestartet
-                sendMessage(v);
                 // Listen aus der Klasse Datasource holen
                 float_list= dataSource.Float_Entries();
                 string_list= dataSource.String_Eintries();
+
+                // beim Neustart neue Liste erstellen, in der alle Infos stehen
+                //levelinfo = new ArrayList<>(6);
+                // Liste mit den richtigen Werten füllen
+                // als erstes kommt das Level
+                levelinfo.add(1);
+                // dann folgen die Punkte der Level 1-5
+                // default 200
+                for(int i=1; i<=5; i++){
+                    levelinfo.add(i, 200);
+                }
+                mainInfo.showAtLocation(popupLayout4, Gravity.CENTER, 0, 0);
+
             }
         });
 
         b_weiterspielen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Datenbank nicht zurücksetzen??
-                // in sendMessage wird die neue Activity gestartet
-                sendMessage(v);
+                // Listen aus der Klasse Datasource holen
+                float_list= dataSource.Float_Entries();
+                string_list= dataSource.String_Eintries();
+                // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
+                integer_list = dataSource.Int_Entries();
+
+                // Level am Index 0 speichern
+                levelinfo.add(integer_list.get(integer_list.size()-6));
+                // levelinfo füllen
+                // am Index 1-5 sollen die letzten 5 Einträge der Liste stehen
+                // im 5. Level steht der letzte Wert der Liste
+                int index = (integer_list.size()-5);
+                for(int i=1; i<=5; i++) {
+                    levelinfo.add(integer_list.get(index));
+                    index++;
+                }
+                mainInfo.showAtLocation(popupLayout4, Gravity.CENTER, 0, 0);
             }
         });
 
@@ -124,6 +185,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }//Ende OnCreate
 
+    /**
+     * Checks if the user is opening the app for the first time.
+     * Note that this method should be placed inside an activity and it can be called multiple times.
+     * @return boolean
+     */
+    private boolean isFirstTime() {
+        if (firstTime == null) {
+            SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
+            firstTime = mPreferences.getBoolean("firstTime", true);
+            if (firstTime) {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean("firstTime", false);
+                editor.commit();
+            }
+        }
+        return firstTime;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
@@ -135,19 +214,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-
             case R.id.sound:
                 changeSound(item);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
 
 
     /**
@@ -157,44 +230,25 @@ public class MainActivity extends AppCompatActivity {
      * @param view View, die geklickt wurde
      */
     public void sendMessage(View view) {
-        // Spiel neu starten
-        if (view.getId() == R.id.start) {
-            Bundle b = new Bundle();
-
-            // starte in Level 1
-            b.putInt("Level", 1);
+        // Spiel neu starten oder weiterspielen
+        if (view.getId()==R.id.ok) {
+            // Bundle füllen
+            // Sound
             // je nach dem ob Sound on oder off ist
+            Bundle b = new Bundle();
             if (soundIsOn) b.putBoolean("Sound",true);
             else b.putBoolean("Sound", false);
 
+            // Liste mit Infos
+            b.putIntegerArrayList("Infos", levelinfo);
 
-            // erstelle eine neue Liste für die Punkte
-            ArrayList<Integer> levelpoints = new ArrayList<>(5);
-            // levelpoints.trimToSize();
-            // Liste mit null-Werten füllen
-            for (int i = 0; i <= 5; i++) {
-                levelpoints.add(i, 100);
-            }
-            b.putIntegerArrayList("Punkte", levelpoints);
-            Intent i = new Intent(this, Spiel.class);
-            i.putExtras(b);
-            startActivity(i);
-        }
-        // Spiel weiter spielen
-        if (view.getId() == R.id.weiterspielen) {
-            Bundle b = new Bundle();
-            // TODO letzten Stand aus der Datenbank holen
-            // Level und die ArrayList mit den Punkten
-            // b.putInt("Level", ...);
-            // b.putIntegerArrayList("Punkte pro Level", ...);
-            Intent i = new Intent(this, Spiel.class);
-            i.putExtras(b);
-            startActivity(i);
+            Intent intent = new Intent(this, Spiel.class);
+            intent.putExtras(b);
+            startActivity(intent);
         }
         // Anleitung anzeigen lassen
         if (view.getId() == R.id.anleitung) {
-            Intent i = new Intent(this, Anleitung.class);
-            startActivity(i);
+            startActivity(new Intent(this, Anleitung.class));
         }
 
     }
@@ -224,9 +278,9 @@ public class MainActivity extends AppCompatActivity {
         //finish();
     }
 
-   static ArrayList returnFloatList (){
+    static ArrayList returnFloatList (){
         return float_list;
-    }
+   }
 
     static ArrayList returnStringList (){
         return string_list;
