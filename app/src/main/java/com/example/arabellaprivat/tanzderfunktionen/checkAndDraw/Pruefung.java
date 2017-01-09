@@ -48,6 +48,7 @@ public class Pruefung {
      * vergleicht den gezeichneten Pfad mit der jeweils vorgegebenen Funktion
      * @param level gibt das aktuelle level an
      * @return true falls gezeichnete Funktion der Original-Funktion entspricht
+     * TODO umbenennen in bewerten
     */
 
 
@@ -86,7 +87,6 @@ public class Pruefung {
             maxPoints=45;
             points+=compareSpecialPoints(n2,0);
         }
-
         // Punkte für die "restlichen" Punkte berechnen
         // hängt von der Genauigkeit (Toleranzbereich) ab
         // es gibt drei Abstufungen
@@ -112,7 +112,6 @@ public class Pruefung {
             }
             index++;
         }
-
         return  pointsInPercent(maxPoints,points);
     }
 

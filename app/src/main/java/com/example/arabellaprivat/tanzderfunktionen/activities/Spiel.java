@@ -625,7 +625,7 @@ public class Spiel extends AppCompatActivity {
     }
 
    
-
+    // TODO umbennen in Bewertungs-Textausgeben
     private void check (Pruefung p){
         // je nach Ergebnis wird das Ergebnis ausgegeben
         int points=p.check(level,para);
