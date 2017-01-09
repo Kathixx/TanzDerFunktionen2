@@ -1,9 +1,11 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
+import android.app.ActionBar;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Schriftart ändern
         FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 

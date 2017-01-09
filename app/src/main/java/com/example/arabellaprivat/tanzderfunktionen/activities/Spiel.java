@@ -1,4 +1,4 @@
-﻿package com.example.arabellaprivat.tanzderfunktionen.activities;
+package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -87,6 +88,7 @@ public class Spiel extends AppCompatActivity {
     private TextView t_points;
     /** zeigt, die Erklärung an */
     private TextView t_conclusion;
+    private TextView t_number;
 
     //Instanz vonn Datasource
     Datasource datasource = MainActivity.dataSource;
@@ -133,6 +135,7 @@ public class Spiel extends AppCompatActivity {
         b_check = (Button) findViewById(R.id.check);
         b_next = (Button) findViewById(R.id.next);
         t_temp_score = (TextView) findViewById(R.id.temp_score);
+        t_number = (TextView) findViewById(R.id.number);
         t_result = (TextView) findViewById(R.id.review);
         t_function = (TextView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
@@ -184,7 +187,24 @@ public class Spiel extends AppCompatActivity {
             if (levelinfo.get(i) != 100)
                 score += levelinfo.get(i);
         }
-        t_temp_score.setText("Punktestand: " + score);
+        t_number.setText(String.valueOf(score));
+        Typeface fontNumber = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
+        t_number.setTypeface(fontNumber);
+        // Je nach Punktestand Farbe setzen
+        int c;
+        if(score <= 9){
+            c = Color.rgb(153,2,14);
+        } else if(score <= 19){
+            c = Color.rgb(255, 127, 39);
+        } else if(score <= 29){
+            c = Color.rgb(255, 201, 14);
+        } else if(score <= 39) {
+            c = Color.rgb(181, 230, 29);
+        } else {
+            c = Color.rgb(34, 177, 76);
+        }
+        t_number.setTextColor(c);
+        t_function.setTextColor(c);
 
 
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
@@ -450,7 +470,7 @@ public class Spiel extends AppCompatActivity {
             // 5. Stufe 0-9: rot
             if(levelinfo.get(i) >= 0 && levelinfo.get(i) <= 9){
                 // sei der Kreis rot ausgemalt
-                paint.setColor(Color.RED);
+                paint.setColor(Color.rgb(153,2,14));
             }
             // 4. Stufe 10-19: orange
             else if(levelinfo.get(i) >= 10 && levelinfo.get(i) <= 19){
@@ -458,7 +478,7 @@ public class Spiel extends AppCompatActivity {
             }
             // 3. Stufe 20-29: gelb
             else if(levelinfo.get(i) >= 20 && levelinfo.get(i) <= 29){
-                paint.setColor(Color.YELLOW);
+                paint.setColor(Color.rgb(255, 201, 14));
             }
             // 2. Stufe 30-39: hellgrün
             else if(levelinfo.get(i) >= 30 && levelinfo.get(i) <= 39){
@@ -466,7 +486,7 @@ public class Spiel extends AppCompatActivity {
             }
             // 1. Stufe 10-19: grün
             else if(levelinfo.get(i) >= 40 && levelinfo.get(i) <= 45){
-                paint.setColor(Color.GREEN);
+                paint.setColor(Color.rgb(34, 177, 76));
             }
             // wenn das Level noch nicht gemacht wurde
             else if(levelinfo.get(i)== 100){
