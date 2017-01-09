@@ -154,8 +154,6 @@ public class Zeichenfläche extends View {
         }
     }
 
-    public boolean pathTooShort (){
-        return (pm.getLength()<500);
-    }
+
 
 }
