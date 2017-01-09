@@ -554,19 +554,20 @@ public class Spiel extends AppCompatActivity {
 
     /**
      * Callback Methode
-     * speichert Zwischenstand ab
+     * speichert Zwischenstand ab beim Verlassen der Activity / des Spiels
      */
     @Override
     protected void onPause() {
         super.onPause();
+        //aktuelle Punktestände aus der Liste lesen
         levelpoint1 = levelpoints.get(1);
         levelpoint2 = levelpoints.get(2);
         levelpoint3 = levelpoints.get(3);
         levelpoint4 = levelpoints.get(4);
         levelpoint5 = levelpoints.get(5);
-        //levelpoint5 = 5;
+        //aktuelles Level, sowie die Punktestände in die Tabelle Temp_Storage schreiben
         datasource.insert_table2(level,levelpoint1, levelpoint2, levelpoint3, levelpoint4, levelpoint5);
-        //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
+        //"Gespeichert"-Toast anzeigen zur Bestätigung
         Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
 
     }

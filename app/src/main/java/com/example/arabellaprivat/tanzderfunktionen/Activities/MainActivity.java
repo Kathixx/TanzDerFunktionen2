@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                 // in sendMessage wird die neue Activity gestartet
                 sendMessage(v);
                 // Listen aus der Klasse Datasource holen
-                float_list= dataSource.Eintraege_Float();
-                string_list= dataSource.Eintraege_String();
+                float_list= dataSource.Float_Entries();
+                string_list= dataSource.String_Eintries();
             }
         });
 
