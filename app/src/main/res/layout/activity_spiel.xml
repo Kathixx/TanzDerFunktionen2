@@ -64,10 +64,11 @@
         android:text="Weiter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/review"
         android:layout_centerHorizontal="true"
         android:textSize="25sp"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:layout_alignBaseline="@+id/check"
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/check"
@@ -80,7 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp"
-        android:soundEffectsEnabled="false"/>
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/delete"
@@ -92,7 +93,8 @@
         android:layout_alignBaseline="@+id/check"
         android:layout_alignBottom="@+id/check"
         android:layout_toStartOf="@+id/functionText"
-        android:layout_marginEnd="46dp" />
+        android:layout_marginEnd="46dp"
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/draw"
@@ -104,7 +106,8 @@
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
-        android:layout_marginStart="33dp" />
+        android:layout_marginStart="33dp"
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/info"
