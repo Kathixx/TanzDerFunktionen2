@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popup_element_4"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:text="Bitte beachte: bei der Überprüfung \n des Funktiongraphens wird besonders Wert \n
+        auf Nullstellen und Achsenabschnitt gelegt. \n Berechne deshalb diese Punkte \n
+         zuvor auf einem Blatt Papier.\n Zeichne dann deine berechneten\n Hilfspunkte ein."
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:text="OK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ok"
+        android:textColor="@android:color/background_light"
+        android:background="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+</LinearLayout>

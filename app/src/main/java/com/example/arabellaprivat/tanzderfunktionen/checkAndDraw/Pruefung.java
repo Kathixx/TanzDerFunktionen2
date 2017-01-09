@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 /**
@@ -27,6 +28,7 @@ public class Pruefung {
 
     /** Array mit den aktuellen Werten der Funktion */
     private double[] parameters;
+
 
 
     /**
@@ -69,6 +71,8 @@ public class Pruefung {
         double n1= parameters[4];
         double n2= parameters[5];
         double t= parameters[6];
+
+
         int maxPoints=41;
 
         int points=0;
@@ -112,6 +116,20 @@ public class Pruefung {
         return  pointsInPercent(maxPoints,points);
     }
 
+    public boolean pathIsInIntervall (double [] fl){
+        parameters=fl;
+        // Das Intervall ist in der parameterliste in den letzten Zwei Stellen gespeichert
+        // minimales und maximales Intervall auslesen
+        double iMin =parameters[7];
+        double iMax= parameters [8];
+        // Start- und Endwert des gezeichneten Pfades auslesen und in Koordinaten umwandeln
+        double start= pixelToCoordinate(listeX.get(0), z,10);
+        double end= pixelToCoordinate(listeX.get(listeX.size()-1),z,10);
+        // falls Start- und Endwert auserhalb des Intervalls bzw. auf der Intervallgrenze liegen, ist die gesamte Funktion innerhalb des Intervalls gezeichnet worden
+        return (start<=iMin && end>=iMax);
+
+
+    }// Ende pathIsInIntervall
 
     private double calculateYValue (int level,double xWert, double a, double b, double c, double d) {
         double yWert;
@@ -341,5 +359,9 @@ public class Pruefung {
 
     private int pointsInPercent (int maxPoints, int points){
        return Math.round((points*100/maxPoints));
+    }
+
+    public boolean pathIsEmpty(){
+        return listeX.isEmpty()&& listeY.isEmpty();
     }
 }

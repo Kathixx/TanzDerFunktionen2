@@ -24,12 +24,6 @@ public class Hilfspunkte extends View {
     private ArrayList<Path> pathList= new ArrayList<>();
 
 
-    PathMeasure pm;
-    float pos []=  new float [2];
-    float distance;
-    float length;
-    float step;
-
     /* neue Liste wird hier erstellt
      während dem Zeichnen werden die y-Wert hier eingetragen
      */
@@ -66,12 +60,10 @@ public class Hilfspunkte extends View {
             case MotionEvent.ACTION_DOWN:
                 if (!path.isEmpty()){
                     tempPath.set(path);
-                    //pathList.add(path);
                 }
                 path.addCircle(xPos,yPos,2f, Path.Direction.CCW);
                 return true;
             case MotionEvent.ACTION_MOVE:
-                //path.addCircle(xPos,yPos,2f, Path.Direction.CCW);
                 break;
             case MotionEvent.ACTION_UP:
                 break;

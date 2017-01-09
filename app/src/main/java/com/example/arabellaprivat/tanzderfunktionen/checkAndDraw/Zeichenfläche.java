@@ -53,7 +53,6 @@ public class Zeichenfläche extends View {
 
     @Override
     protected void onDraw (Canvas canvas) {
-
         canvas.drawPath(path, paint);
     }
 
@@ -65,7 +64,7 @@ public class Zeichenfläche extends View {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 // löscht den alten pfad, sobald man neu aufsetzt, d.h. man nochmal zeichnen möchte --> warum löschen button noch?
-                //path.reset();
+                path.reset();
                 path.moveTo(xPos,yPos);
                 return true;
             case MotionEvent.ACTION_MOVE:
@@ -152,10 +151,11 @@ public class Zeichenfläche extends View {
             case 5: this.setBackgroundResource(R.drawable.logfunction);
                     break;
             default: break;
-
-
         }
     }
 
+    public boolean pathTooShort (){
+        return (pm.getLength()<500);
+    }
 
 }

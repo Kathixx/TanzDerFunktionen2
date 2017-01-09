@@ -182,6 +182,7 @@ public class Bewertung extends AppCompatActivity {
         // mit den "Stift"-Eigenschaften, die je nach Level verändert wurden
         canvas.drawCircle(linkerAbstand, bitmap.getHeight()/2, 45, paint);
 
+
         // in die ImageView einfügen
         i_points.setImageBitmap(bitmap);
     }
