@@ -129,10 +129,7 @@ public class Spiel extends AppCompatActivity {
     private PopupWindow pathTooShort;
     private View popupLayout3;
     private Button b_ok3;
-    /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
-    private PopupWindow mainInfo;
-    private View popupLayout4;
-    private Button b_ok4;
+
 
 
 
@@ -185,7 +182,7 @@ public class Spiel extends AppCompatActivity {
         b_ok2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               nothingIsDrawn.dismiss();
+                nothingIsDrawn.dismiss();
             }
         });
 
@@ -200,15 +197,7 @@ public class Spiel extends AppCompatActivity {
             }
         });
 
-        // Popup Window 4: Info, dass zuerst berechnet werden muss
-        popupLayout4=inflater.inflate(R.layout.popup_maininfo, (ViewGroup)findViewById(R.id.popup_element_4));
-        mainInfo= new PopupWindow(popupLayout4,300,370, true);
-        b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
-        b_ok4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {mainInfo.dismiss();
-            }
-        });
+
 
 
 
@@ -418,8 +407,8 @@ public class Spiel extends AppCompatActivity {
                         pathTooShort.showAtLocation(popupLayout3, Gravity.CENTER, 0, 0);
                    }
                     else { */
-                        check(p);
-                  // }
+                    check(p);
+                    // }
                 }
 
             }
@@ -652,23 +641,23 @@ public class Spiel extends AppCompatActivity {
      * @return Array mit allen relevanten Werten des Levels
 
     static float[] getParameters(int l, ArrayList <Float> fl){
-        // Float-Array in dem alle Parameter, Nullstellen und Achsenabschnitt der jeweiligen Funktion und damit Level gespeichert wird
-        // eine Funktion hat max. 7 Werte: 4 Parameter, 2 Nullstellen, 1 Achsenabschnitt; deshalb 7-stelliges Array;
-        float [] paramters = new float[7];
-        // Startwert, bei dem in der float_liste begonnen werden soll, die WErte auszulesen
-        // und Endwert bei dem dann ein neues Level/Funktion beginnt und gestoppt werden soll
-        //Bsp: wir sind bei Funktion 2 also Level 2:
-        // wir müssen an Stelle 7 in der float_list beginnen: (2-1)*7=7
-        // dann folgen 7 Werte die wir auslesen müssen, also bis stelle 13
-        // der Endwert ist somit 14: 2+7;
-        int start = (l-1)*7;
-        int end= l*2;
-        int index=0;
-        for (int i=start; i<end; i++){
-            paramters[index]=fl.get(i);
-            index++;
-        };
-        return paramters;
+    // Float-Array in dem alle Parameter, Nullstellen und Achsenabschnitt der jeweiligen Funktion und damit Level gespeichert wird
+    // eine Funktion hat max. 7 Werte: 4 Parameter, 2 Nullstellen, 1 Achsenabschnitt; deshalb 7-stelliges Array;
+    float [] paramters = new float[7];
+    // Startwert, bei dem in der float_liste begonnen werden soll, die WErte auszulesen
+    // und Endwert bei dem dann ein neues Level/Funktion beginnt und gestoppt werden soll
+    //Bsp: wir sind bei Funktion 2 also Level 2:
+    // wir müssen an Stelle 7 in der float_list beginnen: (2-1)*7=7
+    // dann folgen 7 Werte die wir auslesen müssen, also bis stelle 13
+    // der Endwert ist somit 14: 2+7;
+    int start = (l-1)*7;
+    int end= l*2;
+    int index=0;
+    for (int i=start; i<end; i++){
+    paramters[index]=fl.get(i);
+    index++;
+    };
+    return paramters;
 
     } */
 
@@ -726,8 +715,8 @@ public class Spiel extends AppCompatActivity {
         item.setIcon(R.mipmap.sound_off);
     }
 
-   
 
+    // TODO umbennen in Bewertungs-Textausgeben
     private void check (Pruefung p){
         // je nach Ergebnis wird das Ergebnis ausgegeben
         int points=p.check(level,para);
