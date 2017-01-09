@@ -3,7 +3,6 @@ package com.example.arabellaprivat.tanzderfunktionen.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,9 +19,6 @@ public class Anleitung extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anleitung);
-        // Schriftart
-        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
-        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         // Variablen belegen
         t_instructions = (TextView) findViewById(R.id.instructions);

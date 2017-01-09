@@ -1,12 +1,12 @@
-﻿package com.example.arabellaprivat.tanzderfunktionen.activities;
+package com.example.arabellaprivat.tanzderfunktionen.activities;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -88,7 +88,6 @@ public class Spiel extends AppCompatActivity {
     private TextView t_points;
     /** zeigt, die Erklärung an */
     private TextView t_conclusion;
-    private TextView t_number;
 
     //Instanz vonn Datasource
     Datasource datasource = MainActivity.dataSource;
@@ -137,9 +136,6 @@ public class Spiel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
-        // Schriftart
-        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
-        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
@@ -147,12 +143,7 @@ public class Spiel extends AppCompatActivity {
         b_check = (Button) findViewById(R.id.check);
         b_next = (Button) findViewById(R.id.next);
         t_temp_score = (TextView) findViewById(R.id.temp_score);
-
         t_intervall = (TextView) findViewById(R.id.review);
-
-        t_number = (TextView) findViewById(R.id.number);
-
-
         t_function = (TextView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
         i_score = (ImageView) findViewById(R.id.score);
@@ -160,7 +151,7 @@ public class Spiel extends AppCompatActivity {
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
         b_draw=(Button) findViewById(R.id.draw);
         t_result2= (TextView)findViewById(R.id.Ergebnis);
-        t_points=(TextView)findViewById(R.id.text);
+        t_points=(TextView)findViewById(R.id.Punkte);
         t_conclusion=(TextView)findViewById(R.id.Erklärung);
         p = new Pruefung(z, h);
 
@@ -200,6 +191,7 @@ public class Spiel extends AppCompatActivity {
             public void onClick(View v) {pathTooShort.dismiss();z.deleteView();
             }
         });
+
 
 
 
@@ -245,24 +237,7 @@ public class Spiel extends AppCompatActivity {
             if (levelinfo.get(i) != 200)
                 score += levelinfo.get(i);
         }
-        t_number.setText(String.valueOf(score));
-        Typeface fontNumber = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
-        t_number.setTypeface(fontNumber);
-        // Je nach Punktestand Farbe setzen
-        int c;
-        if(score <= 9){
-            c = Color.rgb(153,2,14);
-        } else if(score <= 19){
-            c = Color.rgb(255, 127, 39);
-        } else if(score <= 29){
-            c = Color.rgb(255, 201, 14);
-        } else if(score <= 39) {
-            c = Color.rgb(181, 230, 29);
-        } else {
-            c = Color.rgb(34, 177, 76);
-        }
-        t_number.setTextColor(c);
-        t_function.setTextColor(c);
+        t_temp_score.setText("Punktestand: " + score);
 
 
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
@@ -347,6 +322,7 @@ public class Spiel extends AppCompatActivity {
                     nothingIsDrawn.showAtLocation(popupLayout2, Gravity.CENTER, 0, 0);
                 }
                 else {
+
                    if (p.pathIsInIntervall(para)) {
                         pathTooShort.showAtLocation(popupLayout3, Gravity.CENTER, 0, 0);
                    }
@@ -430,15 +406,7 @@ public class Spiel extends AppCompatActivity {
             // Activity starten
             startActivity(i_new);
         } else {
-            // Pop-Up Window
-            Intent intent = new Intent(Spiel.this, Punkte.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("result2", "Halt!");
-            bundle.putString("conclusion","Das Level hast Du schon gemacht. Bitte such Dir ein anderes Level aus.");
-            bundle.putInt("color", Color.RED);
-            bundle.putString("points", "X");
-            intent.putExtras(bundle);
-            startActivity (intent);
+            w_unallowed_choice.showAtLocation(layout, Gravity.CENTER, 0, 0);
         }
     }
 
@@ -458,7 +426,7 @@ public class Spiel extends AppCompatActivity {
             // 5. Stufe 0-9: rot
             if(levelinfo.get(i) >= 0 && levelinfo.get(i) <= 9){
                 // sei der Kreis rot ausgemalt
-                paint.setColor(Color.rgb(153,2,14));
+                paint.setColor(Color.RED);
             }
             // 4. Stufe 10-19: orange
             else if(levelinfo.get(i) >= 10 && levelinfo.get(i) <= 19){
@@ -466,7 +434,7 @@ public class Spiel extends AppCompatActivity {
             }
             // 3. Stufe 20-29: gelb
             else if(levelinfo.get(i) >= 20 && levelinfo.get(i) <= 29){
-                paint.setColor(Color.rgb(255, 201, 14));
+                paint.setColor(Color.YELLOW);
             }
             // 2. Stufe 30-39: hellgrün
             else if(levelinfo.get(i) >= 30 && levelinfo.get(i) <= 39){
@@ -474,7 +442,7 @@ public class Spiel extends AppCompatActivity {
             }
             // 1. Stufe 10-19: grün
             else if(levelinfo.get(i) >= 40 && levelinfo.get(i) <= 45){
-                paint.setColor(Color.rgb(34, 177, 76));
+                paint.setColor(Color.GREEN);
             }
             // wenn das Level noch nicht gemacht wurde
             else if(levelinfo.get(i)== 200){
