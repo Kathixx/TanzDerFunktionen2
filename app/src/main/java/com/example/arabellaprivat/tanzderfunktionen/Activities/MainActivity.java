@@ -10,12 +10,15 @@ import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.util.Log;
 
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
     protected static Boolean firstTime = null;
+
 
 
     /**
@@ -107,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
+
+
         // Buttonfunktion die das Spiel neu startet erstellen
         b_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,10 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 // als erstes kommt das Level
                 levelinfo.add(1);
                 // dann folgen die Punkte der Level 1-5
-                // default 100
+                // default 200
                 for(int i=1; i<=5; i++){
-                    levelinfo.add(i, 100);
+                    levelinfo.add(i, 200);
                 }
+
                 sendMessage(v);
             }
         });
@@ -148,7 +157,8 @@ public class MainActivity extends AppCompatActivity {
                     levelinfo.add(integer_list.get(index));
                     index++;
                 }
-                sendMessage(v);
+
+
             }
         });
 

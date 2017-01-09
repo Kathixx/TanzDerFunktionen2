@@ -69,16 +69,16 @@ public class Bewertung extends AppCompatActivity {
         // Bewertungstext
         // je nach Punktezahl gibt es einen anderen Text
         // bei 0 Punkten
-        if(score <= 9){
+        if(score <= 100){
             t_review.setText("Leider hast du keine Funktion richtig gezeichnet. Vielleicht solltest Du Dich nochmal in das Thema einarbeiten.");
             category = 1;
-        } else if(score <= 19){
+        } else if(score <= 200){
             t_review.setText("Das war noch nicht ganz überzeugend. Übe weiter, um Dich zu verbessern.");
             category = 2;
-        } else if(score <= 29){
+        } else if(score <= 300){
             t_review.setText("Das war schon ein guter Anfang. Übe weiter, um Dich zu verbessern.");
             category = 3;
-        } else if(score <= 39) {
+        } else if(score <= 400) {
             t_review.setText("Gut gemacht. Übe weiter, um Dein Wissen zu festigen.");
             category = 4;
         } else {
@@ -90,7 +90,7 @@ public class Bewertung extends AppCompatActivity {
         visualizeScore();
 
         // Wie viele Punkte wurden erreicht?
-        t_score.setText("Du erhälst " + score + " von 45 Punkten.");
+        t_score.setText("Du erhälst " + score + " von 500 Punkten.");
 
         b_restart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +185,7 @@ public class Bewertung extends AppCompatActivity {
         // Radius 50 px
         // mit den "Stift"-Eigenschaften, die je nach Level verändert wurden
         canvas.drawCircle(linkerAbstand, bitmap.getHeight()/2, 45, paint);
+
 
         // in die ImageView einfügen
         i_points.setImageBitmap(bitmap);

@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen.activities;
+﻿package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -73,7 +73,7 @@ public class Spiel extends AppCompatActivity {
     /** speichert die Punkte jedes Levels */
     private ArrayList<Integer> levelinfo;
     /** informiert, wenn das angeklicckte Level nicht ausgewählt werden darf */
-    PopupWindow w_unallowed_choice;
+    private PopupWindow w_unallowed_choice;
     /** Zeichenfläche, auf der die Funktionen gezeichnet werden */
     private Zeichenfläche z;
     /** hier wird das Popup Window eingefügt */
@@ -117,9 +117,24 @@ public class Spiel extends AppCompatActivity {
     private long lastClick=0;
 
     /** Media Player für Musik */
-    MediaPlayer mp;
+    private MediaPlayer mp;
     /** Variable für Sound */
     private boolean soundIsOn;
+    /** Popup Window informiert falls nichts gezeichnet wurde   */
+    private PopupWindow nothingIsDrawn;
+    private View popupLayout2;
+    private Button b_ok2;
+    private Pruefung p;
+    /** Popup Window informiert, falls Graph zu kuzr gezeichnet wurde */
+    private PopupWindow pathTooShort;
+    private View popupLayout3;
+    private Button b_ok3;
+    /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
+    private PopupWindow mainInfo;
+    private View popupLayout4;
+    private Button b_ok4;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +161,56 @@ public class Spiel extends AppCompatActivity {
         t_result2= (TextView)findViewById(R.id.Ergebnis);
         t_points=(TextView)findViewById(R.id.text);
         t_conclusion=(TextView)findViewById(R.id.Erklärung);
+        p = new Pruefung(z, h);
+
+
+        // LayoutInflater für alle PopUpWindows
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // PopupWindow 1: falls ein Level schon gespielt aber nochmal aufgerufen wurde
+        layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
+        w_unallowed_choice = new PopupWindow(layout, 300, 370, true);
+        b_ok = (Button) layout.findViewById(R.id.ok);
+        b_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                w_unallowed_choice.dismiss();
+            }
+        });
+
+        // Popup Window 2: Falls nichts gezeichnet wurde und auf überprüfen geklickt wurde
+        popupLayout2=inflater.inflate(R.layout.popupwindow2, (ViewGroup)findViewById(R.id.popup_element_2));
+        nothingIsDrawn= new PopupWindow(popupLayout2, 300,370, true);
+        b_ok2=(Button) popupLayout2.findViewById(R.id.ok);
+        b_ok2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               nothingIsDrawn.dismiss();
+            }
+        });
+
+
+        // Popup Window 3: Falls der Pfad zu kurz also in einem zu kleinen Intervall gezeichnet wurde
+        popupLayout3=inflater.inflate(R.layout.popup_pathtooshort, (ViewGroup)findViewById(R.id.popup_element_3));
+        pathTooShort= new PopupWindow(popupLayout3,300,370, true);
+        b_ok3= (Button) popupLayout3.findViewById(R.id.ok);
+        b_ok3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {pathTooShort.dismiss();z.deleteView();
+            }
+        });
+
+        // Popup Window 4: Info, dass zuerst berechnet werden muss
+        popupLayout4=inflater.inflate(R.layout.popup_maininfo, (ViewGroup)findViewById(R.id.popup_element_4));
+        mainInfo= new PopupWindow(popupLayout4,300,370, true);
+        b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
+        b_ok4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {mainInfo.dismiss();
+            }
+        });
+
+
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -157,6 +222,8 @@ public class Spiel extends AppCompatActivity {
         string_list= MainActivity.returnStringList();
 
         text= new String [3];
+
+        // TODO parameter auf 9 erhöhen
         parameters= new double [7];
         para= new double [7];
 
@@ -184,7 +251,7 @@ public class Spiel extends AppCompatActivity {
         // Zwischenstand der Punkte anzeigen
         int score = 0;
         for(int i=1; i<=5; i++) {
-            if (levelinfo.get(i) != 100)
+            if (levelinfo.get(i) != 200)
                 score += levelinfo.get(i);
         }
         t_number.setText(String.valueOf(score));
@@ -275,35 +342,13 @@ public class Spiel extends AppCompatActivity {
         b_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Pruefung p = new Pruefung(z, h);
-                // ändere die Anzeige des Buttons
-                // Löschen und Prüfen Button verschwinden
-                b_delete.setVisibility(View.INVISIBLE);
-                b_check.setVisibility(View.INVISIBLE);
                 // RICHITG oder FALSCH soll angezeigt werden
                 t_result.setVisibility(View.VISIBLE);
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
-                // je nach Ergebnis wird das Ergebnis ausgegeben
-
-                int points=p.check(level,para);
-
-                // Variablen für die visuelle und textuelle Ergebnisanzeige
-                String result2;
-                String conclusion;
-                int color;
-
-                // Ergebnistext je nach PUnktanzahl verändern
-                // macimal erreichte PUnktzahl in einem Level sind 45
-                // falsch gezeichnet
-                if (points<10){
-                    result2="Falsch!";
-                    conclusion="Leider hast du nicht gut genug gezeichnet. \n " +
-                            "Um ein Level zu bestehen, musst du mindestens 10 Punkte erreichen. \n" +
-                            "Leider hast du nur "+String.valueOf(points)+" Punkte erreicht." +
-                            "\n Du kannst trotzdem weiterspielen";
-                    // Rot
-                    color=Color.rgb(153,2,14);
+                // zunächst wird überprüft ob überhaupt ein Graph gezeichnet wurde und ein entsprechender dialog angezeigt
+                if (p.pathIsEmpty()){
+                    nothingIsDrawn.showAtLocation(popupLayout2, Gravity.CENTER, 0, 0);
                 }
                 else {
 
@@ -368,6 +413,14 @@ public class Spiel extends AppCompatActivity {
                 intent.putExtras(bundle);
                 startActivity (intent);
 
+                    /*TODO
+                   if (p.pathIsInIntervall(para)) {
+                        pathTooShort.showAtLocation(popupLayout3, Gravity.CENTER, 0, 0);
+                   }
+                    else { */
+                        check(p);
+                  // }
+                }
 
             }
         });
@@ -378,6 +431,7 @@ public class Spiel extends AppCompatActivity {
                 sendMessage(v);
             }
         });
+
     }// Ende onCreate
 
 
@@ -431,11 +485,12 @@ public class Spiel extends AppCompatActivity {
      */
     public void chooseLevel(int chosenLevel){
         // wenn das Level ausgewählt werden darf
-        if(levelinfo.get(chosenLevel) == 100){
+        if(levelinfo.get(chosenLevel) == 200){
             // speicher das Level in einem Bundle
             Bundle bundle = new Bundle();
             bundle.putInt("Level", chosenLevel);
             bundle.putIntegerArrayList("Infos", levelinfo);
+            bundle.putBoolean("Sound", soundIsOn);
             // neues Intent
             Intent i_new = new Intent(this, Spiel.class);
             i_new.putExtras(bundle);
@@ -489,7 +544,7 @@ public class Spiel extends AppCompatActivity {
                 paint.setColor(Color.rgb(34, 177, 76));
             }
             // wenn das Level noch nicht gemacht wurde
-            else if(levelinfo.get(i)== 100){
+            else if(levelinfo.get(i)== 200){
                 // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
                 paint.setColor(Color.BLACK);
                 paint.setStyle(Paint.Style.STROKE);
@@ -537,8 +592,8 @@ public class Spiel extends AppCompatActivity {
             startActivity(intent);
         } else if(view.getId() == R.id.next) {
             // wenn alle 5 Level gespielt wurden
-            // Level die noch nicht gemacht wurden haben von Beginn an den Wert 100
-            if(levelinfo.get(1) != 100 && levelinfo.get(2) != 100 && levelinfo.get(3) != 100 && levelinfo.get(4) != 100 && levelinfo.get(5) != 100){
+            // Level die noch nicht gemacht wurden haben von Beginn an den Wert 200
+            if(levelinfo.get(1) != 200 && levelinfo.get(2) != 200 && levelinfo.get(3) != 200 && levelinfo.get(4) != 200 && levelinfo.get(5) != 200){
                 // gehe zur Endbewertung
                 bundle.putIntegerArrayList("Infos", levelinfo);
                 bundle.putBoolean("Sound", soundIsOn);
@@ -548,7 +603,7 @@ public class Spiel extends AppCompatActivity {
             } else {
                 // gehe in das Level, das noch nicht gespielt wurde
                 int counter = 1;
-                while(levelinfo.get(counter) != 100)
+                while(levelinfo.get(counter) != 200)
                     counter++;
                 // in dieses Level gehen
                 levelinfo.set(0, counter);
@@ -617,10 +672,13 @@ public class Spiel extends AppCompatActivity {
 
     } */
 
+
     static void insertParameters (int l,ArrayList <Float> fl){
+        // TODO von 7 auf 9 erhöhen
+        int paramertsPerFunction = 7; //9;
         int level =l;
-        int start = (level-1)*7;
-        int end= (level*7);
+        int start = (level-1)*paramertsPerFunction;
+        int end= (level*paramertsPerFunction);
         int index=0;
         for (int i=start; i<end; i++){
             para[index]=fl.get(i);
@@ -670,6 +728,91 @@ public class Spiel extends AppCompatActivity {
 
    
 
+    private void check (Pruefung p){
+        // je nach Ergebnis wird das Ergebnis ausgegeben
+        int points=p.check(level,para);
+        // Variablen für die visuelle und textuelle Ergebnisanzeige
+        String result2;
+        String conclusion;
+        int color;
 
+        // Ergebnistext je nach PUnktanzahl verändern
+        // macimal erreichte PUnktzahl in einem Level sind 45
+        // falsch gezeichnet
+        if (points<=40){
+            points=0;
+            result2="Falsch!";
+            conclusion="Leider hast du nicht gut genug gezeichnet. \n " +
+                    "Probier dein Glück im nächsten Level.";
+            // Rot
+            color=Color.rgb(153,2,14);
+        }
+        else {
+
+            if (points <= 50) {
+                result2 = "Gerade nochmal gut gegangen!";
+                conclusion = " Puh da hast du ja nochmal Glück gehabt. \n" +
+                        "Versuche das nächste Mal genauer zu zeichnen,\n" +
+                        " vielleicht helfen dir mehr Hilfspunkte am Anfang?" +
+                        " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
+                        "Auf ins nächste Level, dann kannst du noch mehr Punkte sammeln";
+                // Orange
+                color = Color.rgb(255, 127, 39);
+            } else {
+                if (points <=70) {
+                    result2 = "Ganz ok";
+                    conclusion = " Das war doch gar nicht mal so schlecht \n" +
+                            "Aber Übung macht den Meister! \n" +
+                            "Du bekommst es das nächste Mal bestimmt noch etwas besser hin!" +
+                            " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
+                            "Ab ins nächste Level";
+                    // Gelb
+                    color = Color.rgb(255, 201, 14);
+                } else {
+                    if (points <= 90) {
+                        result2 = "Gut gemacht!";
+                        conclusion = " Das war schon ziemlich gut! \n" +
+                                "Glückwunsch, du konntest schon " + String.valueOf(points) + " Punkte sammeln. \n " +
+                                "Schaffst du es im nächsten Level noch besser?";
+                        // hellgrün
+                        color = Color.rgb(181, 230, 29);
+                    } else {
+                        result2 = "Sehr gut";
+                        conclusion = " Bravo, du hast den Funktionsgraph ziemlich gut gezeichnet \n" +
+                                "und konntest in diesem Level fabelhaft " + String.valueOf(points) + " Punkte erreichen. \n " +
+                                "Beweise dich im neuen Level!";
+                        // Grün
+                        color = Color.rgb(34, 177, 76);
+                        if(soundIsOn) mp.start();
+                    }
+                }
+            }
+        }// Ende if-else
+        // ändere die Anzeige des Buttons
+        // Löschen und Prüfen Button verschwinden
+        b_delete.setVisibility(View.INVISIBLE);
+        b_check.setVisibility(View.INVISIBLE);
+        // Button, der zum nächsten Level führt wird sichtbar
+        b_next.setVisibility(View.VISIBLE);
+        //  Korrekturbild soll über die Zeichnung gelegt werden
+        z.changeBackground(level);
+        z.redrawInColor(color);
+        levelinfo.set(level, points);
+        // Pop-Up Window
+        Intent intent = new Intent(Spiel.this, Punkte.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("result2", result2);
+        bundle.putString("conclusion",conclusion);
+        bundle.putInt("color",color);
+        bundle.putInt("points",points);
+        intent.putExtras(bundle);
+        startActivity (intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 }
 
