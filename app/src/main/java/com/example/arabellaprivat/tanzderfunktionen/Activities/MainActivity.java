@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
     protected static Boolean firstTime = null;
+    /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
+    private PopupWindow mainInfo;
+    private View popupLayout4;
+    private Button b_ok4;
 
 
 
@@ -91,6 +95,21 @@ public class MainActivity extends AppCompatActivity {
         t_willkommen.setText("Herzlich Willkommen beim Tanz der Funktionen");
 
 
+        // LayoutInflater für alle PopUpWindows
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // Popup Window 4: Info, dass zuerst berechnet werden muss
+        popupLayout4=inflater.inflate(R.layout.popup_maininfo, (ViewGroup)findViewById(R.id.popup_element_4));
+        mainInfo= new PopupWindow(popupLayout4,300,370, true);
+        b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
+        b_ok4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainInfo.dismiss();
+                sendMessage(v);
+            }
+        });
+
+
         /************************************************ das geht nicht, dann gibt es eine NullpointerException ***********************************
         if(dataSource.Eintraege_Int() == null)
             Spiel.isBuffered = false;
@@ -103,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             b_weiterspielen.setVisibility(View.INVISIBLE);
             b_start.setText("Start");
         }
+
 
 
 
@@ -127,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
                 for(int i=1; i<=5; i++){
                     levelinfo.add(i, 200);
                 }
+                mainInfo.showAtLocation(popupLayout4, Gravity.CENTER, 0, 0);
 
-                sendMessage(v);
             }
         });
 
@@ -151,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     levelinfo.add(integer_list.get(index));
                     index++;
                 }
-
-
+                mainInfo.showAtLocation(popupLayout4, Gravity.CENTER, 0, 0);
             }
         });
 
@@ -212,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void sendMessage(View view) {
         // Spiel neu starten oder weiterspielen
-        if (view.getId() == R.id.start || view.getId() == R.id.weiterspielen) {
+        if (view.getId()==R.id.ok) {
             // Bundle füllen
             // Sound
             // je nach dem ob Sound on oder off ist

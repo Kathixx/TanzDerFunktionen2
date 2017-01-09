@@ -128,10 +128,7 @@ public class Spiel extends AppCompatActivity {
     private PopupWindow pathTooShort;
     private View popupLayout3;
     private Button b_ok3;
-    /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
-    private PopupWindow mainInfo;
-    private View popupLayout4;
-    private Button b_ok4;
+
 
 
 
@@ -195,15 +192,7 @@ public class Spiel extends AppCompatActivity {
             }
         });
 
-        // Popup Window 4: Info, dass zuerst berechnet werden muss
-        popupLayout4=inflater.inflate(R.layout.popup_maininfo, (ViewGroup)findViewById(R.id.popup_element_4));
-        mainInfo= new PopupWindow(popupLayout4,300,370, true);
-        b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
-        b_ok4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {mainInfo.dismiss();
-            }
-        });
+
 
 
 
