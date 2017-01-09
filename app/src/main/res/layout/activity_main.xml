@@ -21,45 +21,52 @@
         android:textSize="50sp"
         android:textAlignment="center" />
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="500px"
-        android:layout_height="400px"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/tanz_der_funktionen"
-        android:layout_below="@id/willkommen"/>
-
-    <Button
-        android:text="Neustart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/start"
-        android:textSize="36sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="158dp"
-        android:textAllCaps="false" />
-
     <Button
         android:text="Anleitung"
-        android:layout_width="match_parent"
+        android:layout_width="150px"
         android:layout_height="wrap_content"
         android:id="@+id/anleitung"
         android:textSize="36sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:background="@color/btnColor"
+        android:textColor="@android:color/background_light" />
 
     <Button
         android:text="Spiel fortsetzen"
-        android:layout_width="match_parent"
+        android:layout_width="150px"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="53dp"
         android:id="@+id/weiterspielen"
         android:textSize="36sp"
         android:textAllCaps="false"
+        android:background="@color/btnColor"
+        android:textColor="@android:color/background_light"
         android:layout_above="@+id/start"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Neustart"
+        android:layout_width="150px"
+        android:layout_height="wrap_content"
+        android:id="@+id/start"
+        android:textSize="36sp"
+        android:layout_marginBottom="77dp"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/btnColor"
+        android:textColor="@android:color/background_light"
+        android:layout_above="@+id/anleitung"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="500px"
+        android:layout_height="400px"
+        app:srcCompat="@drawable/tanz_der_funktionen"
+        android:layout_below="@+id/willkommen"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp" />
 
 </RelativeLayout>

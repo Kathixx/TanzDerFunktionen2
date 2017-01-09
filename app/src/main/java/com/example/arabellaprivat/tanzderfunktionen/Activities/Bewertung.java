@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,9 @@ public class Bewertung extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bewertung);
+        // Schriftart
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         // Intent, das diese Activity geöffnet hat
         Intent intent = getIntent();
@@ -92,7 +96,7 @@ public class Bewertung extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Möglichkeit dann weiterzuspielen "ausschalten"
-                // MainActivity.firstTime = true;
+                MainActivity.firstTime = true;
                 sendMessage(v);
             }
         });
@@ -136,15 +140,15 @@ public class Bewertung extends AppCompatActivity {
         for(int i=1; i<=category; i++){
             if(category == 1)
                 // diese Punkte werden rot gezeichnet
-                paint.setColor(Color.RED);
+                paint.setColor(Color.rgb(153,2,14));
             else if(category == 2)
                 paint.setColor(Color.rgb(255, 127, 39));
             else if(category == 3)
-                paint.setColor(Color.YELLOW);
+                paint.setColor(Color.rgb(255, 201, 14));
             else if(category == 4)
                 paint.setColor(Color.rgb(181, 230, 29));
             else
-                paint.setColor(Color.GREEN);
+                paint.setColor(Color.rgb(34, 177, 76));
             paint.setStyle(Paint.Style.FILL);
 
             // der Abstand zwischen den Kreisen beträgt 1/8 der gesamten Breite der Bitmap

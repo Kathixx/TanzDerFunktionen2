@@ -2,15 +2,13 @@ package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.arabellaprivat.tanzderfunktionen.R;
-
-import java.util.Locale;
 
 /**
  * Created by Kathi on 05.01.2017.
@@ -35,7 +33,11 @@ public class Punkte extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punkte);
-        t_points= (TextView) findViewById(R.id.Punkte);
+        // Schriftart
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+
+        t_points= (TextView) findViewById(R.id.text);
         t_result2= (TextView)findViewById(R.id.Ergebnis);
         t_conclusion=(TextView)findViewById(R.id.Erklärung);
 
@@ -45,10 +47,10 @@ public class Punkte extends Activity {
         String c= bundle.getString("conclusion");
         String r= bundle.getString("result2");
         int co=bundle.getInt("color");
-        int p=bundle.getInt("points");
+        String p=bundle.getString("points");
 
         // TExte individuell anzeigen
-        t_points.setText(String.valueOf(p));
+        t_points.setText(p);
         t_result2.setText(r);
         t_conclusion.setText(c);
 
@@ -64,11 +66,11 @@ public class Punkte extends Activity {
 
         // Schrift beeinflussen
         Typeface fontNumber = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
-        Typeface fontText=Typeface.createFromAsset(getAssets(),  "fonts/Brandon_reg.otf");
+        // Typeface fontText=Typeface.createFromAsset(getAssets(),  "fonts/Brandon_reg.otf");
         t_points.setTypeface(fontNumber);
-        t_result2.setTypeface(fontText);
+        // t_result2.setTypeface(fontText);
         t_points.setTextColor(co);
-        t_conclusion.setTypeface(fontText);
+        // t_conclusion.setTypeface(fontText);
     }
 
 

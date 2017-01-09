@@ -1,9 +1,11 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
+import android.app.ActionBar;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 /**
  * Startbildschirm
  * wird beim Start der App automatisch aufgerufen
+ * Quelle Font setzen: https://coderwall.com/p/qxxmaa/android-use-a-custom-font-everywhere
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -76,8 +79,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Schriftart
-        //FontOverride.setDefaultFont(this, "DEFAULT", "Brandon_reg.otf");
+        // Schriftart ändern
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+
+
 
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);
