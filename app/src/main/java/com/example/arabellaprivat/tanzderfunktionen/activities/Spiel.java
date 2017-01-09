@@ -61,7 +61,7 @@ public class Spiel extends AppCompatActivity {
     /** führt zum nächsten Level oder zur Endbewertung */
     private Button b_next;
     /** sagt, ob richtig oder falsch gezeichnet wurde */
-    private TextView t_result;
+    private TextView t_intervall;
     /** zeigt die zu malende Funktion an */
     private TextView t_function;
     /** diese TextView zeigt das aktuelle Level an */
@@ -143,7 +143,7 @@ public class Spiel extends AppCompatActivity {
         b_check = (Button) findViewById(R.id.check);
         b_next = (Button) findViewById(R.id.next);
         t_temp_score = (TextView) findViewById(R.id.temp_score);
-        t_result = (TextView) findViewById(R.id.review);
+        t_intervall = (TextView) findViewById(R.id.review);
         t_function = (TextView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
         i_score = (ImageView) findViewById(R.id.score);
@@ -208,17 +208,15 @@ public class Spiel extends AppCompatActivity {
 
         text= new String [3];
 
-        // TODO parameter auf 9 erhöhen
-        parameters= new double [7];
-        para= new double [7];
+
+        parameters= new double [9];
+        para= new double [9];
 
         // MediaPlayer für Musik
-        mp= MediaPlayer.create(this, R.raw.pad_confirm);
+        mp= MediaPlayer.create(this, R.raw.confirm);
         // Variable ob Sound on oder of ist
         soundIsOn=bundle.getBoolean("Sound");
 
-        // Text reinschreiben
-        t_result.setText("Berechne Schnittpunkte mit den Achsen und ggf. Extremstellen auf einem Blatt Papier, denn darauf wird bei der Überprüfung besonders Wert gelegt. Zeichne dann Deine Hilfspunkte ein."+String.valueOf(soundIsOn));
 
 
         //  Weiter Button ist erstmal unsichtbar
@@ -249,6 +247,11 @@ public class Spiel extends AppCompatActivity {
         // Array mit aktuellen Parametern des Levels füllen
         // parameters= getParameters(level, float_list);
         insertParameters(level, float_list);
+        //TODO
+        double iMin= float_list.get(7);
+        double iMax= float_list.get(8);
+        t_intervall.setText("Bitte zeichne den Funktionsgraphen im Intervall von "+ String.valueOf(iMin)+" und "+String.valueOf(iMax));
+
 
 
         // Buttons mit Funktion belegen
@@ -295,7 +298,7 @@ public class Spiel extends AppCompatActivity {
                 // Button zum Überprüfen der Funktion einschalten
                 b_check.setVisibility(View.VISIBLE);
                 // Text ausblenden
-                t_result.setVisibility(View.INVISIBLE);
+                t_intervall.setVisibility(View.INVISIBLE);
 
                 //Toast als Hinweis, dass nun der Funktionsgraph eingezeichnet werden soll
                 Context context = getApplicationContext();
@@ -311,7 +314,7 @@ public class Spiel extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // RICHITG oder FALSCH soll angezeigt werden
-                t_result.setVisibility(View.VISIBLE);
+                t_intervall.setVisibility(View.VISIBLE);
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // zunächst wird überprüft ob überhaupt ein Graph gezeichnet wurde und ein entsprechender dialog angezeigt
@@ -319,13 +322,13 @@ public class Spiel extends AppCompatActivity {
                     nothingIsDrawn.showAtLocation(popupLayout2, Gravity.CENTER, 0, 0);
                 }
                 else {
-                    /*TODO
+
                    if (p.pathIsInIntervall(para)) {
                         pathTooShort.showAtLocation(popupLayout3, Gravity.CENTER, 0, 0);
                    }
-                    else { */
+                    else {
                     check(p);
-                    // }
+                     }
                 }
 
             }
@@ -572,8 +575,7 @@ public class Spiel extends AppCompatActivity {
 
 
     static void insertParameters (int l,ArrayList <Float> fl){
-        // TODO von 7 auf 9 erhöhen
-        int paramertsPerFunction = 7; //9;
+        int paramertsPerFunction =9;
         int level =l;
         int start = (level-1)*paramertsPerFunction;
         int end= (level*paramertsPerFunction);
@@ -681,10 +683,12 @@ public class Spiel extends AppCompatActivity {
                                 "Beweise dich im neuen Level!";
                         // Grün
                         color = Color.rgb(34, 177, 76);
-                        if(soundIsOn) mp.start();
+
                     }
                 }
             }
+            // Sound ertön sobal Funktionsgraph richtig gezeichnet wurde
+            if(soundIsOn) mp.start();
         }// Ende if-else
         // ändere die Anzeige des Buttons
         // Löschen und Prüfen Button verschwinden
@@ -711,6 +715,10 @@ public class Spiel extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        // Text renschreiben
+        double iMin= para[7];
+        double iMax=para[8];
+        t_intervall.setText("Intervall von "+String.valueOf(iMin));
     }
 }
 
