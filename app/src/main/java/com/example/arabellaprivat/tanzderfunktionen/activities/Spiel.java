@@ -459,32 +459,31 @@ public class Spiel extends AppCompatActivity {
         paint.setStyle(Paint.Style.FILL);
         // mit einer Schleife gehen wir durch die Liste zu den verschiedenen Levels
         for (int i=1; i<=5; i++) {
+            // alle nicht gemachten Level sind schwarz umrandet
+            if(levelinfo.get(i) == 200) {
+                paint.setColor(Color.BLACK);
+                paint.setStyle(Paint.Style.STROKE);
+            }
             // 5. Stufe 0-9: rot
-            if(levelinfo.get(i) >= 0 && levelinfo.get(i) <= 9){
+            else if(levelinfo.get(i) <= 20){
                 // sei der Kreis rot ausgemalt
-                paint.setColor(Color.RED);
+                paint.setColor(Color.rgb(153,2,14));
             }
             // 4. Stufe 10-19: orange
-            else if(levelinfo.get(i) >= 10 && levelinfo.get(i) <= 19){
+            else if(levelinfo.get(i) <= 40){
                 paint.setColor(Color.rgb(255, 127, 39));
             }
             // 3. Stufe 20-29: gelb
-            else if(levelinfo.get(i) >= 20 && levelinfo.get(i) <= 29){
-                paint.setColor(Color.YELLOW);
+            else if(levelinfo.get(i) <= 60){
+                paint.setColor(Color.rgb(255, 201, 14));
             }
             // 2. Stufe 30-39: hellgrün
-            else if(levelinfo.get(i) >= 30 && levelinfo.get(i) <= 39){
+            else if(levelinfo.get(i) <= 80){
                 paint.setColor(Color.rgb(181, 230, 29));
             }
             // 1. Stufe 10-19: grün
-            else if(levelinfo.get(i) >= 40 && levelinfo.get(i) <= 45){
-                paint.setColor(Color.GREEN);
-            }
-            // wenn das Level noch nicht gemacht wurde
-            else if(levelinfo.get(i)== 200){
-                // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
-                paint.setColor(Color.BLACK);
-                paint.setStyle(Paint.Style.STROKE);
+            else if(levelinfo.get(i) <= 100){
+                paint.setColor(Color.rgb(34, 177, 76));
             }
 
             // Abstand zum linken Nachbarkreis vergrößern
