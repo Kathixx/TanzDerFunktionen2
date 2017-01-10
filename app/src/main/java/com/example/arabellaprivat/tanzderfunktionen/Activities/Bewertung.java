@@ -61,7 +61,7 @@ public class Bewertung extends AppCompatActivity {
 
 
         // Möglichkeit weiterzuspielen "ausschalten"
-        MainActivity.firstTime = true;
+        MainActivity.firstTime = false;
 
         // Intent, das diese Activity geöffnet hat
         Intent intent = getIntent();
@@ -126,6 +126,7 @@ public class Bewertung extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
+                MainActivity.firstTime = false;
                 sendMessage(v);
             }
         });
@@ -168,6 +169,7 @@ public class Bewertung extends AppCompatActivity {
     private void visualizeScore() {
 
         Bitmap bitmap = Bitmap.createBitmap(500, 100, Bitmap.Config.ARGB_8888);
+
 
         // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
         float abstand_x = bitmap.getWidth() / 16;
