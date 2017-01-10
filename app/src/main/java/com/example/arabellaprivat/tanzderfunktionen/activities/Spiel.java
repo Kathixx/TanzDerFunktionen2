@@ -1,4 +1,4 @@
-﻿package com.example.arabellaprivat.tanzderfunktionen.activities;
+package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
