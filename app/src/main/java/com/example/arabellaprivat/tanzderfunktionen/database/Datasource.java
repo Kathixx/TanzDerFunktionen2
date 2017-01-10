@@ -57,7 +57,7 @@ public class Datasource  {
      * und schreibt sie in eine Array liste
      * @return      Arrayliste von Strings mit Level, Funktion und Tipp drinnen
      */
-    public ArrayList<String> String_Eintries () {
+    public ArrayList<String> String_Entries () {
         //Cursor der alle Level nacheinander durchläuft und level,funktion und tipp selektiert
         Cursor c = database.rawQuery("SELECT level_level, function, hint FROM " + DatabaseHelper.DB_TABLE_1, null);
         //auslesen der Indices

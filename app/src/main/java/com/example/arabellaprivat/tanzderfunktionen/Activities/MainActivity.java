@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Listen aus der Klasse Datasource holen
                 float_list= dataSource.Float_Entries();
-                string_list= dataSource.String_Eintries();
+                string_list= dataSource.String_Entries();
 
                 // beim Neustart neue Liste erstellen, in der alle Infos stehen
                 //levelinfo = new ArrayList<>(6);
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Listen aus der Klasse Datasource holen
                 float_list= dataSource.Float_Entries();
-                string_list= dataSource.String_Eintries();
+                string_list= dataSource.String_Entries();
                 // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
                 integer_list = dataSource.Int_Entries();
 
