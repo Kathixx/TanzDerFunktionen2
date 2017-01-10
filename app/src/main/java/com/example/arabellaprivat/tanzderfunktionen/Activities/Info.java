@@ -2,7 +2,6 @@ package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -23,7 +22,6 @@ public class Info extends Activity {
     private TextView t_help;
     /** schließt die Activity */
     private Button b_close;
-    private int level;
 
 
     @Override
@@ -33,18 +31,9 @@ public class Info extends Activity {
         FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        // daraus die übergebenen Daten holen
-        this.level = bundle.getInt("Level");
-
         // Variablen belegen
         t_help = (TextView) findViewById(R.id.help);
         b_close = (Button) findViewById(R.id.close);
-
-        // Intent, das diese Activity geöffnet hat holen
-        Intent i = getIntent();
-        Bundle b = i.getExtras();
 
 
         // Größe beeinflussen
@@ -64,6 +53,10 @@ public class Info extends Activity {
         t_help.setText(Spiel.getInfo());
 
         b_close.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 // schließe diese Activity

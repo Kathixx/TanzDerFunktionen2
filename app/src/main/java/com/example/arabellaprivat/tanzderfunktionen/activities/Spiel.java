@@ -106,6 +106,7 @@ public class Spiel extends AppCompatActivity {
     private MediaPlayer mp;
     /** Variable für Sound */
     private boolean soundIsOn;
+
     /** Popup Window informiert falls nichts gezeichnet wurde   */
     private PopupWindow nothingIsDrawn;
     private View popupLayout2;
@@ -115,7 +116,7 @@ public class Spiel extends AppCompatActivity {
     private PopupWindow pathTooShort;
     private View popupLayout3;
     private Button b_ok3;
-    /** Popup Window informiert, wenn das angeklicckte Level nicht ausgewählt werden darf */
+    /** Popup Window informiert, wenn das angeklickte Level nicht ausgewählt werden darf */
     private PopupWindow w_forbidden_choice;
     /** hier wird das Popup Window des Menüs eingefügt */
     private View layout;
@@ -534,11 +535,7 @@ public class Spiel extends AppCompatActivity {
         Bundle bundle = new Bundle();
 
         if(view.getId() == R.id.info) {
-            // die Klasse Info braucht nur das aktuelle Level
-            bundle.putInt("Level", level);
-            Intent intent = new Intent(this, Info.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            startActivity(new Intent(this, Info.class));
         }
 
         else if(view.getId() == R.id.next) {

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.arabellaprivat.tanzderfunktionen.R;
 
+/* diese Klasse erklärt die Regeln der App */
 public class Anleitung extends AppCompatActivity {
 
     /** Text für die Anleitung */
@@ -15,6 +16,10 @@ public class Anleitung extends AppCompatActivity {
     /** schließt die Activity */
     private Button b_close;
 
+    /**
+     * erstellt die Activity bei dessen Aufruf
+     * @param savedInstanceState    Siehe Super Klasse
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,10 @@ public class Anleitung extends AppCompatActivity {
                 "Und jetzt viel Spaß beim Zeichnen!\n\n");
 
         b_close.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 finish();
