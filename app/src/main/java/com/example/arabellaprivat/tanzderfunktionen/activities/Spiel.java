@@ -415,12 +415,11 @@ public class Spiel extends AppCompatActivity {
                 chooseLevel(5);
                 break;
             case R.id.home:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                MainActivity.firstTime = true;
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.anleitung:
-                Intent in = new Intent(this, Anleitung.class);
-                startActivity(in);
+                startActivity(new Intent(this, Anleitung.class));
                 break;
 
         }

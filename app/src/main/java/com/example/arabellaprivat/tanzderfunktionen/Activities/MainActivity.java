@@ -1,17 +1,13 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
-import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,15 +16,16 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.util.Log;
+import java.util.ArrayList;
 
 import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 import com.example.arabellaprivat.tanzderfunktionen.R;
 
-import java.util.ArrayList;
 
 /**
  * Startbildschirm
  * wird beim Start der App automatisch aufgerufen
+ * Quelle der Methode firstTime(): http://www.andreabaccega.com/blog/2012/04/12/android-how-to-execute-some-code-only-on-first-time-the-application-is-launched/
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private Button b_anleitung;
     /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
     private Button b_weiterspielen;
-    /** übergibt die wichtigen Daten an die nächste Activity */
-    private Bundle bundle = new Bundle();
     /** hier werden die Punkte der einzelnen Level gespeichert und das Level selbst */
     private ArrayList<Integer> levelinfo;
     /** legt ein Datenquellen-Objekt an */
@@ -52,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
     /** Listen mit Datena aus der Datenbank */
     static ArrayList <Float> float_list;
     static ArrayList <String> string_list;
-    /** enthält Level und Punkte aus dem letzten Spiel */
     static ArrayList <Integer> integer_list;
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
+    /** gibt an, ob die App zum Ersten Mal nach Installation geöffnet wird */
     protected static Boolean firstTime = null;
     /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
     private PopupWindow mainInfo;
@@ -70,13 +65,14 @@ public class MainActivity extends AppCompatActivity {
      * legt Datenquellenobjekt an
      * öffnen und schließen der DBverbindung in lifecyle-callbacks ausgelagert
      *
-     * @param savedInstanceState
+     * @param savedInstanceState    Siehe Super-Klasse
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Schriftart setzen
         FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         // Schriftart für Popups extra holen
@@ -106,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
         mainInfo= new PopupWindow(popupLayout4,300,370, true);
         b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
         b_ok4.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 mainInfo.dismiss();
@@ -116,16 +116,9 @@ public class MainActivity extends AppCompatActivity {
         b_ok4.setTypeface(fontRegular);
         popupText.setTypeface(fontRegular);
 
-
-        /************************************************ das geht nicht, dann gibt es eine NullpointerException ***********************************
-        if(dataSource.Eintraege_Int() == null)
-            Spiel.isBuffered = false;
-         */
-
-
-        // wenn es keinen Zwischenspeicher gibt
-        // blende die Möglichkeit weiterzuspielen aus
+        // wenn es das erste Mal ist, dass die App nach Installation geöffnet wird, heißt das, es gibt keinen Zwischenspeicher
         if(isFirstTime()){
+            // blende die Möglichkeit weiterzuspielen aus
             b_weiterspielen.setVisibility(View.INVISIBLE);
             b_start.setText("Start");
         }
@@ -133,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Buttonfunktion die das Spiel neu startet erstellen
         b_start.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 // Listen aus der Klasse Datasource holen
@@ -140,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 string_list= dataSource.String_Entries();
 
                 // beim Neustart neue Liste erstellen, in der alle Infos stehen
-                //levelinfo = new ArrayList<>(6);
                 // Liste mit den richtigen Werten füllen
                 // als erstes kommt das Level
                 levelinfo.add(1);
@@ -155,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         b_weiterspielen.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 // Listen aus der Klasse Datasource holen
@@ -177,8 +177,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Buttonfunktion die zur Anleitung führt erstellen
         b_anleitung.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 // in sendMessage wird die neue Activity gestartet
@@ -190,7 +193,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Checks if the user is opening the app for the first time.
      * Note that this method should be placed inside an activity and it can be called multiple times.
-     * @return boolean
+     * Source: http://www.andreabaccega.com/blog/2012/04/12/android-how-to-execute-some-code-only-on-first-time-the-application-is-launched/
+     * @return boolean      edited variable firstTime
      */
     private boolean isFirstTime() {
         if (firstTime == null) {
@@ -205,7 +209,11 @@ public class MainActivity extends AppCompatActivity {
         return firstTime;
     }
 
-
+    /**
+     * erstellt die Icons in der ActionBar
+     * @param menu  Menü in der ActionBar
+     * @return      true wenn das Menü erstellt wurde
+     */
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -215,6 +223,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * ermöglicht den Klick auf ein Item des Menüs
+     * @param item  Element, das angeklickt wurde
+     * @return      siehe Super-Klasse
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sound:
@@ -226,9 +239,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * wird beim Click auf einen Button aufgerufen
+     * wird beim Klick auf einen Button aufgerufen
      * und startet abhängig vom Button die passende Activity
-     *
      * @param view View, die geklickt wurde
      */
     public void sendMessage(View view) {
@@ -276,20 +288,20 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         Log.d(LOG_TAG, "Die Datenquelle wird geschlossen.");
-        //dataSource.close();
-        //finish();
     }
 
     static ArrayList returnFloatList (){
         return float_list;
-   }
+    }
 
     static ArrayList returnStringList (){
         return string_list;
     }
 
 
-    // disable Back-Button
+    /**
+     * verbietet das zurück-gehen mit dem "Zurück"-Button des Tablets
+     */
     @Override
     public void onBackPressed(){}
 
