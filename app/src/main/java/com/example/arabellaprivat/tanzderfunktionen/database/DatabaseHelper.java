@@ -81,17 +81,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(2, '0.25x^2+1x-4', 'Alles, was Du tun musst ist, den Scheitelpunkt und die Verschiebung abzulesen', 0.25, 1, -4, 99, -6.5, 2.5, -4,-8,4);";
+                    "(2, '0.25x²+1x-4', 'Alles, was Du tun musst ist, den Scheitelpunkt und die Verschiebung abzulesen', 0.25, 1, -4, 99, -6.5, 2.5, -4,-8,4);";
     public static final String SQL_INSERTDB1_3 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(3, '3/(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -1.5, 1, -1, 99, -0.5, -8,2);";
+                    "(3, '3:(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -1.5, 1, -1, 99, -0.5, -8,2);";
     public static final String SQL_INSERTDB1_4 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(4, '3cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, 1, 0, -2.571, 0.571, 1.62, -4, 4);";
+                    "(4, '3·cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, 1, 0, -2.571, 0.571, 1.62, -4, 4);";
 
     public static final String SQL_INSERTDB1_5 =
             "INSERT INTO Level"+

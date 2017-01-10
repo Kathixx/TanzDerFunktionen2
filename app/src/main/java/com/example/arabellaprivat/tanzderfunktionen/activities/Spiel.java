@@ -716,9 +716,9 @@ public class Spiel extends AppCompatActivity {
         if (points<=40){
             points=0;
             result2="Falsch!";
-            conclusion="Leider hast du nicht gut genug gezeichnet. \n " +
-                    "Schau doch das nächste Mal in die Infos, vielleicht bekommst du da ein paar Tipps wie du die Funktion richtig zeichnen kannst. "+
-                    "Probier dein Glück im nächsten Level.";
+            conclusion="Leider hast Du nicht gut genug gezeichnet. \n " +
+                    "Schau doch das nächste Mal in die Infos, vielleicht bekommst Du da ein paar Tipps wie Du die Funktion richtig zeichnen kannst. "+
+                    "Probier Dein Glück im nächsten Level.";
             // Rot
             color=Color.rgb(153,2,14);
         }
@@ -726,10 +726,10 @@ public class Spiel extends AppCompatActivity {
 
             if (points <= 50) {
                 result2 = "Gerade nochmal gut gegangen!";
-                conclusion = " Puh da hast du ja nochmal Glück gehabt. \n" +
+                conclusion = " Puh da hast Du ja nochmal Glück gehabt. \n" +
                         "Versuche das nächste Mal genauer zu zeichnen,\n" +
-                        " vielleicht helfen dir mehr Hilfspunkte am Anfang?" +
-                        " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
+                        " vielleicht helfen Dir mehr Hilfspunkte am Anfang?" +
+                        " In diesem Level hast Du " + String.valueOf(points) + " Punkte geschafft. \n " +
                         "Auf ins nächste Level!";
                 // Orange
                 color = Color.rgb(255, 127, 39);
@@ -737,10 +737,10 @@ public class Spiel extends AppCompatActivity {
                 if (points <=70) {
                     result2 = "Ganz ok";
                     conclusion = " Das war doch gar nicht mal so schlecht.\n "+
-                            "Aber Übung macht den Meister!"+
-                            "Du bekommst es das nächste Mal" +
-                            " bestimmt noch etwas besser hin!" +
-                            " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n ";
+                            "Aber Übung macht den Meister! "+
+                            "Das bekommst Du das nächste Mal" +
+                            " bestimmt noch besser hin!\n" +
+                            "In diesem Level hast Du " + String.valueOf(points) + " Punkte geschafft. \n ";
 
                     // Gelb
                     color = Color.rgb(255, 201, 14);
@@ -748,15 +748,15 @@ public class Spiel extends AppCompatActivity {
                     if (points <= 90) {
                         result2 = "Gut gemacht!";
                         conclusion = " Das war schon ziemlich gut! \n" +
-                                "Glückwunsch, du konntest schon " + String.valueOf(points) + " Punkte sammeln. \n " +
-                                "Schaffst du es im nächsten Level noch besser?";
+                                "Glückwunsch, Du konntest schon \n" + String.valueOf(points) + " Punkte sammeln. \n " +
+                                "Schaffst Du es im nächsten Level noch besser?";
                         // hellgrün
                         color = Color.rgb(181, 230, 29);
                     } else {
                         result2 = "Sehr gut";
-                        conclusion = " Bravo, du hast den Funktionsgraph ziemlich gut gezeichnet \n" +
+                        conclusion = " Bravo, Du hast den Funktionsgraph hervorragend gezeichnet " +
                                 "und konntest in diesem Level fabelhaft " + String.valueOf(points) + " Punkte erreichen. \n " +
-                                "Beweise dich im neuen Level!";
+                                "Beweise Dich im neuen Level!";
                         // Grün
                         color = Color.rgb(34, 177, 76);
 
