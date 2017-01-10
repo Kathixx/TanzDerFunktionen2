@@ -277,6 +277,7 @@ public class Spiel extends AppCompatActivity {
 
 
 
+
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
         splitArray(string_list.get(level-1));
         // liest die jeweilige Funktion aus
