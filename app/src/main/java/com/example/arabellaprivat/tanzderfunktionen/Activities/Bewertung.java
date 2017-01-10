@@ -129,44 +129,45 @@ public class Bewertung extends AppCompatActivity {
     private void visualizeScore(){
         Bitmap bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
 
-        // Start bei 1/16 der Bitmap
-        float leftBorder = bitmap.getWidth()/16;
-        // Style und Farbe
+        // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
+        float abstand_x = bitmap.getWidth()/16;
+        // Style und Farbe hängen von der Bewertung der Level ab
         Paint paint = new Paint();
-        // insgesamt gibt es 5 Kategorien
-        // je nach dem wie hoch die Anzahl der erreichten Punkte sind, werden verschiedene Farben verwendet
-        for(int i=1; i<=category; i++){
-            if(category == 1)
-                // diese Punkte werden rot gezeichnet
+        paint.setStyle(Paint.Style.FILL);
+        // mit einer Schleife gehen wir durch die Liste zu den verschiedenen Levels
+        for (int i=1; i<=5; i++) {
+            // alle nicht gemachten Level sind schwarz umrandet
+            if(levelinfo.get(i) == 200) {
+                paint.setColor(Color.BLACK);
+                paint.setStyle(Paint.Style.STROKE);
+            }
+            // 5. Stufe 0-9: rot
+            else if(levelinfo.get(i) <= 20){
+                // sei der Kreis rot ausgemalt
                 paint.setColor(Color.rgb(153,2,14));
-            else if(category == 2)
+            }
+            // 4. Stufe 10-19: orange
+            else if(levelinfo.get(i) <= 40){
                 paint.setColor(Color.rgb(255, 127, 39));
-            else if(category == 3)
+            }
+            // 3. Stufe 20-29: gelb
+            else if(levelinfo.get(i) <= 60){
                 paint.setColor(Color.rgb(255, 201, 14));
-            else if(category == 4)
+            }
+            // 2. Stufe 30-39: hellgrün
+            else if(levelinfo.get(i) <= 80){
                 paint.setColor(Color.rgb(181, 230, 29));
-            else
+            }
+            // 1. Stufe 10-19: grün
+            else if(levelinfo.get(i) <= 100){
                 paint.setColor(Color.rgb(34, 177, 76));
-            paint.setStyle(Paint.Style.FILL);
+            }
 
-            // der Abstand zwischen den Kreisen beträgt 1/8 der gesamten Breite der Bitmap
-            leftBorder += bitmap.getWidth()/8;
+            // Abstand zum linken Nachbarkreis vergrößern
+            abstand_x += bitmap.getWidth()/8;
 
-            // mit diesen Einstellungen den Kreis zeichnen
-            this.paintCircle(bitmap, paint, leftBorder);
-        }
-        // restliche nicht erreichte Punkte zeichnen
-        for(int i=category; i<=4; i++){
-            // diese Punkte werden schwarz umrandet
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(5);
-
-            // der Abstand zwischen den Kreisen beträgt 1/8 der gesamten Breite der Bitmap
-            leftBorder += bitmap.getWidth()/8;
-
-            // mit diesen Einstellungen den Kreis zeichnen
-            this.paintCircle(bitmap, paint, leftBorder);
+            // mit diesen Einstellungen den Kreis malen
+            this.paintStar(bitmap, paint, abstand_x);
         }
     }
 
@@ -176,7 +177,7 @@ public class Bewertung extends AppCompatActivity {
      * @param paint         Zeichen-Eigenschaften
      * @param leftBorder     Abstand zum linken Bildschirmrand, bzw. zum linken Nachbar-Kreis
      */
-    private void paintCircle(Bitmap bitmap, Paint paint, float leftBorder){
+    private void paintStar(Bitmap bitmap, Paint paint, float leftBorder){
         Canvas canvas = new Canvas(bitmap);
         // Kreis zeichnen
         // linker Abstand vergrößert sich nach jedem Kreis
