@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -72,12 +73,7 @@ public class Spiel extends AppCompatActivity {
     private Hilfspunkte h;
     /** Button um nach dem einzeichnen der Hilfspunkte die Funktion zu zeichnen*/
     private Button b_draw;
-    /** zeigt an, ob das Level richtig oder Falsch ist*/
-    private TextView t_result2;
-    /** zeigt, wie viele Punkte man gesammelt hat */
-    private TextView t_points;
-    /** zeigt, die Erklärung an */
-    private TextView t_conclusion;
+
 
     //Instanz vonn Datasource
     Datasource datasource = MainActivity.dataSource;
@@ -123,6 +119,13 @@ public class Spiel extends AppCompatActivity {
     /** schließt das Popup Window im Menü */
     private Button b_ok;
 
+    /** Popup Window, informiert über den erreichten Punktestand nach der Überprüfung */
+    private PopupWindow scoreInThisLevel;
+    private View popupLayout4;
+    private TextView t_result2;
+    private TextView t_points;
+    private TextView t_conclusion;
+
     /**
      * erstellt die Activity bei dessen Aufruf
      * @param savedInstanceState
@@ -152,9 +155,6 @@ public class Spiel extends AppCompatActivity {
         z           = (Zeichenfläche) findViewById(R.id.zeichenfläche);
         h           = (Hilfspunkte) findViewById (R.id.hilfspunkte);
         b_draw      = (Button) findViewById(R.id.draw);
-        t_result2   = (TextView)findViewById(R.id.Ergebnis);
-        t_points    =(TextView)findViewById(R.id.Punkte);
-        t_conclusion=(TextView)findViewById(R.id.Erklärung);
         p           = new Pruefung(z, h);
 
 
@@ -203,6 +203,19 @@ public class Spiel extends AppCompatActivity {
         popupText= (TextView)popupLayout3.findViewById(R.id.content);
         b_ok3.setTypeface(fontRegular);
         popupText.setTypeface(fontRegular);
+
+        // Popup Window 4: Zeigt das Ergebnis und die Punkte des gezeichneten Graphen an
+        popupLayout4=inflater.inflate(R.layout.activity_punkte, (ViewGroup)findViewById(R.id.popup_element_4));
+        scoreInThisLevel= new PopupWindow(popupLayout4,400,350, true);
+        t_result2=(TextView) popupLayout4.findViewById(R.id.Ergebnis);
+        t_points=(TextView) popupLayout4.findViewById(R.id.Punkte);
+        t_conclusion=(TextView) popupLayout4.findViewById(R.id.Erklärung);
+        // Eigenschaften des Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
+        scoreInThisLevel.setBackgroundDrawable(new BitmapDrawable());
+        t_result2.setTypeface(fontRegular);
+        t_conclusion.setTypeface(fontRegular);
+        t_points.setTypeface(fontBold
+        );
 
         // Informationen aus der MainActivity holen und verarbeiten
         Intent intent = getIntent();
@@ -685,6 +698,7 @@ public class Spiel extends AppCompatActivity {
             points=0;
             result2="Falsch!";
             conclusion="Leider hast du nicht gut genug gezeichnet. \n " +
+                    "Schau doch das nächste Mal in die Infos, vielleicht bekommst du da ein paar Tipps wie du die Funktion richtig zeichnen kannst. "+
                     "Probier dein Glück im nächsten Level.";
             // Rot
             color=Color.rgb(153,2,14);
@@ -697,17 +711,18 @@ public class Spiel extends AppCompatActivity {
                         "Versuche das nächste Mal genauer zu zeichnen,\n" +
                         " vielleicht helfen dir mehr Hilfspunkte am Anfang?" +
                         " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
-                        "Auf ins nächste Level, dann kannst du noch mehr Punkte sammeln";
+                        "Auf ins nächste Level!";
                 // Orange
                 color = Color.rgb(255, 127, 39);
             } else {
                 if (points <=70) {
                     result2 = "Ganz ok";
-                    conclusion = " Das war doch gar nicht mal so schlecht \n" +
-                            "Aber Übung macht den Meister! \n" +
-                            "Du bekommst es das nächste Mal bestimmt noch etwas besser hin!" +
-                            " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n " +
-                            "Ab ins nächste Level";
+                    conclusion = " Das war doch gar nicht mal so schlecht.\n "+
+                            "Aber Übung macht den Meister!"+
+                            "Du bekommst es das nächste Mal" +
+                            " bestimmt noch etwas besser hin!" +
+                            " In diesem Level hast du " + String.valueOf(points) + " Punkte geschafft. \n ";
+
                     // Gelb
                     color = Color.rgb(255, 201, 14);
                 } else {
@@ -742,15 +757,21 @@ public class Spiel extends AppCompatActivity {
         z.changeBackground(level);
         z.redrawInColor(color);
         levelinfo.set(level, points);
-        // Pop-Up Window
-        Intent intent = new Intent(Spiel.this, Punkte.class);
+        //Pop-Up Window mit Texten füllen
+        t_result2.setText(result2);
+        t_points.setText(String.valueOf(points));
+        t_points.setTextColor(color);
+        t_conclusion.setText(conclusion);
+        scoreInThisLevel.showAtLocation(popupLayout4, Gravity.TOP, 0, 280);
+
+        /*Intent intent = new Intent(Spiel.this, Punkte.class);
         Bundle bundle = new Bundle();
         bundle.putString("result2", result2);
         bundle.putString("conclusion",conclusion);
         bundle.putInt("color",color);
         bundle.putInt("points",points);
         intent.putExtras(bundle);
-        startActivity (intent);
+        startActivity (intent); */
     }
 
     public int getiMin(int level, ArrayList<Float> fl){

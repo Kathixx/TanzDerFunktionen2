@@ -7,11 +7,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +52,14 @@ public class Bewertung extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bewertung);
 
+
+        //// Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+        // Schriftart für Popups extra holen
+        Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
+
+
         // Möglichkeit weiterzuspielen "ausschalten"
         MainActivity.firstTime = true;
 
@@ -71,25 +81,43 @@ public class Bewertung extends AppCompatActivity {
         t_score = (TextView) findViewById(R.id.score);
         b_restart = (Button) findViewById(R.id.restart);
 
+        // Schriftart für die Punte verändern
+        t_score.setTypeface(fontBold);
+
+
         // Bewertungstext
         // je nach Punktezahl gibt es einen anderen Text
         // bei 0 Punkten
-        if(score <= 100)
+        if(score <= 100) {
             t_review.setText("Leider hast du keine Funktion richtig gezeichnet. Vielleicht solltest Du Dich nochmal in das Thema einarbeiten.");
-        else if(score <= 200)
-            t_review.setText("Das war noch nicht ganz überzeugend. Übe weiter, um Dich zu verbessern.");
-        else if(score <= 300)
-            t_review.setText("Das war schon ein guter Anfang. Übe weiter, um Dich zu verbessern.");
-        else if(score <= 400)
-            t_review.setText("Gut gemacht. Übe weiter, um Dein Wissen zu festigen.");
-        else
-            t_review.setText("Super! Du hast alles richtig gezeichnet. Du bist bereit für die nächste Prüfung.");
+            t_score.setTextColor(Color.rgb(153, 2, 14));
+        }
+        else {
+            if(score <= 200){
+                t_review.setText("Das war noch nicht ganz überzeugend. Übe weiter, um Dich zu verbessern.");
+                t_score.setTextColor(Color.rgb(255, 127, 39));
+            }
+            else {
+                if(score <= 300){
+                    t_review.setText("Das war schon ein guter Anfang. Übe weiter, um Dich zu verbessern.");
+                    t_score.setTextColor(Color.rgb(255, 201, 14));}
+                else {
+                    if(score <= 400){
+                        t_review.setText("Gut gemacht. Übe weiter, um Dein Wissen zu festigen.");
+                        t_score.setTextColor(Color.rgb(181, 230, 29));}
+                    else {
+                        t_review.setText("Super! Du hast alles richtig gezeichnet. Du bist bereit für die nächste Prüfung.");
+                        t_score.setTextColor(Color.rgb(34, 177, 76));
+                    }
+                }
+            }
+        }
 
         // Visualisierung der Punkte
         visualizeScore();
 
         // Wie viele Punkte wurden erreicht?
-        t_score.setText("Du erhälst " + score + " von 500 Punkten.");
+        t_score.setText(String.valueOf(score));
 
         b_restart.setOnClickListener(new View.OnClickListener() {
             /**
@@ -138,7 +166,8 @@ public class Bewertung extends AppCompatActivity {
      * koordiniert das Zeichnen der Punkteanzeige
      */
     private void visualizeScore() {
-        Bitmap bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
+
+        Bitmap bitmap = Bitmap.createBitmap(500, 100, Bitmap.Config.ARGB_8888);
 
         // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
         float abstand_x = bitmap.getWidth() / 16;
@@ -153,6 +182,7 @@ public class Bewertung extends AppCompatActivity {
             this.paintStar(bitmap, paint, abstand_x);
         }
     }
+
 
     /**
      * legt Farbe des Sterns fest
