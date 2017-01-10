@@ -24,7 +24,7 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="500px"
-        android:layout_height="400px"
+        android:layout_height="350px"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/tanz_der_funktionen"
         android:layout_below="@id/willkommen"/>
@@ -37,14 +37,14 @@
         android:textSize="36sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="158dp"
+        android:layout_marginBottom="140dp"
         android:textAllCaps="false"
-        android:backgroundTint="@color/btnColor"
-        android:textColor="@android:color/background_light" />
+        android:background="@color/border_style"
+	android:padding="10dp" />
 
     <Button
         android:text="Anleitung"
-        android:layout_width="170px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/anleitung"
         android:textSize="36sp"
@@ -52,20 +52,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
         android:textAllCaps="false"
-        android:backgroundTint="@color/btnColor"
-        android:textColor="@android:color/background_light" />
+        android:background="@drawable/border_style"
+        android:padding="10dp"/>
 
     <Button
         android:text="Spiel fortsetzen"
-        android:layout_width="170px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="49dp"
+        android:layout_marginBottom="17dp"
         android:id="@+id/weiterspielen"
         android:textSize="36sp"
         android:textAllCaps="false"
         android:backgroundTint="@color/btnColor"
         android:textColor="@android:color/background_light"
         android:layout_above="@+id/start"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/border_style"
+        android:padding="10dp"/>
 
 </RelativeLayout>

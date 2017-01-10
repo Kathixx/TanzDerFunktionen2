@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen.activities;
+﻿package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -33,6 +33,7 @@ import com.example.arabellaprivat.tanzderfunktionen.R;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche;
 import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -139,6 +140,9 @@ public class Spiel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
+
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
@@ -273,8 +277,8 @@ public class Spiel extends AppCompatActivity {
         // parameters= getParameters(level, float_list);
         insertParameters(level, float_list);
         //TODO
-        double iMin= float_list.get(7);
-        double iMax= float_list.get(8);
+        double iMin= float_list.get(getiMin(level, float_list));
+        double iMax= float_list.get(getiMax(level, float_list));
         t_intervall.setText("Bitte zeichne den Funktionsgraphen im Intervall von "+ String.valueOf(iMin)+" und "+String.valueOf(iMax));
 
 
@@ -322,8 +326,7 @@ public class Spiel extends AppCompatActivity {
 
                 // Button zum Überprüfen der Funktion einschalten
                 b_check.setVisibility(View.VISIBLE);
-                // Text ausblenden
-                t_intervall.setVisibility(View.INVISIBLE);
+
 
                 //Toast als Hinweis, dass nun der Funktionsgraph eingezeichnet werden soll
                 Context context = getApplicationContext();
@@ -348,7 +351,7 @@ public class Spiel extends AppCompatActivity {
                 }
                 else {
 
-                   if (p.pathIsInIntervall(para)) {
+                   if (!p.pathIsInIntervall(para, t_intervall)) {
                         pathTooShort.showAtLocation(popupLayout3, Gravity.CENTER, 0, 0);
                    }
                     else {
@@ -612,6 +615,8 @@ public class Spiel extends AppCompatActivity {
         };
     }
 
+
+
     // disable Back-Button
     @Override
     public void onBackPressed(){}
@@ -737,14 +742,19 @@ public class Spiel extends AppCompatActivity {
         startActivity (intent);
     }
 
+    public int getiMin(int level, ArrayList<Float> fl){
+        return 7+((level-1)*9);
+    }
+
+    public int getiMax(int level, ArrayList<Float> fl){
+        return 8+((level-1)*9);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        // Text renschreiben
-        double iMin= para[7];
-        double iMax=para[8];
-        t_intervall.setText("Intervall von "+String.valueOf(iMin));
+
     }
 }
 

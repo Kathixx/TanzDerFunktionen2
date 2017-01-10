@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
         android:layout_below="@+id/functionText"
-        android:layout_alignStart="@+id/level" />
+        android:layout_alignStart="@+id/level"
+        />
 
     <TextView
         android:id="@+id/functionText"
@@ -54,12 +55,11 @@
         android:text="Weiter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/review"
         android:layout_centerHorizontal="true"
         android:textSize="25sp"
         android:textAllCaps="false"
-        android:textColor="@android:color/background_light"
-        android:backgroundTint="@color/btnColor" />
+        android:layout_alignBaseline="@+id/check"
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/check"
@@ -72,9 +72,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp"
-        android:soundEffectsEnabled="false"
-        android:textColor="@android:color/background_light"
-        android:backgroundTint="@color/btnColor" />
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/delete"
@@ -87,8 +85,7 @@
         android:layout_alignBottom="@+id/check"
         android:layout_toStartOf="@+id/functionText"
         android:layout_marginEnd="46dp"
-        android:backgroundTint="@color/btnColor"
-        android:textColor="@android:color/background_light" />
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/draw"
@@ -101,8 +98,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp"
-        android:textColor="@android:color/background_light"
-        android:backgroundTint="@color/btnColor" />
+        android:background="@drawable/border_style"/>
 
     <Button
         android:id="@+id/info"

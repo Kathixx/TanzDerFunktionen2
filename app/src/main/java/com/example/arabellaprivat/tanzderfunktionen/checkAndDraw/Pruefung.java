@@ -115,7 +115,7 @@ public class Pruefung {
         return  pointsInPercent(maxPoints,points);
     }
 
-    public boolean pathIsInIntervall (double [] fl){
+    public boolean pathIsInIntervall (double [] fl, TextView tv){
         parameters=fl;
         // Das Intervall ist in der parameterliste in den letzten Zwei Stellen gespeichert
         // minimales und maximales Intervall auslesen
@@ -124,11 +124,13 @@ public class Pruefung {
         // Start- und Endwert des gezeichneten Pfades auslesen und in Koordinaten umwandeln
         double start= pixelToCoordinate(listeX.get(0), z,10);
         double end= pixelToCoordinate(listeX.get(listeX.size()-1),z,10);
+        boolean isInIntervall=(start<=iMin && iMax<=end);
+        tv.setText("iMin: "+iMin+" iMax: "+iMax+" start: "+start+" end: e"+end+ " vgl.Min "+String.valueOf(start<=iMin)+ " vgl.Max "+String.valueOf(iMax<=end));
         // falls Start- und Endwert auserhalb des Intervalls bzw. auf der Intervallgrenze liegen, ist die gesamte Funktion innerhalb des Intervalls gezeichnet worden
-        return (start<=iMin && end>=iMax);
 
-
+        return (isInIntervall);
     }// Ende pathIsInIntervall
+
 
     private double calculateYValue (int level,double xWert, double a, double b, double c, double d) {
         double yWert;
