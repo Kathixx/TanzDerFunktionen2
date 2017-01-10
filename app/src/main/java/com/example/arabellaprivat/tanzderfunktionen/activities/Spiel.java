@@ -260,21 +260,6 @@ public class Spiel extends AppCompatActivity {
         t_number.setText(String.valueOf(score));
         t_number.setTypeface(fontBold);
 
-        // Je nach Punktestand Farbe setzen
-        int c;
-        if(score <= 9){
-            c = Color.rgb(153,2,14);
-        } else if(score <= 19){
-            c = Color.rgb(255, 127, 39);
-        } else if(score <= 29){
-            c = Color.rgb(255, 201, 14);
-        } else if(score <= 39) {
-            c = Color.rgb(181, 230, 29);
-        } else {
-            c = Color.rgb(34, 177, 76);
-        }
-        t_number.setTextColor(c);
-
 
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
         splitArray(string_list.get(level-1));
@@ -465,20 +450,20 @@ public class Spiel extends AppCompatActivity {
                 paint.setStyle(Paint.Style.STROKE);
             }
             // 5. Stufe 0-9: rot
-            else if(levelinfo.get(i) <= 20){
+            else if(levelinfo.get(i) <= 40){
                 // sei der Kreis rot ausgemalt
                 paint.setColor(Color.rgb(153,2,14));
             }
             // 4. Stufe 10-19: orange
-            else if(levelinfo.get(i) <= 40){
+            else if(levelinfo.get(i) <= 50){
                 paint.setColor(Color.rgb(255, 127, 39));
             }
             // 3. Stufe 20-29: gelb
-            else if(levelinfo.get(i) <= 60){
+            else if(levelinfo.get(i) <= 70){
                 paint.setColor(Color.rgb(255, 201, 14));
             }
             // 2. Stufe 30-39: hellgrün
-            else if(levelinfo.get(i) <= 80){
+            else if(levelinfo.get(i) <= 90){
                 paint.setColor(Color.rgb(181, 230, 29));
             }
             // 1. Stufe 10-19: grün
