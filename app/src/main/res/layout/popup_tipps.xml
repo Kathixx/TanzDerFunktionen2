@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_tipps"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/popup_style">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/content"
+        android:layout_marginTop="5sp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@android:color/background_light"
+        android:padding="20dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/ok"
+        android:textColor="@android:color/background_light"
+        android:background="@android:color/transparent"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textSize="36sp"/>
+
+</LinearLayout>

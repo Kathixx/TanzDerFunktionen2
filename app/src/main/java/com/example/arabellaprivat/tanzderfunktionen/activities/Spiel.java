@@ -124,6 +124,12 @@ public class Spiel extends AppCompatActivity {
     private TextView t_points;
     private TextView t_conclusion;
 
+    /** Popup Window zeigt Tipps zum zeichnen */
+    private PopupWindow tipps;
+    private View popuplayout5;
+    private Button b_ok5;
+    private TextView t_tipps;
+
     /**
      * erstellt die Activity bei dessen Aufruf
      * @param savedInstanceState
@@ -214,6 +220,20 @@ public class Spiel extends AppCompatActivity {
         t_conclusion.setTypeface(fontRegular);
         t_points.setTypeface(fontBold
         );
+
+        // Popup Window 5: Tipps die beim Zeichnen der Funktion helfen
+        popuplayout5 = inflater.inflate(R.layout.popup_tipps, (ViewGroup) findViewById(R.id.popup_tipps));
+        tipps = new PopupWindow(popuplayout5, 300, 200, true);
+        b_ok5 = (Button) popuplayout5.findViewById(R.id.ok);
+        b_ok5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tipps.dismiss();
+            }
+        });
+        t_tipps = (TextView) popuplayout5.findViewById(R.id.content);
+        b_ok5.setTypeface(fontRegular);
+        t_tipps.setTypeface(fontRegular);
 
         // Informationen aus der MainActivity holen und verarbeiten
         Intent intent = getIntent();
@@ -539,7 +559,8 @@ public class Spiel extends AppCompatActivity {
         Bundle bundle = new Bundle();
 
         if(view.getId() == R.id.info) {
-            startActivity(new Intent(this, Info.class));
+            tipps.showAtLocation(popuplayout5, Gravity.BOTTOM, 0, 0);
+            t_tipps.setText(getInfo());
         }
 
         else if(view.getId() == R.id.next) {
