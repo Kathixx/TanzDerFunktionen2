@@ -60,7 +60,7 @@ public class Punkte extends Activity {
         int width =dm.widthPixels;
         int heigth= dm.heightPixels;
 
-        getWindow().setLayout((int)(width*0.8),(int)(heigth*0.5));
+        getWindow().setLayout(500,350);
 
         // Schrift beeinflussen
         Typeface fontNumber = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");

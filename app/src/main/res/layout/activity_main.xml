@@ -39,7 +39,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="140dp"
         android:textAllCaps="false"
-        android:background="@color/border_style"
+        android:background="@drawable/border_style"
 	android:padding="10dp" />
 
     <Button
@@ -63,8 +63,6 @@
         android:id="@+id/weiterspielen"
         android:textSize="36sp"
         android:textAllCaps="false"
-        android:backgroundTint="@color/btnColor"
-        android:textColor="@android:color/background_light"
         android:layout_above="@+id/start"
         android:layout_centerHorizontal="true"
         android:background="@drawable/border_style"

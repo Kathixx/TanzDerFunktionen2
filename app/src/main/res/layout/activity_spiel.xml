@@ -19,36 +19,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:layout_marginLeft="10dp"
+        android:paddingLeft="10dp"
         android:layout_alignParentTop="true" />
 
     <ImageView
         android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:layout_below="@+id/functionText"
+        android:layout_below="@+id/level"
+        android:layout_marginTop="5dp"
         android:layout_alignStart="@+id/level"
         />
 
     <TextView
         android:id="@+id/functionText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/btnBack"
+        android:textColor="@android:color/background_light"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:textColor="@android:color/holo_blue_bright"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/review"
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/zeichenfläche"
+        android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:textAllCaps="false" />
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/next"
@@ -59,7 +52,8 @@
         android:textSize="25sp"
         android:textAllCaps="false"
         android:layout_alignBaseline="@+id/check"
-        android:background="@drawable/border_style"/>
+        android:background="@drawable/border_style"
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/check"
@@ -70,9 +64,9 @@
         android:textAllCaps="false"
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/functionText"
-        android:layout_marginStart="33dp"
-        android:background="@drawable/border_style"/>
+        android:layout_marginLeft="300dp"
+        android:background="@drawable/border_style"
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/delete"
@@ -83,9 +77,9 @@
         android:textAllCaps="false"
         android:layout_alignBaseline="@+id/check"
         android:layout_alignBottom="@+id/check"
-        android:layout_toStartOf="@+id/functionText"
-        android:layout_marginEnd="46dp"
-        android:background="@drawable/border_style"/>
+        android:layout_marginLeft="170dp"
+        android:background="@drawable/border_style"
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/draw"
@@ -96,20 +90,23 @@
         android:textAllCaps="false"
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/functionText"
-        android:layout_marginStart="33dp"
-        android:background="@drawable/border_style"/>
+        android:layout_marginLeft="300dp"
+        android:background="@drawable/border_style"
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/info"
         android:text="i"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         android:textAllCaps="false"
         android:textSize="25sp"
-        android:backgroundTint="@color/btnColor"
+        android:background="@drawable/circle_style"
+        android:backgroundTint="@color/btnBack"
         android:textColor="@android:color/background_light" />
 
     <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte
@@ -117,15 +114,17 @@
         android:layout_width="568px"
         android:layout_height="400px"
         android:background="@drawable/coordinate_blank"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/functionText"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="10dp"/>
 
     <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche
         android:id="@+id/zeichenfläche"
         android:layout_width="568px"
         android:layout_height="400px"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/functionText"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:text="TextView"
@@ -135,15 +134,19 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/number"
         android:textSize="36sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:textAlignment="textEnd" />
 
     <TextView
-        android:text="Punktestand: "
+        android:id="@+id/review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/temp_score"
-        android:textSize="30sp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/draw" />
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:layout_below="@+id/hilfspunkte"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+
 
 </RelativeLayout>

@@ -15,19 +15,20 @@
         android:layout_marginTop="5sp"
         android:text="Dein Graph ist aber ganz schon kurz! Bitte zeichne ihn im vorgegebenen Intervall ein!"
         android:textAlignment="center"
-        android:textSize="30sp"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/background_light" />
+        android:textSize="20sp"
+        android:textColor="@android:color/background_light"
+        android:padding="20dp"/>
 
     <Button
-        android:text="OK"
+        android:text="Ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ok"
         android:textColor="@android:color/background_light"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/transparent"
         android:textAllCaps="false"
         android:textAlignment="center"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        />
 
 </LinearLayout>

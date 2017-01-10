@@ -15,7 +15,7 @@
         android:layout_marginTop="5sp"
         android:text="Halt! Das Level hast du schon erledigt. Such Dir bitte ein anderes aus."
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/background_light" />
 

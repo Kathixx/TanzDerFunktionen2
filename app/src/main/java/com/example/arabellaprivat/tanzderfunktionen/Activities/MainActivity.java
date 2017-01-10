@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
 
         FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+        // Schriftart für Popups extra holen
+        Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
+        Typeface fontRegular= Typeface.createFromAsset(getAssets(), "fonts/Brandon_reg.otf");
 
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);
@@ -108,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 sendMessage(v);
             }
         });
+        TextView popupText= (TextView)popupLayout4.findViewById(R.id.content);
+        b_ok4.setTypeface(fontRegular);
+        popupText.setTypeface(fontRegular);
 
 
         /************************************************ das geht nicht, dann gibt es eine NullpointerException ***********************************

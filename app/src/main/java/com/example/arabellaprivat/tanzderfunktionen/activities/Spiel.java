@@ -54,8 +54,6 @@ public class Spiel extends AppCompatActivity {
     private Button b_info;
     /** schließt das Popup Window im Menü */
     private Button b_ok;
-    /** zeigt den aktuellen Punktestand an */
-    private TextView t_temp_score;
     /** Button zum Löschen der View */
     private Button b_delete;
     /** Button zum prüfen der gemalten Funktion */
@@ -143,13 +141,15 @@ public class Spiel extends AppCompatActivity {
 
         FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+        // Schriftart für Popups extra holen
+        Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
+        Typeface fontRegular= Typeface.createFromAsset(getAssets(), "fonts/Brandon_reg.otf");
 
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
         b_delete = (Button) findViewById(R.id.delete);
         b_check = (Button) findViewById(R.id.check);
         b_next = (Button) findViewById(R.id.next);
-        t_temp_score = (TextView) findViewById(R.id.temp_score);
         t_intervall = (TextView) findViewById(R.id.review);
         t_function = (TextView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
@@ -177,10 +177,14 @@ public class Spiel extends AppCompatActivity {
                 w_unallowed_choice.dismiss();
             }
         });
+        TextView popupText= (TextView)layout.findViewById(R.id.content);
+        b_ok.setTypeface(fontRegular);
+        popupText.setTypeface(fontRegular);
+
 
         // Popup Window 2: Falls nichts gezeichnet wurde und auf überprüfen geklickt wurde
         popupLayout2=inflater.inflate(R.layout.popupwindow2, (ViewGroup)findViewById(R.id.popup_element_2));
-        nothingIsDrawn= new PopupWindow(popupLayout2, 300,370, true);
+        nothingIsDrawn= new PopupWindow(popupLayout2, 300,200, true);
         b_ok2=(Button) popupLayout2.findViewById(R.id.ok);
         b_ok2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,17 +192,23 @@ public class Spiel extends AppCompatActivity {
                 nothingIsDrawn.dismiss();
             }
         });
+        popupText= (TextView)popupLayout2.findViewById(R.id.content);
+        b_ok2.setTypeface(fontRegular);
+        popupText.setTypeface(fontRegular);
 
 
         // Popup Window 3: Falls der Pfad zu kurz also in einem zu kleinen Intervall gezeichnet wurde
         popupLayout3=inflater.inflate(R.layout.popup_pathtooshort, (ViewGroup)findViewById(R.id.popup_element_3));
-        pathTooShort= new PopupWindow(popupLayout3,300,370, true);
+        pathTooShort= new PopupWindow(popupLayout3,300,200, true);
         b_ok3= (Button) popupLayout3.findViewById(R.id.ok);
         b_ok3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {pathTooShort.dismiss();z.deleteView();
             }
         });
+        popupText= (TextView)popupLayout3.findViewById(R.id.content);
+        b_ok3.setTypeface(fontRegular);
+        popupText.setTypeface(fontRegular);
 
 
 
@@ -248,9 +258,7 @@ public class Spiel extends AppCompatActivity {
 
         // Punktestand anzeigen
         t_number.setText(String.valueOf(score));
-        // Schriftart
-        Typeface fontNumber = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
-        t_number.setTypeface(fontNumber);
+        t_number.setTypeface(fontBold);
 
         // Je nach Punktestand Farbe setzen
         int c;
@@ -266,7 +274,7 @@ public class Spiel extends AppCompatActivity {
             c = Color.rgb(34, 177, 76);
         }
         t_number.setTextColor(c);
-        t_function.setTextColor(c);
+
 
 
         // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
@@ -347,12 +355,12 @@ public class Spiel extends AppCompatActivity {
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // zunächst wird überprüft ob überhaupt ein Graph gezeichnet wurde und ein entsprechender dialog angezeigt
                 if (p.pathIsEmpty()){
-                    nothingIsDrawn.showAtLocation(popupLayout2, Gravity.CENTER, 0, 0);
+                    nothingIsDrawn.showAtLocation(popupLayout2, Gravity.TOP, 0, 358);
                 }
                 else {
 
-                   if (!p.pathIsInIntervall(para, t_intervall)) {
-                        pathTooShort.showAtLocation(popupLayout3, Gravity.CENTER, 0, 0);
+                   if (!p.pathIsInIntervall(para)) {
+                        pathTooShort.showAtLocation(popupLayout3, Gravity.TOP, 0, 380);
                    }
                     else {
                     check(p);

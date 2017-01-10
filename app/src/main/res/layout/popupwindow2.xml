@@ -15,9 +15,9 @@
         android:layout_marginTop="5sp"
         android:text="Du hast nichts gezeichnet. Bitte zeichne deinen Funktionsgraph ein."
         android:textAlignment="center"
-        android:textSize="30sp"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/background_light" />
+        android:textSize="20sp"
+        android:textColor="@android:color/background_light"
+        android:padding="20dp"/>
 
 
     <Button
@@ -26,8 +26,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/ok"
         android:textColor="@android:color/background_light"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/transparent"
         android:textAllCaps="false"
         android:textAlignment="center"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        />
 </LinearLayout>
