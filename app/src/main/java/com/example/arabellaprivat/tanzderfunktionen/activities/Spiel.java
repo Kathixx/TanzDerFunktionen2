@@ -472,7 +472,7 @@ public class Spiel extends AppCompatActivity {
      * @param circleNumber  Kreis, der gezeichnet werden soll
      * @return              Farbe und Style des Kreises
      */
-    public Paint setPaint(int circleNumber){
+    private Paint setPaint(int circleNumber){
         // Style und Farbe hängen von der Bewertung der Level ab
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -482,26 +482,20 @@ public class Spiel extends AppCompatActivity {
             paint.setStyle(Paint.Style.STROKE);
         }
         // 5. Stufe: rot
-        else if(levelinfo.get(circleNumber) <= 40){
-            // sei der Kreis rot ausgemalt
+        else if(levelinfo.get(circleNumber) <= 40)
             paint.setColor(Color.rgb(153,2,14));
-        }
         // 4. Stufe: orange
-        else if(levelinfo.get(circleNumber) <= 50){
+        else if(levelinfo.get(circleNumber) <= 50)
             paint.setColor(Color.rgb(255, 127, 39));
-        }
         // 3. Stufe: gelb
-        else if(levelinfo.get(circleNumber) <= 70){
+        else if(levelinfo.get(circleNumber) <= 70)
             paint.setColor(Color.rgb(255, 201, 14));
-        }
         // 2. Stufe: hellgrün
-        else if(levelinfo.get(circleNumber) <= 90){
+        else if(levelinfo.get(circleNumber) <= 90)
             paint.setColor(Color.rgb(181, 230, 29));
-        }
         // 1. Stufe: grün
-        else if(levelinfo.get(circleNumber) <= 100){
+        else if(levelinfo.get(circleNumber) <= 100)
             paint.setColor(Color.rgb(34, 177, 76));
-        }
         return paint;
     }
 
@@ -633,8 +627,9 @@ public class Spiel extends AppCompatActivity {
     }
 
 
-
-    // disable Back-Button
+    /**
+     * verhindert, dass über den "Zurück"-Button des Tablets ein Level wiederholt werden könnte
+     */
     @Override
     public void onBackPressed(){}
 
