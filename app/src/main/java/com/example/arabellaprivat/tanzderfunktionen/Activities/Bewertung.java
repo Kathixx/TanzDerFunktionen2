@@ -51,7 +51,7 @@ public class Bewertung extends AppCompatActivity {
         setContentView(R.layout.activity_bewertung);
 
         // Möglichkeit weiterzuspielen "ausschalten"
-        MainActivity.firstTime = true;
+        MainActivity.firstTime = false;
 
         // Intent, das diese Activity geöffnet hat
         Intent intent = getIntent();
@@ -98,6 +98,7 @@ public class Bewertung extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
+                MainActivity.firstTime = false;
                 sendMessage(v);
             }
         });
@@ -138,7 +139,7 @@ public class Bewertung extends AppCompatActivity {
      * koordiniert das Zeichnen der Punkteanzeige
      */
     private void visualizeScore() {
-        Bitmap bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
 
         // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
         float abstand_x = bitmap.getWidth() / 16;

@@ -206,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
             }
         }
+        if(!firstTime)
+            firstTime = true;
         return firstTime;
     }
 

@@ -118,9 +118,7 @@ public class Spiel extends AppCompatActivity {
     private Button b_ok3;
     /** Popup Window informiert, wenn das angeklickte Level nicht ausgewählt werden darf */
     private PopupWindow w_forbidden_choice;
-    /** hier wird das Popup Window des Menüs eingefügt */
     private View layout;
-    /** schließt das Popup Window im Menü */
     private Button b_ok;
 
     /**
@@ -415,7 +413,7 @@ public class Spiel extends AppCompatActivity {
                 chooseLevel(5);
                 break;
             case R.id.home:
-                MainActivity.firstTime = true;
+                MainActivity.firstTime = false;
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.anleitung:
