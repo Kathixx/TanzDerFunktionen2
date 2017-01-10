@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
-        android:text="Bitte beachte:\n Bei der Überprüfung des Funktiongraphens wird besonders Wert auf Nullstellen und Achsenabschnitt gelegt. Berechne deshalb diese Punkte zuvor auf einem Blatt Papier.\n Zeichne dann deine berechneten\n Hilfspunkte ein."
+        android:text="Bitte beachte:\n Bei der Überprüfung des Funktiongraphens wird besonders Wert auf Nullstellen und Achsenabschnitt gelegt. Berechne deshalb diese Punkte zuvor auf einem Blatt Papier.\n Zeichne dann deine berechneten\n Hilfspunkte ein. "
         android:textAlignment="center"
         android:textSize="20dp"
         android:textColor="@android:color/white"

@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(3, '3/(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -1,5, 1, -1, 99, -0.5, -8,2);";
+                    "(3, '3/(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -1.5, 1, -1, 99, -0.5, -8,2);";
     public static final String SQL_INSERTDB1_4 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
