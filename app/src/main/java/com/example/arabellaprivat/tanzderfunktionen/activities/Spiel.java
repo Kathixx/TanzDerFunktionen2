@@ -1,6 +1,5 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,20 +11,18 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
 
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Pruefung;
@@ -33,8 +30,6 @@ import com.example.arabellaprivat.tanzderfunktionen.R;
 import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche;
 import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * hier fidet das Spiel / das Zeichnen statt
@@ -42,25 +37,20 @@ import java.util.ArrayList;
  * Quellen:
  * Bundle   https://www.youtube.com/watch?v=KRN7EYvorZY
  * DoubleClick: http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button
+ * Menü: https://developer.android.com/guide/topics/ui/menus.html
  */
 public class Spiel extends AppCompatActivity {
 
     // IV
-    /** gibt es einen Zwischenstand?
-     * wird auf true gesetzt, wenn der Zwischenstand gespeichert wird
-     */
-    static boolean isBuffered = false;
     /** Info-Button */
     private Button b_info;
-    /** schließt das Popup Window im Menü */
-    private Button b_ok;
     /** Button zum Löschen der View */
     private Button b_delete;
     /** Button zum prüfen der gemalten Funktion */
     private Button b_check;
     /** führt zum nächsten Level oder zur Endbewertung */
     private Button b_next;
-    /** sagt, ob richtig oder falsch gezeichnet wurde */
+    /** sagt, in welchem Intervall gezeichnet werden muss */
     private TextView t_intervall;
     /** zeigt die zu malende Funktion an */
     private TextView t_function;
@@ -68,21 +58,19 @@ public class Spiel extends AppCompatActivity {
     private TextView t_level;
     /** gibt die Punkteanzahl aus */
     private TextView t_number;
-    /** zeigt, wie viele Level absolviert wurden */
+    /** Punkte, die zeigen, welche Level wie abgeschlossen wurden */
     private ImageView i_score;
     /** zeigt das aktuelle Level an */
     private int level;
-    /** speichert die Punkte jedes Levels */
+    /** speichert Infos über das aktulle Spiel
+     * Index 0:     aktuelles Level
+     * Index 1-5:   Punkte des jeweiligen Levels */
     private ArrayList<Integer> levelinfo;
-    /** informiert, wenn das angeklicckte Level nicht ausgewählt werden darf */
-    private PopupWindow w_unallowed_choice;
     /** Zeichenfläche, auf der die Funktionen gezeichnet werden */
     private Zeichenfläche z;
-    /** hier wird das Popup Window eingefügt */
-    private View layout;
-    /** Touchfläche für Hilfspunkt */
+    /** Touchfläche für Hilfspunkte */
     private Hilfspunkte h;
-    /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
+    /** Button um nach dem einzeichnen der Hilfspunkte die Funktion zu zeichnen*/
     private Button b_draw;
     /** zeigt an, ob das Level richtig oder Falsch ist*/
     private TextView t_result2;
@@ -93,27 +81,24 @@ public class Spiel extends AppCompatActivity {
 
     //Instanz vonn Datasource
     Datasource datasource = MainActivity.dataSource;
-
-    //Instanzen für das Speichern der Aktuellen Punktestände
+    /* Instanzen für das Speichern der Aktuellen Punktestände */
     private int levelpoint1; //= levelinfo.get(1);
     private int levelpoint2; //= levelinfo.get(2);
     private int levelpoint3; //= levelinfo.get(3);
     private int levelpoint4; //= levelinfo.get(4);
     private int levelpoint5; //= 3; //levelinfo.get(5)
-
-
     /** Listen zum Auslesen aus der Datenbank */
     // float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionen
     private ArrayList <Float> float_list;
     // string_list enthält alle Text, also Funktion als Ganzes und Tipps
     // Texte eines Levels in einem Array mit Komma getrennt
     private ArrayList <String> string_list;
-    private ArrayList<Integer> integer_list;
     // temporäres Array, in dem die Texte des jeweiligen Levels gespeichert werden
     static String [] text;
     // temporäres Array, in dem alle WErte des jeweiligen Levels gespeichert werden
     private double [] parameters;
     static double [] para;
+
     /** Zeitstempel für das Abfangen von DoppelKlick */
     private long lastClick=0;
 
@@ -130,15 +115,23 @@ public class Spiel extends AppCompatActivity {
     private PopupWindow pathTooShort;
     private View popupLayout3;
     private Button b_ok3;
+    /** Popup Window informiert, wenn das angeklicckte Level nicht ausgewählt werden darf */
+    private PopupWindow w_forbidden_choice;
+    /** hier wird das Popup Window des Menüs eingefügt */
+    private View layout;
+    /** schließt das Popup Window im Menü */
+    private Button b_ok;
 
-
-
-
+    /**
+     * erstellt die Activity bei dessen Aufruf
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
 
+        // Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
         FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         // Schriftart für Popups extra holen
@@ -146,22 +139,22 @@ public class Spiel extends AppCompatActivity {
         Typeface fontRegular= Typeface.createFromAsset(getAssets(), "fonts/Brandon_reg.otf");
 
         // Variablen belegen
-        b_info = (Button) findViewById(R.id.info);
-        b_delete = (Button) findViewById(R.id.delete);
-        b_check = (Button) findViewById(R.id.check);
-        b_next = (Button) findViewById(R.id.next);
+        b_info      = (Button) findViewById(R.id.info);
+        b_delete    = (Button) findViewById(R.id.delete);
+        b_check     = (Button) findViewById(R.id.check);
+        b_next      = (Button) findViewById(R.id.next);
         t_intervall = (TextView) findViewById(R.id.review);
-        t_function = (TextView) findViewById(R.id.functionText);
-        t_level = (TextView) findViewById(R.id.level);
-        t_number = (TextView) findViewById(R.id.number);
-        i_score = (ImageView) findViewById(R.id.score);
-        z = (Zeichenfläche) findViewById(R.id.zeichenfläche);
-        h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
-        b_draw=(Button) findViewById(R.id.draw);
-        t_result2= (TextView)findViewById(R.id.Ergebnis);
-        t_points=(TextView)findViewById(R.id.Punkte);
+        t_function  = (TextView) findViewById(R.id.functionText);
+        t_level     = (TextView) findViewById(R.id.level);
+        t_number    = (TextView) findViewById(R.id.number);
+        i_score     = (ImageView) findViewById(R.id.score);
+        z           = (Zeichenfläche) findViewById(R.id.zeichenfläche);
+        h           = (Hilfspunkte) findViewById (R.id.hilfspunkte);
+        b_draw      = (Button) findViewById(R.id.draw);
+        t_result2   = (TextView)findViewById(R.id.Ergebnis);
+        t_points    =(TextView)findViewById(R.id.Punkte);
         t_conclusion=(TextView)findViewById(R.id.Erklärung);
-        p = new Pruefung(z, h);
+        p           = new Pruefung(z, h);
 
 
         // LayoutInflater für alle PopUpWindows
@@ -169,12 +162,12 @@ public class Spiel extends AppCompatActivity {
 
         // PopupWindow 1: falls ein Level schon gespielt aber nochmal aufgerufen wurde
         layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
-        w_unallowed_choice = new PopupWindow(layout, 300, 370, true);
+        w_forbidden_choice = new PopupWindow(layout, 300, 370, true);
         b_ok = (Button) layout.findViewById(R.id.ok);
         b_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                w_unallowed_choice.dismiss();
+                w_forbidden_choice.dismiss();
             }
         });
         TextView popupText= (TextView)layout.findViewById(R.id.content);
@@ -210,14 +203,12 @@ public class Spiel extends AppCompatActivity {
         b_ok3.setTypeface(fontRegular);
         popupText.setTypeface(fontRegular);
 
-
-
-
-
-
+        // Informationen aus der MainActivity holen und verarbeiten
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        // Liste mit den Infos über Level und Punkte
         levelinfo = bundle.getIntegerArrayList("Infos");
+        // Das aktuelle Level steht am Index 0
         level = levelinfo.get(0);
 
         // Listen aus der Main Activity holen
@@ -255,7 +246,6 @@ public class Spiel extends AppCompatActivity {
             if (levelinfo.get(i) != 200)
                 score += levelinfo.get(i);
         }
-
         // Punktestand anzeigen
         t_number.setText(String.valueOf(score));
         t_number.setTypeface(fontBold);
@@ -275,8 +265,12 @@ public class Spiel extends AppCompatActivity {
 
 
 
-        // Buttons mit Funktion belegen
+
         b_info.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 sendMessage(v);
@@ -284,6 +278,10 @@ public class Spiel extends AppCompatActivity {
         });
 
         b_delete.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 // Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
@@ -309,6 +307,10 @@ public class Spiel extends AppCompatActivity {
         });
 
         b_draw.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 //Zeichenfläche zum Zeichnen der Funktion sichtbar machen ("einschalten")
@@ -329,13 +331,15 @@ public class Spiel extends AppCompatActivity {
             }
         });
 
-
         b_check.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
-                // RICHITG oder FALSCH soll angezeigt werden
+                // Intervall soll angezeigt werden
                 t_intervall.setVisibility(View.VISIBLE);
-                // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // zunächst wird überprüft ob überhaupt ein Graph gezeichnet wurde und ein entsprechender dialog angezeigt
                 if (p.pathIsEmpty()){
@@ -355,6 +359,10 @@ public class Spiel extends AppCompatActivity {
         });
 
         b_next.setOnClickListener(new View.OnClickListener() {
+            /**
+             * ermöglicht eine Aktoin beim Klick auf den Button
+             * @param v View, auf die geklickt wurde
+             */
             @Override
             public void onClick(View v) {
                 sendMessage(v);
@@ -364,6 +372,11 @@ public class Spiel extends AppCompatActivity {
     }// Ende onCreate
 
 
+    /**
+     * erstellt die Icons in der ActionBar
+     * @param menu  Menü in der ActionBar
+     * @return      true wenn das Menü erstellt wurde
+     */
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -373,6 +386,11 @@ public class Spiel extends AppCompatActivity {
 
     }
 
+    /**
+     * ermöglicht den Klick auf ein Item des Menüs
+     * @param item  Element, das angeklickt wurde
+     * @return      siehe Super-Klasse
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -427,65 +445,73 @@ public class Spiel extends AppCompatActivity {
             // Activity starten
             startActivity(i_new);
         } else {
-            w_unallowed_choice.showAtLocation(layout, Gravity.CENTER, 0, 0);
+            w_forbidden_choice.showAtLocation(layout, Gravity.CENTER, 0, 0);
         }
     }
 
     /**
      * koordiniert das Zeichnen der Punkteanzeige
-     * hier werden Zeichen-Eigenschaften gesetzt
      */
-    private void visualizeScore(){
+    private void visualizeScore() {
         Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
         // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
         int abstand_x = 0;
-        // Style und Farbe hängen von der Bewertung der Level ab
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        // mit einer Schleife gehen wir durch die Liste zu den verschiedenen Levels
-        for (int i=1; i<=5; i++) {
-            // alle nicht gemachten Level sind schwarz umrandet
-            if(levelinfo.get(i) == 200) {
-                paint.setColor(Color.BLACK);
-                paint.setStyle(Paint.Style.STROKE);
-            }
-            // 5. Stufe 0-9: rot
-            else if(levelinfo.get(i) <= 40){
-                // sei der Kreis rot ausgemalt
-                paint.setColor(Color.rgb(153,2,14));
-            }
-            // 4. Stufe 10-19: orange
-            else if(levelinfo.get(i) <= 50){
-                paint.setColor(Color.rgb(255, 127, 39));
-            }
-            // 3. Stufe 20-29: gelb
-            else if(levelinfo.get(i) <= 70){
-                paint.setColor(Color.rgb(255, 201, 14));
-            }
-            // 2. Stufe 30-39: hellgrün
-            else if(levelinfo.get(i) <= 90){
-                paint.setColor(Color.rgb(181, 230, 29));
-            }
-            // 1. Stufe 10-19: grün
-            else if(levelinfo.get(i) <= 100){
-                paint.setColor(Color.rgb(34, 177, 76));
-            }
 
-            // Abstand zum linken Nachbarkreis vergrößern
+        for (int i = 1; i <= 5; i++) {
+            // Farb-Eigenschaften festlegen
+            Paint paint = setPaint(i);
+            // Abstand zum linken Nachbarn vergrößern
             abstand_x += 15;
-
-            // mit diesen Einstellungen den Kreis malen
-            this.einenKreisZeichnen(bitmap, paint, abstand_x);
+            // damit den Kreis zeichnen
+            this.paintCircle(bitmap, paint, abstand_x);
         }
     }
 
     /**
-     * zeichnet einen Punkt
+     * setzt die Farbe des zu zeichnenden Kreises fest
+     * @param circleNumber  Kreis, der gezeichnet werden soll
+     * @return              Farbe und Style des Kreises
+     */
+    public Paint setPaint(int circleNumber){
+        // Style und Farbe hängen von der Bewertung der Level ab
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        // alle nicht gemachten Level sind schwarz umrandet
+        if(levelinfo.get(circleNumber) == 200) {
+            paint.setColor(Color.BLACK);
+            paint.setStyle(Paint.Style.STROKE);
+        }
+        // 5. Stufe: rot
+        else if(levelinfo.get(circleNumber) <= 40){
+            // sei der Kreis rot ausgemalt
+            paint.setColor(Color.rgb(153,2,14));
+        }
+        // 4. Stufe: orange
+        else if(levelinfo.get(circleNumber) <= 50){
+            paint.setColor(Color.rgb(255, 127, 39));
+        }
+        // 3. Stufe: gelb
+        else if(levelinfo.get(circleNumber) <= 70){
+            paint.setColor(Color.rgb(255, 201, 14));
+        }
+        // 2. Stufe: hellgrün
+        else if(levelinfo.get(circleNumber) <= 90){
+            paint.setColor(Color.rgb(181, 230, 29));
+        }
+        // 1. Stufe: grün
+        else if(levelinfo.get(circleNumber) <= 100){
+            paint.setColor(Color.rgb(34, 177, 76));
+        }
+        return paint;
+    }
+
+    /**
+     * zeichnet einen Kreis
      * @param bitmap        Hier wird gezeichnet
      * @param paint         Zeichen-Eigenschaften
      * @param abstand_x     Abstand zum linken Bildschirmrand, bzw. zum linken Nachbar-Kreis
      */
-    private void einenKreisZeichnen(Bitmap bitmap, Paint paint, int abstand_x){
+    private void paintCircle(Bitmap bitmap, Paint paint, int abstand_x){
         Canvas canvas = new Canvas(bitmap);
         // Kreis zeichnen
         // mit dem sich mit jedem Kreis vergrößernden linken Abstand
@@ -504,14 +530,18 @@ public class Spiel extends AppCompatActivity {
      * @param view  Button, der geklickt wurde
      */
     public void sendMessage(View view){
+        // Infos im Bundle speichern
         Bundle bundle = new Bundle();
+
         if(view.getId() == R.id.info) {
             // die Klasse Info braucht nur das aktuelle Level
             bundle.putInt("Level", level);
             Intent intent = new Intent(this, Info.class);
             intent.putExtras(bundle);
             startActivity(intent);
-        } else if(view.getId() == R.id.next) {
+        }
+
+        else if(view.getId() == R.id.next) {
             // wenn alle 5 Level gespielt wurden
             // Level die noch nicht gemacht wurden haben von Beginn an den Wert 200
             if(levelinfo.get(1) != 200 && levelinfo.get(2) != 200 && levelinfo.get(3) != 200 && levelinfo.get(4) != 200 && levelinfo.get(5) != 200){
@@ -619,7 +649,6 @@ public class Spiel extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        isBuffered = true;
         levelpoint1 = levelinfo.get(1);
         levelpoint2 = levelinfo.get(2);
         levelpoint3 = levelinfo.get(3);
@@ -740,12 +769,4 @@ public class Spiel extends AppCompatActivity {
     public int getiMax(int level, ArrayList<Float> fl){
         return 8+((level-1)*9);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-    }
 }
-
