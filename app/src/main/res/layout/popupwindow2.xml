@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
-        android:text="Du hast nichts gezeichnet. Bitte zeichne deinen Funktionsgraph ein."
+        android:text="Du hast nichts gezeichnet. Bitte zeichne deinen Funktionsgraphen ein."
         android:textAlignment="center"
         android:textSize="20sp"
         android:textColor="@android:color/background_light"

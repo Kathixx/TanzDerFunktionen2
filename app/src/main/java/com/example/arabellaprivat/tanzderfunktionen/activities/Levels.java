@@ -25,10 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte;
-import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Pruefung;
+import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.TouchViewDots;
+import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Check;
 import com.example.arabellaprivat.tanzderfunktionen.R;
-import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche;
+import com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.TouchViewGraph;
 import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
 
@@ -40,7 +40,7 @@ import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
  * DoubleClick: http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button
  * Menü: https://developer.android.com/guide/topics/ui/menus.html
  */
-public class Spiel extends AppCompatActivity {
+public class Levels extends AppCompatActivity {
 
     // IV
     /** Info-Button */
@@ -68,9 +68,9 @@ public class Spiel extends AppCompatActivity {
      * Index 1-5:   Punkte des jeweiligen Levels */
     private ArrayList<Integer> levelinfo;
     /** Zeichenfläche, auf der die Funktionen gezeichnet werden */
-    private Zeichenfläche z;
+    private TouchViewGraph z;
     /** Touchfläche für Hilfspunkte */
-    private Hilfspunkte h;
+    private TouchViewDots h;
     /** Button um nach dem einzeichnen der Hilfspunkte die Funktion zu zeichnen*/
     private Button b_draw;
 
@@ -107,7 +107,7 @@ public class Spiel extends AppCompatActivity {
     private PopupWindow nothingIsDrawn;
     private View popupLayout2;
     private Button b_ok2;
-    private Pruefung p;
+    private Check p;
     /** Popup Window informiert, falls Graph zu kuzr gezeichnet wurde */
     private PopupWindow pathTooShort;
     private View popupLayout3;
@@ -130,6 +130,8 @@ public class Spiel extends AppCompatActivity {
     private Button b_close;
     private TextView t_tipps;
 
+
+
     /**
      * erstellt die Activity bei dessen Aufruf
      * @param savedInstanceState
@@ -139,8 +141,10 @@ public class Spiel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
 
+
+
         // Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
-        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         // Schriftart für Popups extra holen
         Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
@@ -156,10 +160,10 @@ public class Spiel extends AppCompatActivity {
         t_level     = (TextView) findViewById(R.id.level);
         t_number    = (TextView) findViewById(R.id.number);
         i_score     = (ImageView) findViewById(R.id.score);
-        z           = (Zeichenfläche) findViewById(R.id.zeichenfläche);
-        h           = (Hilfspunkte) findViewById (R.id.hilfspunkte);
+        z           = (TouchViewGraph) findViewById(R.id.zeichenfläche);
+        h           = (TouchViewDots) findViewById (R.id.hilfspunkte);
         b_draw      = (Button) findViewById(R.id.draw);
-        p           = new Pruefung(z, h);
+        p           = new Check(z, h);
 
 
         // LayoutInflater für alle PopUpWindows
@@ -246,8 +250,8 @@ public class Spiel extends AppCompatActivity {
         level = levelinfo.get(0);
 
         // Listen aus der Main Activity holen
-        float_list= MainActivity.returnFloatList();
-        string_list= MainActivity.returnStringList();
+        float_list= datasource.Float_Entries();
+        string_list= datasource.String_Entries();
 
         text= new String [3];
 
@@ -456,7 +460,7 @@ public class Spiel extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.anleitung:
-                startActivity(new Intent(this, Anleitung.class));
+                startActivity(new Intent(this, Instruction.class));
                 break;
 
         }
@@ -477,7 +481,7 @@ public class Spiel extends AppCompatActivity {
             bundle.putIntegerArrayList("Infos", levelinfo);
             bundle.putBoolean("Sound", soundIsOn);
             // neues Intent
-            Intent i_new = new Intent(this, Spiel.class);
+            Intent i_new = new Intent(this, Levels.class);
             i_new.putExtras(bundle);
             // Activity starten
             startActivity(i_new);
@@ -510,7 +514,7 @@ public class Spiel extends AppCompatActivity {
      * @return              Farbe und Style des Kreises
      */
     private Paint setPaint(int circleNumber){
-        // Style und Farbe hängen von der Bewertung der Level ab
+        // Style und Farbe hängen von der Rating der Level ab
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         // alle nicht gemachten Level sind schwarz umrandet
@@ -577,7 +581,7 @@ public class Spiel extends AppCompatActivity {
                 // gehe zur Endbewertung
                 bundle.putIntegerArrayList("Infos", levelinfo);
                 bundle.putBoolean("Sound", soundIsOn);
-                Intent intent = new Intent(this, Bewertung.class);
+                Intent intent = new Intent(this, Rating.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             } else {
@@ -589,7 +593,7 @@ public class Spiel extends AppCompatActivity {
                 levelinfo.set(0, counter);
                 bundle.putIntegerArrayList("Infos", levelinfo);
                 bundle.putBoolean("Sound",soundIsOn);
-                Intent intent = new Intent(this, Spiel.class);
+                Intent intent = new Intent(this, Levels.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -681,6 +685,7 @@ public class Spiel extends AppCompatActivity {
         super.onPause();
         levelpoint1 = levelinfo.get(1);
         levelpoint2 = levelinfo.get(2);
+        levelpoint2 = levelinfo.get(2);
         levelpoint3 = levelinfo.get(3);
         levelpoint4 = levelinfo.get(4);
         levelpoint5 = levelinfo.get(5);
@@ -709,7 +714,7 @@ public class Spiel extends AppCompatActivity {
 
 
     // TODO umbennen in Bewertungs-Textausgeben
-    private void check (Pruefung p){
+    private void check (Check p){
         // je nach Ergebnis wird das Ergebnis ausgegeben
         int points=p.check(level,para);
         // Variablen für die visuelle und textuelle Ergebnisanzeige
@@ -755,7 +760,7 @@ public class Spiel extends AppCompatActivity {
                     if (points <= 90) {
                         result2 = "Gut gemacht!";
                         conclusion = " Das war schon ziemlich gut! \n" +
-                                "Glückwunsch, Du konntest schon \n" + String.valueOf(points) + " Punkte sammeln. \n " +
+                                "Glückwunsch, Du konntest weitere \n" + String.valueOf(points) + " Punkte sammeln. \n " +
                                 "Schaffst Du es im nächsten Level noch besser?";
                         // hellgrün
                         color = Color.rgb(181, 230, 29);

@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:isIndicator="true"
-    tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Bewertung">
+    tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Rating">
 
 
     <View

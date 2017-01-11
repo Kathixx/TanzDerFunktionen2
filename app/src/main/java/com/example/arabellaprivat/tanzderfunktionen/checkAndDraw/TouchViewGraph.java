@@ -17,7 +17,7 @@ import com.example.arabellaprivat.tanzderfunktionen.R;
  * Created by Kathi on 29.11.2016.
  */
 
-public class Zeichenfläche extends View {
+public class TouchViewGraph extends View {
 
     private Paint paint =new Paint();
     private Path path= new Path();
@@ -31,8 +31,8 @@ public class Zeichenfläche extends View {
     /* neue Liste wird hier erstellt
      während dem Zeichnen werden die y-Wert hier eingetragen
      */
-    Liste listX = new Liste();
-    Liste listY= new Liste();
+    FloatList listX = new FloatList();
+    FloatList listY= new FloatList();
 
     int index =0;
     /** Constructor
@@ -40,7 +40,7 @@ public class Zeichenfläche extends View {
      * @param ctx  l
      * @param attrs xy
      */
-    public Zeichenfläche (Context ctx, AttributeSet attrs) {
+    public TouchViewGraph(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
         paint.setAntiAlias(true);
         paint.setColor(Color.BLACK);
@@ -116,10 +116,10 @@ public class Zeichenfläche extends View {
     /** gibt aktelle Liste zurück
      * @return Liste
      */
-    public Liste getListX (){
+    public FloatList getListX (){
         return listX;
     }
-    public Liste getListY(){return listY;}
+    public FloatList getListY(){return listY;}
 
 
 

@@ -17,17 +17,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import com.example.arabellaprivat.tanzderfunktionen.R;
+import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
 
 /**
- * zur Bewertung des Spiels
+ * zur Rating des Spiels
  * Quelle des Algorithmus zum Zeichnen eines Sterns:   http://stackoverflow.com/questions/7007429/android-how-to-draw-triangle-star-square-heart-on-the-canvas
  */
-public class Bewertung extends AppCompatActivity {
+public class Rating extends AppCompatActivity {
 
+    private Datasource dataSource;
     /** Bewertungssatz */
     private TextView t_review;
     /** visualisiert, wie viele Punkte erreicht wurden */
@@ -53,15 +57,20 @@ public class Bewertung extends AppCompatActivity {
         setContentView(R.layout.activity_bewertung);
 
 
+        dataSource = MainActivity.dataSource;
+
         //// Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
-        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         // Schriftart für Popups extra holen
         Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
 
-
         // Möglichkeit weiterzuspielen "ausschalten"
-        MainActivity.firstTime = false;
+        MainActivity.firstTime = true;
+
+        // Zwischenspeicher leeren
+        MainActivity.integer_list.clear();
+
 
         // Intent, das diese Activity geöffnet hat
         Intent intent = getIntent();
@@ -126,7 +135,7 @@ public class Bewertung extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                MainActivity.firstTime = false;
+                MainActivity.firstTime = true;
                 sendMessage(v);
             }
         });
@@ -306,5 +315,16 @@ public class Bewertung extends AppCompatActivity {
         item.setIcon(R.mipmap.sound_off);
     }
 
+    /**
+     * Callback Methode
+     * speichert Zwischenstand ab
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataSource.insert_table2(6,levelinfo.get(1),  levelinfo.get(2), levelinfo.get(3), levelinfo.get(4), levelinfo.get(5));
+        //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
+        Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
+    }
 
 }

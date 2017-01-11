@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView t_willkommen;
     /** Button, mit dem das Spiel gestartet wird */
     private Button b_start;
-    /** Button navigiert zur Anleitung */
+    /** Button navigiert zur Instruction */
     private Button b_anleitung;
     /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
     private Button b_weiterspielen;
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     /** legt ein Datenquellen-Objekt an */
     public static Datasource dataSource;
     /** Listen mit Datena aus der Datenbank */
-    static ArrayList <Float> float_list;
-    static ArrayList <String> string_list;
+    //static ArrayList <Float> float_list;
+    //static ArrayList <String> string_list;
     static ArrayList <Integer> integer_list;
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
@@ -72,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         // Schriftart setzen
-        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/Brandon_reg.otf");
+        FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         // Schriftart für Popups extra holen
         Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);
 
+        Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
+        dataSource.open();
 
         // Variablen belegen
         t_willkommen = (TextView) findViewById(R.id.willkommen);
@@ -116,11 +120,20 @@ public class MainActivity extends AppCompatActivity {
         b_ok4.setTypeface(fontRegular);
         popupText.setTypeface(fontRegular);
 
-        // wenn es das erste Mal ist, dass die App nach Installation geöffnet wird, heißt das, es gibt keinen Zwischenspeicher
-        if(isFirstTime()){
+
+        // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
+        integer_list = dataSource.Int_Entries();
+        // wenn das Level 6 ist
+        // kann nicht weiter gespielt werden
+        if (integer_list.isEmpty()){
             // blende die Möglichkeit weiterzuspielen aus
             b_weiterspielen.setVisibility(View.INVISIBLE);
-            b_start.setText("Start");
+            b_start.setText("Start");}
+        else {
+            if (integer_list.get(integer_list.size()-6)==6){
+            // blende die Möglichkeit weiterzuspielen aus
+            b_weiterspielen.setVisibility(View.INVISIBLE);
+            b_start.setText("Start");}
         }
 
 
@@ -133,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Listen aus der Klasse Datasource holen
-                float_list= dataSource.Float_Entries();
-                string_list= dataSource.String_Entries();
+                //float_list= dataSource.Float_Entries();
+                //string_list= dataSource.String_Entries();
 
                 // beim Neustart neue Liste erstellen, in der alle Infos stehen
                 // Liste mit den richtigen Werten füllen
@@ -158,10 +171,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Listen aus der Klasse Datasource holen
-                float_list= dataSource.Float_Entries();
-                string_list= dataSource.String_Entries();
-                // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
-                integer_list = dataSource.Int_Entries();
+                //float_list= dataSource.Float_Entries();
+                //string_list= dataSource.String_Entries();
+
 
                 // Level am Index 0 speichern
                 levelinfo.add(integer_list.get(integer_list.size()-6));
@@ -206,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
             }
         }
-        if(!firstTime)
-            firstTime = true;
+        /*if(!firstTime)
+            firstTime = true; */
         return firstTime;
     }
 
@@ -258,13 +270,13 @@ public class MainActivity extends AppCompatActivity {
             // Liste mit Infos
             b.putIntegerArrayList("Infos", levelinfo);
 
-            Intent intent = new Intent(this, Spiel.class);
+            Intent intent = new Intent(this, Levels.class);
             intent.putExtras(b);
             startActivity(intent);
         }
-        // Anleitung anzeigen lassen
+        // Instruction anzeigen lassen
         if (view.getId() == R.id.anleitung) {
-            startActivity(new Intent(this, Anleitung.class));
+            startActivity(new Intent(this, Instruction.class));
         }
 
     }
@@ -272,33 +284,34 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Callback Methode
      * stellt die Verbindung zur DB her
-     */
+     *
     @Override
     protected void onResume() {
         super.onResume();
 
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
         dataSource.open();
-    }
+    }*/
 
     /**
      * Callback Methode
      * schließt die Verbindung zur Datenbank
      */
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
 
         Log.d(LOG_TAG, "Die Datenquelle wird geschlossen.");
+        dataSource.close();
     }
 
-    static ArrayList returnFloatList (){
+    /*static ArrayList returnFloatList (){
         return float_list;
     }
 
     static ArrayList returnStringList (){
         return string_list;
-    }
+    } */
 
 
     /**

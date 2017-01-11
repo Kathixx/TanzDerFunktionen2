@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
-        android:text="Dein Graph ist aber ganz schon kurz! Bitte zeichne ihn im vorgegebenen Intervall ein!"
+        android:text="Dein Graph ist aber ganz schon kurz. Bitte zeichne ihn im vorgegebenen Intervall ein!"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textColor="@android:color/background_light"

@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
 
-    tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Spiel">
+    tools:context="com.example.arabellaprivat.tanzderfunktionen.activities.Levels">
 
 
     <TextView
@@ -109,7 +109,7 @@
         android:backgroundTint="@color/yellow"
         android:textColor="@android:color/background_light" />
 
-    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte
+    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.TouchViewDots
         android:id="@+id/hilfspunkte"
         android:layout_width="568px"
         android:layout_height="400px"
@@ -118,7 +118,7 @@
         android:layout_below="@+id/functionText"
         android:layout_marginTop="10dp"/>
 
-    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Zeichenfläche
+    <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.TouchViewGraph
         android:id="@+id/zeichenfläche"
         android:layout_width="568px"
         android:layout_height="400px"

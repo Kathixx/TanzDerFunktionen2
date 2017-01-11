@@ -12,14 +12,14 @@ package com.example.arabellaprivat.tanzderfunktionen.activities;
         import android.widget.TextView;
 
 
-public class FontChangeCrawler {
+public class FontChanger {
     private Typeface typeface;
 
-    public FontChangeCrawler(Typeface typeface) {
+    public FontChanger(Typeface typeface) {
         this.typeface = typeface;
     }
 
-    public FontChangeCrawler(AssetManager assets, String assetsFontFileName) {
+    public FontChanger(AssetManager assets, String assetsFontFileName) {
         typeface = Typeface.createFromAsset(assets, assetsFontFileName);
     }
 

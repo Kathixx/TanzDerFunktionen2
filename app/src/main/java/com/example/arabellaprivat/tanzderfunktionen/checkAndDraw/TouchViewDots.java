@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  * Created by Kathi on 03.12.2016.
  */
 
-public class Hilfspunkte extends View {
+public class TouchViewDots extends View {
     private Paint paint =new Paint();
     private Path path= new Path();
     private Path tempPath= new Path();
@@ -27,8 +26,8 @@ public class Hilfspunkte extends View {
     /* neue Liste wird hier erstellt
      während dem Zeichnen werden die y-Wert hier eingetragen
      */
-    Liste listX = new Liste();
-    Liste listY= new Liste();
+    FloatList listX = new FloatList();
+    FloatList listY= new FloatList();
 
     int index =0;
     /** Constructor
@@ -36,7 +35,7 @@ public class Hilfspunkte extends View {
      * @param ctx  l
      * @param attrs xy
      */
-    public Hilfspunkte (Context ctx, AttributeSet attrs) {
+    public TouchViewDots(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
         paint.setAntiAlias(true);
         paint.setColor(Color.BLUE);

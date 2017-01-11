@@ -1,16 +1,17 @@
 package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Kathi on 10.11.2016.
  */
 
-class StringListe extends ArrayList <String>  {
+class FloatList extends ArrayList <Double> implements Serializable{
 
 
     /** Constructor */
-    StringListe(){
+    FloatList(){
     };
 
     /*
@@ -27,7 +28,7 @@ class StringListe extends ArrayList <String>  {
      * gibt Liste zurück
      * @return Liste
      */
-    public StringListe getList (){
+    public FloatList getList (){
         return this;
     }
 }

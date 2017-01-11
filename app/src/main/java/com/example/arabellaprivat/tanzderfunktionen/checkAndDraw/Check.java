@@ -1,11 +1,7 @@
 package com.example.arabellaprivat.tanzderfunktionen.checkAndDraw;
 
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.View;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 /**
  * Created by Kathi on 09.12.2016.
@@ -13,16 +9,16 @@ import android.widget.TextView;
  * dadurch wird v.a. die KLasse "Spiel" übersichtlicher
  */
 
-public class Pruefung {
+public class Check {
      /** Instanzvariablen */
     /** Liste, die die übergebenen x-Werte des Pfades abspeichert */
-    private Liste listeX;
+    private FloatList listeX;
     /** Liste, die die übergebenen y-Werte des Pfades abspeichert */
-    private Liste listeY;
+    private FloatList listeY;
     /** Zeichenfläche */
-    private Zeichenfläche z;
+    private TouchViewGraph tvg;
     /** Hilfspunkte */
-    private Hilfspunkte h;
+    private TouchViewDots h;
     /** Levelanzeige */
     private int x;
 
@@ -34,11 +30,11 @@ public class Pruefung {
     /**
      *Constructor
      */
-    public Pruefung(Zeichenfläche zf, Hilfspunkte hp){
-        z=zf;
+    public Check(TouchViewGraph tvg, TouchViewDots hp){
+        this.tvg=tvg;
         h=hp;
-        listeX=z.getListX();
-        listeY=z.getListY();
+        listeX=tvg.getListX();
+        listeY=tvg.getListY();
     }
 
 
@@ -95,11 +91,11 @@ public class Pruefung {
             // x-Wert aus der Liste auslesen
             xWert = (listeX.get(index));
             // in x-Koordinaten-Werte umwandeln
-            xWert = pixelToCoordinate(xWert, z, 10);
+            xWert = pixelToCoordinate(xWert, tvg, 10);
             // Berechnet den y-Wert, Funktionstyp ist abhängig vom Level
             yWert = calculateYValue(level, xWert, a, b, c, d);
             // y-Koordinaten-Wert in Pixel umrechnen
-            yWert = coordinateToPixel(yWert, z, 6);
+            yWert = coordinateToPixel(yWert, tvg, 6);
             // berechneten y-Wert mit y-Wert aus der Liste vergleichen
             // 3 Abstufungen erzeugen in dem Toleranzbereich verändert wird, je ganuer gezeichnet wurde desto mehr PUnkte gibt es
             if (compare(yWert, listeY, index, 10)) points += 3;
@@ -122,8 +118,8 @@ public class Pruefung {
         double iMin =parameters[7];
         double iMax= parameters [8];
         // Start- und Endwert des gezeichneten Pfades auslesen und in Koordinaten umwandeln
-        double start= pixelToCoordinate(listeX.get(0), z,10);
-        double end= pixelToCoordinate(listeX.get(listeX.size()-1),z,10);
+        double start= pixelToCoordinate(listeX.get(0), tvg,10);
+        double end= pixelToCoordinate(listeX.get(listeX.size()-1),tvg,10);
         boolean isInIntervall=(start<=iMin && iMax<=end);
         //tv.setText("iMin: "+iMin+" iMax: "+iMax+" start: "+start+" end: e"+end+ " vgl.Min "+String.valueOf(start<=iMin)+ " vgl.Max "+String.valueOf(iMax<=end));
         // falls Start- und Endwert auserhalb des Intervalls bzw. auf der Intervallgrenze liegen, ist die gesamte Funktion innerhalb des Intervalls gezeichnet worden
@@ -226,7 +222,7 @@ public class Pruefung {
      *  @param xMax   maximaler Wert der x-Achse
      *  @return xWert dieser Wert wird in die Funktion eingesetzt
      */
-    private double pixelToCoordinate ( double pixel, Zeichenfläche z, int xMax){
+    private double pixelToCoordinate (double pixel, TouchViewGraph z, int xMax){
         double xWert;
         // Liest die maximalen Pixelwerte des Views zurück
         //float maxXPixel = v. getRight-getLeft??
@@ -261,7 +257,7 @@ public class Pruefung {
      * @param yMax
      * @return
      */
-    private double coordinateToPixel (double coordinate, Zeichenfläche z, double yMax){
+    private double coordinateToPixel (double coordinate, TouchViewGraph z, double yMax){
         double yWert;
         double widthView=z.getBottom()-z.getTop();
         double stepPixels=widthView/(2*yMax);
@@ -272,7 +268,7 @@ public class Pruefung {
 
 
     //berechnet x Koordinate
-    private double xCoordinateToPixel (double coordinate, Zeichenfläche z, double xMax){
+    private double xCoordinateToPixel (double coordinate, TouchViewGraph z, double xMax){
         double xWert;
         double widthView=z.getRight()-z.getLeft();
         // nach wie vielen Pixeln kommt 1 x Wert
@@ -290,7 +286,7 @@ public class Pruefung {
      * @param index Stelle in der Liste, an der Vergleichswert steht
      * @return true falls Vergleich der zwei Werte übereinstimmt
      */
-    private boolean compare (double f, Liste l, int index, double tolerance){
+    private boolean compare (double f, FloatList l, int index, double tolerance){
         double compareValue=l.get(index);
         return (f>=compareValue-tolerance && f<=compareValue+tolerance );
     }//Ende compare
@@ -321,8 +317,8 @@ public class Pruefung {
         boolean blackPixel=false;
         double tolerance=5;
         // berechnete bzw. in der Datenbank stehende Koordinatenwerte werden zum weiteren Vergleich in Pixelwerte umgerechnet
-        double  xVergleichswert=  xCoordinateToPixel(x, z, 10);
-        double yVergleichswert=  coordinateToPixel(y, z, 6);
+        double  xVergleichswert=  xCoordinateToPixel(x, tvg, 10);
+        double yVergleichswert=  coordinateToPixel(y, tvg, 6);
 
         //Kontrolle
         //String s="X-WErt: "+x+" Y-Wert: "+y+" ausgerechnete Pixel x: "+ xVergleichswert+" ausgerechnete Pixel y: "+yVergleichswert;
@@ -354,7 +350,7 @@ public class Pruefung {
      * @return true, falls Vergleich richtig ist
      */
     private int compareSpecialPoints(double x, double y) {
-            if (compareBitmapPoints(convertViewToBitmap(z), x, y)) return 4;
+            if (compareBitmapPoints(convertViewToBitmap(tvg), x, y)) return 4;
             else return 0;
     }// Ende compareSpecialPoints
 
