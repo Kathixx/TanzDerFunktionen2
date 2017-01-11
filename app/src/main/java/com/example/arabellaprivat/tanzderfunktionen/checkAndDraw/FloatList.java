@@ -5,26 +5,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Kathi on 10.11.2016.
+ * Klasse zum einfachen Zurückgeben von Floatlisten
  */
 
-class FloatList extends ArrayList <Double> implements Serializable{
+class FloatList extends ArrayList <Float> {
 
 
     /** Constructor */
-    FloatList(){
-    };
-
-    /*
-    Methoden void add (int index, E element) und E get (int index) sind schon vorgeben
-    und werden so wie vorgegeben verwendet und nicht überschrieben
-     */
-
+    FloatList(){};
 
     /**
-     * gibt den Wert an der entsprechenden Stelle in der Liste als double zurück
-     */
-
-    /** getList()
      * gibt Liste zurück
      * @return Liste
      */

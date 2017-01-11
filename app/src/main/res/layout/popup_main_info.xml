@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/popup_element"
+    android:id="@+id/popup_maininfo"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,21 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
-        android:text="Halt! \nDas Level hast du schon erledigt. Such Dir bitte ein anderes aus."
+        android:text="Bitte beachte:\n Bei der Überprüfung des Funktiongraphens wird besonders Wert auf Nullstellen und Achsenabschnitt gelegt. Berechne deshalb diese Punkte zuvor auf einem Blatt Papier.\n Zeichne dann deine berechneten\n Hilfspunkte ein. "
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="20dp"
+        android:textColor="@android:color/white"
         android:padding="20dp"
-        android:textColor="@android:color/background_light"/>
+        />
 
     <Button
         android:text="Ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ok"
-        android:textColor="@android:color/background_light"
-        android:background="@android:color/transparent"
         android:textAllCaps="false"
         android:textAlignment="center"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:textColor="@android:color/white"
+        android:background="@android:color/transparent"
+        />
 
 </LinearLayout>

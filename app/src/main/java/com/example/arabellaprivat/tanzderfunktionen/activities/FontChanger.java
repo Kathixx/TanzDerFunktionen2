@@ -1,7 +1,7 @@
 package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 /**
- * Created by Kathi on 09.01.2017.
+ * Created by Arabella on 09.01.2017.
  * Quelle: https://coderwall.com/p/qxxmaa/android-use-a-cust
  */
 

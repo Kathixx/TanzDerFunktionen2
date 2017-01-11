@@ -44,18 +44,18 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> levelinfo;
     /** legt ein Datenquellen-Objekt an */
     public static Datasource dataSource;
-    /** Listen mit Datena aus der Datenbank */
-    //static ArrayList <Float> float_list;
-    //static ArrayList <String> string_list;
+    //TODO JAVADOCH ARABELLA
     static ArrayList <Integer> integer_list;
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
     /** gibt an, ob die App zum Ersten Mal nach Installation geöffnet wird */
     protected static Boolean firstTime = null;
     /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
-    private PopupWindow mainInfo;
-    private View popupLayout4;
-    private Button b_ok4;
+    private PopupWindow pw_mainInfo;
+    /** Layout des PopupWindos*/
+    private View popupLayout;
+    /** Ok Button im PopUpWindow */
+    private Button b_ok;
 
 
 
@@ -72,18 +72,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         // Schriftart setzen
         FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         // Schriftart für Popups extra holen
-        Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
         Typeface fontRegular= Typeface.createFromAsset(getAssets(), "fonts/Brandon_reg.otf");
 
+        // Datasource Instanz erstellen und öffnen
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
         dataSource = new Datasource(this);
-
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
         dataSource.open();
 
@@ -102,29 +99,31 @@ public class MainActivity extends AppCompatActivity {
         // LayoutInflater für alle PopUpWindows
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // Popup Window 4: Info, dass zuerst berechnet werden muss
-        popupLayout4=inflater.inflate(R.layout.popup_maininfo, (ViewGroup)findViewById(R.id.popup_element_4));
-        mainInfo= new PopupWindow(popupLayout4,300,370, true);
-        b_ok4=(Button)popupLayout4.findViewById(R.id.ok);
-        b_ok4.setOnClickListener(new View.OnClickListener() {
+        popupLayout=inflater.inflate(R.layout.popup_main_info, (ViewGroup)findViewById(R.id.popup_maininfo));
+        pw_mainInfo= new PopupWindow(popupLayout,300,370, true);
+        b_ok=(Button)popupLayout.findViewById(R.id.ok);
+        // Bei Klick auf Ok: Popup schließt sich und man kommt ins nächste Level
+        b_ok.setOnClickListener(new View.OnClickListener() {
             /**
              * ermöglicht eine Aktoin beim Klick auf den Button
              * @param v View, auf die geklickt wurde
              */
             @Override
             public void onClick(View v) {
-                mainInfo.dismiss();
+                pw_mainInfo.dismiss();
                 sendMessage(v);
             }
         });
-        TextView popupText= (TextView)popupLayout4.findViewById(R.id.content);
-        b_ok4.setTypeface(fontRegular);
-        popupText.setTypeface(fontRegular);
+        TextView t_popupText= (TextView)popupLayout.findViewById(R.id.content);
+        // Schriftart setzen, sowohl im Button als auch im Text
+        b_ok.setTypeface(fontRegular);
+        t_popupText.setTypeface(fontRegular);
 
 
         // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
         integer_list = dataSource.Int_Entries();
         // wenn das Level 6 ist
-        // kann nicht weiter gespielt werden
+        // kann nicht weiter gespielt werden, Button Sichtbarkeit anpassen
         if (integer_list.isEmpty()){
             // blende die Möglichkeit weiterzuspielen aus
             b_weiterspielen.setVisibility(View.INVISIBLE);
@@ -145,10 +144,6 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                // Listen aus der Klasse Datasource holen
-                //float_list= dataSource.Float_Entries();
-                //string_list= dataSource.String_Entries();
-
                 // beim Neustart neue Liste erstellen, in der alle Infos stehen
                 // Liste mit den richtigen Werten füllen
                 // als erstes kommt das Level
@@ -158,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 for(int i=1; i<=5; i++){
                     levelinfo.add(i, 200);
                 }
-                mainInfo.showAtLocation(popupLayout4, Gravity.CENTER, 0, 0);
+                pw_mainInfo.showAtLocation(popupLayout, Gravity.CENTER, 0, 0);
 
             }
         });
@@ -170,11 +165,6 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                // Listen aus der Klasse Datasource holen
-                //float_list= dataSource.Float_Entries();
-                //string_list= dataSource.String_Entries();
-
-
                 // Level am Index 0 speichern
                 levelinfo.add(integer_list.get(integer_list.size()-6));
                 // levelinfo füllen
@@ -185,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                     levelinfo.add(integer_list.get(index));
                     index++;
                 }
-                mainInfo.showAtLocation(popupLayout4, Gravity.CENTER, 0, 0);
+                pw_mainInfo.showAtLocation(popupLayout, Gravity.CENTER, 0, 0);
             }
         });
 
@@ -233,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actions, menu);
         int i=R.id.sound;
-
         return true;
     }
 
@@ -283,18 +272,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Callback Methode
-     * stellt die Verbindung zur DB her
-     *
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
-        dataSource.open();
-    }*/
-
-    /**
-     * Callback Methode
      * schließt die Verbindung zur Datenbank
      */
     @Override
@@ -305,14 +282,6 @@ public class MainActivity extends AppCompatActivity {
         dataSource.close();
     }
 
-    /*static ArrayList returnFloatList (){
-        return float_list;
-    }
-
-    static ArrayList returnStringList (){
-        return string_list;
-    } */
-
 
     /**
      * verbietet das zurück-gehen mit dem "Zurück"-Button des Tablets
@@ -321,6 +290,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed(){}
 
 
+    /** verändert den Sound
+     * @param item Item in der Actionbar der dieses Funktion auslöst
+     */
     private void changeSound(MenuItem item){
         if (soundIsOn) {
             soundIsOn=false;
@@ -333,8 +305,6 @@ public class MainActivity extends AppCompatActivity {
             item.setIcon(R.mipmap.sound_on_white);
         }
     }
-
-
 
 }
 

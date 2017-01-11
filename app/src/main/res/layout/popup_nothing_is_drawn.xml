@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/popup_element_3"
+    android:id="@+id/popup_nothingIsDrawn"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,11 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
-        android:text="Dein Graph ist aber ganz schon kurz. Bitte zeichne ihn im vorgegebenen Intervall ein!"
+        android:text="Du hast nichts gezeichnet. Bitte zeichne deinen Funktionsgraphen ein."
         android:textAlignment="center"
         android:textSize="20sp"
         android:textColor="@android:color/background_light"
         android:padding="20dp"/>
+
 
     <Button
         android:text="Ok"
@@ -30,5 +31,4 @@
         android:textAlignment="center"
         android:textSize="36sp"
         />
-
 </LinearLayout>

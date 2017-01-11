@@ -33,16 +33,23 @@ import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
 
 
 /**
- * hier fidet das Spiel / das Zeichnen statt
- *
+ * Created by Arabella und Kathi
+ * hier findet das Spiel an sich, sowie das Zeichnen und Überprüfen statt
  * Quellen:
- * Bundle   https://www.youtube.com/watch?v=KRN7EYvorZY
  * DoubleClick: http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button
  * Menü: https://developer.android.com/guide/topics/ui/menus.html
  */
 public class Levels extends AppCompatActivity {
 
     // IV
+    /** zeigt das aktuelle Level an */
+    private int level;
+    /** speichert Infos über das aktulle Spiel
+     * Index 0:     aktuelles Level
+     * Index 1-5:   Punkte des jeweiligen Levels */
+    private ArrayList<Integer> levelinfo;
+
+    // Buttons
     /** Info-Button */
     private Button b_info;
     /** Button zum Löschen der View */
@@ -51,6 +58,9 @@ public class Levels extends AppCompatActivity {
     private Button b_check;
     /** führt zum nächsten Level oder zur Endbewertung */
     private Button b_next;
+    /** Button um nach dem einzeichnen der Hilfspunkte die Funktion zu zeichnen*/
+    private Button b_draw;
+
     /** sagt, in welchem Intervall gezeichnet werden muss */
     private TextView t_intervall;
     /** zeigt die zu malende Funktion an */
@@ -61,21 +71,16 @@ public class Levels extends AppCompatActivity {
     private TextView t_number;
     /** Punkte, die zeigen, welche Level wie abgeschlossen wurden */
     private ImageView i_score;
-    /** zeigt das aktuelle Level an */
-    private int level;
-    /** speichert Infos über das aktulle Spiel
-     * Index 0:     aktuelles Level
-     * Index 1-5:   Punkte des jeweiligen Levels */
-    private ArrayList<Integer> levelinfo;
-    /** Zeichenfläche, auf der die Funktionen gezeichnet werden */
-    private TouchViewGraph z;
-    /** Touchfläche für Hilfspunkte */
-    private TouchViewDots h;
-    /** Button um nach dem einzeichnen der Hilfspunkte die Funktion zu zeichnen*/
-    private Button b_draw;
 
+    /** TouchView, auf dem die Funktionen gezeichnet werden */
+    private TouchViewGraph tvg;
+    /** TouchVie für Hilfspunkte */
+    private TouchViewDots tvd;
 
-    //Instanz vonn Datasource
+    /** Prüfung  */
+    private Check check;
+
+    /**Instanz vonn Datasource */
     Datasource datasource = MainActivity.dataSource;
     /* Instanzen für das Speichern der Aktuellen Punktestände */
     private int levelpoint1; //= levelinfo.get(1);
@@ -83,56 +88,71 @@ public class Levels extends AppCompatActivity {
     private int levelpoint3; //= levelinfo.get(3);
     private int levelpoint4; //= levelinfo.get(4);
     private int levelpoint5; //= 3; //levelinfo.get(5)
-    /** Listen zum Auslesen aus der Datenbank */
-    // float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionen
+
+
+    // Listen zum Auslesen aus der Datenbank
+    /** float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionenen */
     private ArrayList <Float> float_list;
-    // string_list enthält alle Text, also Funktion als Ganzes und Tipps
-    // Texte eines Levels in einem Array mit Komma getrennt
+    /** string_list enthält alle Text, also Funktion als Ganzes und Tipps */
     private ArrayList <String> string_list;
-    // temporäres Array, in dem die Texte des jeweiligen Levels gespeichert werden
-    static String [] text;
-    // temporäres Array, in dem alle WErte des jeweiligen Levels gespeichert werden
+    /** temporäres Array, in dem die Texte des jeweiligen Levels gespeichert werden */
+    private String [] text;
+    /** temporäres Array, in dem alle Werte des jeweiligen Levels gespeichert werden */
     private double [] parameters;
-    static double [] para;
 
     /** Zeitstempel für das Abfangen von DoppelKlick */
     private long lastClick=0;
 
     /** Media Player für Musik */
-    private MediaPlayer mp;
-    /** Variable für Sound */
+    private MediaPlayer mediaPlayer;
+
+    /** Variable für den Sound */
     private boolean soundIsOn;
 
     /** Popup Window informiert falls nichts gezeichnet wurde   */
-    private PopupWindow nothingIsDrawn;
+    private PopupWindow pw_nothingIsDrawn;
+    /** Layout dieses Popup Windows*/
     private View popupLayout2;
+    /** Ok Button deses PopupWindows */
     private Button b_ok2;
-    private Check p;
+
     /** Popup Window informiert, falls Graph zu kuzr gezeichnet wurde */
-    private PopupWindow pathTooShort;
+    private PopupWindow pw_pathTooShort;
+    /** Layout dieses Popup Windows*/
     private View popupLayout3;
+    /** Ok Button deses PopupWindows */
     private Button b_ok3;
+
     /** Popup Window informiert, wenn das angeklickte Level nicht ausgewählt werden darf */
-    private PopupWindow w_forbidden_choice;
+    private PopupWindow pw_forbiddenChoice;
+    /** Layout dieses Popup Windows*/
     private View layout;
+    /** Ok Button deses PopupWindows */
     private Button b_ok;
 
     /** Popup Window, informiert über den erreichten Punktestand nach der Überprüfung */
-    private PopupWindow scoreInThisLevel;
+    private PopupWindow pw_scoreInThisLevel;
+    /** Layout dieses Popup Windows*/
     private View popupLayout4;
-    private TextView t_result2;
+    /** Text View zur Ergebnisanzeige in diesem Popup Window*/
+    private TextView t_result;
+    /** Text View zur Punkteanzeige in diesem Popup Window*/
     private TextView t_points;
+    /** Text View zur Erklärung des Ergebnisses in diesem Popup Window*/
     private TextView t_conclusion;
 
     /** Popup Window zeigt Tipps zum zeichnen */
-    private PopupWindow tipps;
+    private PopupWindow pw_tipps;
+    /** Layout dieses Popup Windows*/
     private View popuplayout5;
+    /** Schließen button des PopUp Windows*/
     private Button b_close;
+    /** Text View für die Tipps in diesem Popup Window*/
     private TextView t_tipps;
 
 
 
-    /**
+    /** Methode onCreate()
      * erstellt die Activity bei dessen Aufruf
      * @param savedInstanceState
      */
@@ -141,12 +161,10 @@ public class Levels extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
 
-
-
-        // Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
+        // Schriftart für die ganze Activity ändern mithilfe des FontChanger
         FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
-        // Schriftart für Popups extra holen
+        // Schriftart für Popups extra überschreiben (wird nicht vom FontChanger gemacht)
         Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
         Typeface fontRegular= Typeface.createFromAsset(getAssets(), "fonts/Brandon_reg.otf");
 
@@ -160,86 +178,93 @@ public class Levels extends AppCompatActivity {
         t_level     = (TextView) findViewById(R.id.level);
         t_number    = (TextView) findViewById(R.id.number);
         i_score     = (ImageView) findViewById(R.id.score);
-        z           = (TouchViewGraph) findViewById(R.id.zeichenfläche);
-        h           = (TouchViewDots) findViewById (R.id.hilfspunkte);
+        tvg           = (TouchViewGraph) findViewById(R.id.zeichenfläche);
+        tvd           = (TouchViewDots) findViewById (R.id.hilfspunkte);
         b_draw      = (Button) findViewById(R.id.draw);
-        p           = new Check(z, h);
+        // Instanz der Prüfung (check) erstellen, Zeichenfläche und Hilfspunkte-Zeichenfläche werden mitübergeben
+        check          = new Check(tvg, tvd);
 
 
         // LayoutInflater für alle PopUpWindows
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // PopupWindow 1: falls ein Level schon gespielt aber nochmal aufgerufen wurde
-        layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
-        w_forbidden_choice = new PopupWindow(layout, 300, 200, true);
+        layout = inflater.inflate(R.layout.popup_forbidden_choice, (ViewGroup) findViewById(R.id.popup_forbiddenChoice));
+        pw_forbiddenChoice = new PopupWindow(layout, 300, 200, true);
         b_ok = (Button) layout.findViewById(R.id.ok);
         b_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                w_forbidden_choice.dismiss();
+                pw_forbiddenChoice.dismiss();
             }
         });
-        TextView popupText= (TextView)layout.findViewById(R.id.content);
+        TextView t_popupText= (TextView)layout.findViewById(R.id.content);
+        // Schriftarten werden nicht vom FontChanger verändert und müssen hier extra überschrieben werden
         b_ok.setTypeface(fontRegular);
-        popupText.setTypeface(fontRegular);
+        t_popupText.setTypeface(fontRegular);
 
 
         // Popup Window 2: Falls nichts gezeichnet wurde und auf überprüfen geklickt wurde
-        popupLayout2=inflater.inflate(R.layout.popupwindow2, (ViewGroup)findViewById(R.id.popup_element_2));
-        nothingIsDrawn= new PopupWindow(popupLayout2, 300,200, true);
+        popupLayout2=inflater.inflate(R.layout.popup_nothing_is_drawn, (ViewGroup)findViewById(R.id.popup_nothingIsDrawn));
+        pw_nothingIsDrawn= new PopupWindow(popupLayout2, 300,200, true);
         b_ok2=(Button) popupLayout2.findViewById(R.id.ok);
         b_ok2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nothingIsDrawn.dismiss();
+                pw_nothingIsDrawn.dismiss();
             }
         });
-        popupText= (TextView)popupLayout2.findViewById(R.id.content);
+        t_popupText= (TextView)popupLayout2.findViewById(R.id.content);
+        // Schriftarten werden nicht vom FontChanger verändert und müssen hier extra überschrieben werden
         b_ok2.setTypeface(fontRegular);
-        popupText.setTypeface(fontRegular);
-
+        t_popupText.setTypeface(fontRegular);
 
         // Popup Window 3: Falls der Pfad zu kurz also in einem zu kleinen Intervall gezeichnet wurde
-        popupLayout3=inflater.inflate(R.layout.popup_pathtooshort, (ViewGroup)findViewById(R.id.popup_element_3));
-        pathTooShort= new PopupWindow(popupLayout3,300,200, true);
+        popupLayout3=inflater.inflate(R.layout.popup_path_too_short, (ViewGroup)findViewById(R.id.popup_pathTooShort));
+        pw_pathTooShort= new PopupWindow(popupLayout3,300,200, true);
         b_ok3= (Button) popupLayout3.findViewById(R.id.ok);
         b_ok3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {pathTooShort.dismiss();z.deleteView();
+            public void onClick(View v) {pw_pathTooShort.dismiss();tvg.deleteView();
             }
         });
-        popupText= (TextView)popupLayout3.findViewById(R.id.content);
+        t_popupText= (TextView)popupLayout3.findViewById(R.id.content);
+        // Schriftarten werden nicht vom FontChanger verändert und müssen hier extra überschrieben werden
         b_ok3.setTypeface(fontRegular);
-        popupText.setTypeface(fontRegular);
+        t_popupText.setTypeface(fontRegular);
 
         // Popup Window 4: Zeigt das Ergebnis und die Punkte des gezeichneten Graphen an
-        popupLayout4=inflater.inflate(R.layout.activity_punkte, (ViewGroup)findViewById(R.id.popup_element_4));
-        scoreInThisLevel= new PopupWindow(popupLayout4,400,350, true);
-        t_result2=(TextView) popupLayout4.findViewById(R.id.Ergebnis);
+        popupLayout4=inflater.inflate(R.layout.popup_score_in_this_level, (ViewGroup)findViewById(R.id.popup_scoreInThisLevel));
+        pw_scoreInThisLevel= new PopupWindow(popupLayout4,400,350, true);
+        t_result=(TextView) popupLayout4.findViewById(R.id.Ergebnis);
         t_points=(TextView) popupLayout4.findViewById(R.id.Punkte);
         t_conclusion=(TextView) popupLayout4.findViewById(R.id.Erklärung);
-        // Eigenschaften des Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
-        scoreInThisLevel.setBackgroundDrawable(new BitmapDrawable());
-        t_result2.setTypeface(fontRegular);
+        // Eigenschaften dieses Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
+        pw_scoreInThisLevel.setBackgroundDrawable(new BitmapDrawable());
+        // Schriftarten werden nicht vom FontChanger verändert und müssen hier extra überschrieben werden
+        t_result.setTypeface(fontRegular);
         t_conclusion.setTypeface(fontRegular);
-        t_points.setTypeface(fontBold
-        );
+        t_points.setTypeface(fontBold);
 
         // Popup Window 5: Tipps die beim Zeichnen der Funktion helfen
-        popuplayout5 = inflater.inflate(R.layout.activity_info, (ViewGroup) findViewById(R.id.popup_tipps));
-        tipps = new PopupWindow(popuplayout5, 400, 400, true);
+        popuplayout5 = inflater.inflate(R.layout.popup_info, (ViewGroup) findViewById(R.id.popup_info));
+        pw_tipps = new PopupWindow(popuplayout5, 400, 400, true);
         b_close = (Button) popuplayout5.findViewById(R.id.close);
         b_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tipps.dismiss();
+                pw_tipps.dismiss();
             }
         });
         t_tipps = (TextView) popuplayout5.findViewById(R.id.help);
+        // Eigenschaften des Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
+        pw_tipps.setBackgroundDrawable(new BitmapDrawable());
+        // Schriftarten werden nicht vom FontChanger verändert und müssen hier extra überschrieben werden
         b_close.setTypeface(fontRegular);
         t_tipps.setTypeface(fontRegular);
-        // Eigenschaften des Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
-        tipps.setBackgroundDrawable(new BitmapDrawable());
+
+        // MediaPlayer für Musik erstellen
+        mediaPlayer= MediaPlayer.create(this, R.raw.confirm);
 
         // Informationen aus der MainActivity holen und verarbeiten
         Intent intent = getIntent();
@@ -248,31 +273,32 @@ public class Levels extends AppCompatActivity {
         levelinfo = bundle.getIntegerArrayList("Infos");
         // Das aktuelle Level steht am Index 0
         level = levelinfo.get(0);
+        // Variable ob Sound on oder off ist aus zuvorigen Activity
+        soundIsOn=bundle.getBoolean("Sound");
 
-        // Listen aus der Main Activity holen
+        // Listen aus der datasource holen (static, da datasource nicht mittels Bunde übergeben werden kann und keine neue Instanz von Datasource erstellt werden soll
         float_list= datasource.Float_Entries();
         string_list= datasource.String_Entries();
 
+        // Text Array mit 3 möglichen Einträgen erstellen: 1. für das Level, 2. für die Funktion (als String), 3. Tipp
         text= new String [3];
+        // einzelne Strings des aktuellen Levels in dem Text Array abspeichern
+        splitArray(string_list.get(level-1));
 
-
+        // Parameter Array mit 9 möglichen Einträgen erstellen:
+        // 1.-4. Parameter der Funktion, 5.-6. Nullstellen, 7. Achsenabschnitt, 8.-9. Intervall
         parameters= new double [9];
-        para= new double [9];
-
-        // MediaPlayer für Musik
-        mp= MediaPlayer.create(this, R.raw.confirm);
-        // Variable ob Sound on oder of ist
-        soundIsOn=bundle.getBoolean("Sound");
+        // Parameter Array mit aktuellen Parametern des Levels füllen
+        insertParameters();
 
 
-
-        //  Weiter Button ist erstmal unsichtbar
+        /************* Layout dynamisch anpassen */
+        // "Weiter"-Button, TouchView zum Zeichnen sowie "Check" Button sind unsichtber
         b_next.setVisibility(View.INVISIBLE);
-        // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
-        z.setVisibility(View.INVISIBLE);
+        tvg.setVisibility(View.INVISIBLE);
         b_check.setVisibility(View.INVISIBLE);
 
-        // zeigen, in welchem Level wir sind
+        // Anzeige setzen, in welchem Level wir sind
         t_level.setText("Level " + level);
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
@@ -287,27 +313,19 @@ public class Levels extends AppCompatActivity {
         // Punktestand anzeigen
         t_number.setText(String.valueOf(score));
         // Farbe je nach Punktestand setzen
-        if (level!=1) t_number.setTextColor(calculateColor(level,score));
-
-
+        if (level!=1) t_number.setTextColor(calculateColor(score));
+        // Schriftart für den Punktestand verändern
         t_number.setTypeface(fontBold);
 
 
-        // einzelne Strings des aktuellen Levels in dem TextARRAY abspeichern
-        splitArray(string_list.get(level-1));
         // liest die jeweilige Funktion aus
         t_function.setText(getFunction());
-        // Array mit aktuellen Parametern des Levels füllen
-        // parameters= getParameters(level, float_list);
-        insertParameters(level, float_list);
-        //TODO
-        double iMin= float_list.get(getiMin(level, float_list));
-        double iMax= float_list.get(getiMax(level, float_list));
-        t_intervall.setText("Bitte zeichne den Funktionsgraphen im Intervall von "+ String.valueOf(iMin)+" und "+String.valueOf(iMax));
+
+        // Intervall auslesen und ausgeben
+        t_intervall.setText("Bitte zeichne den Funktionsgraphen im Intervall von "+ getiMin()+" und "+getiMax());
 
 
-
-
+        /*********** Click Listener der Buttons ***/
         b_info.setOnClickListener(new View.OnClickListener() {
             /**
              * ermöglicht eine Aktoin beim Klick auf den Button
@@ -326,24 +344,24 @@ public class Levels extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                // Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
-                // werden unterschiedliche Aktionen von diesem Button hervorgerufen
-                // die Zeichenfläche die Sichtbar ist wird geleert
-                if (z.getVisibility() == View.INVISIBLE) {
-                    // bei DoubleKlick werden alle Hilfspunkte gelöscht
-                    // elapsedRealtime() gibt die Sekunden (nano!) zurück, seid dem letzten boot
-                    // 500 gibt die Sekunden an inherhalb denen man doppelt geklickt haben muss
+                /* Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
+                 * werden unterschiedliche Aktionen von diesem Button hervorgerufen
+                 * die Zeichenfläche die Sichtbar ist wird geleert */
+                if (tvg.getVisibility() == View.INVISIBLE) {
+                    /* bei DoubleKlick werden alle Hilfspunkte gelöscht
+                     * elapsedRealtime() gibt die Sekunden (nano!) zurück, seid dem letzten boot
+                     * 500 gibt die Sekunden an inherhalb denen man doppelt geklickt haben muss */
                     if (SystemClock.elapsedRealtime() - lastClick < 500) {
-                        h.deleteView();
+                        tvd.deleteView();
                     }
                     // bei einfachen Klick nur den letzten Hilfspunkt löschen
-                    else h.deleteLast();
+                    else tvd.deleteLast();
                 }
-                // wenn man bereits beim Zeichnen ist,
-                // sollen die Hilfspunkte nicht mehr verändert werden
-                // nur der Graph soll gelöscht werden
-                // hier nur einfacher Klick möglich
-                else z.deleteView();
+                /* wenn man bereits beim Zeichnen ist,
+                 * sollen die Hilfspunkte nicht mehr verändert werden
+                 * nur der Graph soll gelöscht werden
+                 * hier nur einfacher Klick möglich */
+                else tvg.deleteView();
                 lastClick = SystemClock.elapsedRealtime();
             }
         });
@@ -356,11 +374,10 @@ public class Levels extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Zeichenfläche zum Zeichnen der Funktion sichtbar machen ("einschalten")
-                z.setVisibility(View.VISIBLE);
-                // Button für Beenden der Hilfspunkte-setzen ausschalten
+                tvg.setVisibility(View.VISIBLE);
+                // Button für Beenden der Hilfspunkte-setzen ausblenden
                 b_draw.setVisibility(View.INVISIBLE);
-
-                // Button zum Überprüfen der Funktion einschalten
+                // Button zum Überprüfen der Funktion anzeigen
                 b_check.setVisibility(View.VISIBLE);
 
 
@@ -381,22 +398,22 @@ public class Levels extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Intervall soll angezeigt werden
+                //TODO testen
                 t_intervall.setVisibility(View.VISIBLE);
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // zunächst wird überprüft ob überhaupt ein Graph gezeichnet wurde und ein entsprechender dialog angezeigt
-                if (p.pathIsEmpty()){
-                    nothingIsDrawn.showAtLocation(popupLayout2, Gravity.TOP, 0, 358);
+                if (check.pathIsEmpty()){
+                    pw_nothingIsDrawn.showAtLocation(popupLayout2, Gravity.TOP, 0, 358);
                 }
                 else {
-
-                   if (!p.pathIsInIntervall(para)) {
-                        pathTooShort.showAtLocation(popupLayout3, Gravity.TOP, 0,358);
+                   if (!check.pathIsInIntervall(parameters)) {
+                       pw_pathTooShort.showAtLocation(popupLayout3, Gravity.TOP, 0,358);
                    }
-                    else {
-                    check(p);
-                     }
+                   else {
+                       // ruft die eigentliche checkFunction() Methode auf und gibt das Ergebnis als PopUp aus
+                       showResult(check);
+                   }
                 }
-
             }
         });
 
@@ -425,7 +442,6 @@ public class Levels extends AppCompatActivity {
         inflater.inflate(R.menu.sound_level, menu);
         if (!soundIsOn) changeIcon(menu);
         return true;
-
     }
 
     /**
@@ -462,33 +478,56 @@ public class Levels extends AppCompatActivity {
             case R.id.anleitung:
                 startActivity(new Intent(this, Instruction.class));
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * navigiert zum ausgewähltem Level
-     * @param chosenLevel   Level, auf das geklickt wurde
+     * Teilt die Texte des ersten Levels, die nur mit einem Komma getrennt sind und gibt sie als einzelnes Array zurück
+     * an stelle 0: Level
+     * an Stelle 1: Funktion
+     * an Stelle 2: Tipp
+     * @param s String der kompletten Texte, also Level, Funktion und Tipp der Funktion
      */
-    public void chooseLevel(int chosenLevel){
-        // wenn das Level ausgewählt werden darf
-        if(levelinfo.get(chosenLevel) == 200){
-            // speicher das Level in einem Bundle
-            Bundle bundle = new Bundle();
-            // Level aktualisieren
-            levelinfo.set(0, chosenLevel);
-            bundle.putIntegerArrayList("Infos", levelinfo);
-            bundle.putBoolean("Sound", soundIsOn);
-            // neues Intent
-            Intent i_new = new Intent(this, Levels.class);
-            i_new.putExtras(bundle);
-            // Activity starten
-            startActivity(i_new);
-        } else {
-            w_forbidden_choice.showAtLocation(layout, Gravity.TOP, 0, 358);
+    private void splitArray (String s){
+        text = s.split(";");
+    }//Ende splitArray
+
+
+    /** speichert in das Parameter-Array alle Parameter die für die aktuelle Funktion notwendig werden
+     * da in der float_list alle Parameter aller Funktionen gespeichert sind
+     */
+    private void insertParameters (){
+        int paramertsPerFunction =9;
+        int start = (level-1)*paramertsPerFunction;
+        int end= (level*paramertsPerFunction);
+        int index=0;
+        for (int i=start; i<end; i++){
+            parameters[index]=float_list.get(i);
+            index++;
         }
-    }
+    } // Ende insertParameters
+
+
+    /* berechnet die Farbe des aktuellen Punktestandes runtergerechnet auf ein Level
+     */
+    private int calculateColor (int score){
+        int color;
+        int relativScore=score/(level-1);
+        if(relativScore <=40){
+            color = Color.rgb(153,2,14);
+        } else if(relativScore <= 50){
+            color = Color.rgb(255, 127, 39);
+        } else if(relativScore <= 70){
+            color = Color.rgb(255, 201, 14);
+        } else if(relativScore <= 90) {
+            color = Color.rgb(181, 230, 29);
+        } else {
+            color = Color.rgb(34, 177, 76);
+        }
+        return color;
+    }// Ende calculateColor
+
 
     /**
      * koordiniert das Zeichnen der Punkteanzeige
@@ -497,7 +536,6 @@ public class Levels extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
         // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
         int abstand_x = 0;
-
         for (int i = 1; i <= 5; i++) {
             // Farb-Eigenschaften festlegen
             Paint paint = setPaint(i);
@@ -506,7 +544,8 @@ public class Levels extends AppCompatActivity {
             // damit den Kreis zeichnen
             this.paintCircle(bitmap, paint, abstand_x);
         }
-    }
+    }// Ende visualizeScore
+
 
     /**
      * setzt die Farbe des zu zeichnenden Kreises fest
@@ -525,20 +564,22 @@ public class Levels extends AppCompatActivity {
         // 5. Stufe: rot
         else if(levelinfo.get(circleNumber) <= 40)
             paint.setColor(Color.rgb(153,2,14));
-        // 4. Stufe: orange
+            // 4. Stufe: orange
         else if(levelinfo.get(circleNumber) <= 50)
             paint.setColor(Color.rgb(255, 127, 39));
-        // 3. Stufe: gelb
+            // 3. Stufe: gelb
         else if(levelinfo.get(circleNumber) <= 70)
             paint.setColor(Color.rgb(255, 201, 14));
-        // 2. Stufe: hellgrün
+            // 2. Stufe: hellgrün
         else if(levelinfo.get(circleNumber) <= 90)
             paint.setColor(Color.rgb(181, 230, 29));
-        // 1. Stufe: grün
+            // 1. Stufe: grün
         else if(levelinfo.get(circleNumber) <= 100)
             paint.setColor(Color.rgb(34, 177, 76));
         return paint;
-    }
+    }//Ende setPaint
+
+
 
     /**
      * zeichnet einen Kreis
@@ -554,23 +595,43 @@ public class Levels extends AppCompatActivity {
         // Radius 5 px
         // mit den "Stift"-Eigenschaften, die je nach Level verändert wurden
         canvas.drawCircle(abstand_x, 5, 5, paint);
-
         // in die ImageView einfügen
         i_score.setImageBitmap(bitmap);
-    }
+    }// paintCircle
+
+
+    /**
+     * Gibt die aktuelle Funktion als String zurück
+     * @return  aktuelle Funktion
+     */
+    private String getFunction (){
+        return text[1];
+    }// Ende getFunction
+
+
+    /** gibt die untere Intervallgrenze zurück */
+    private float getiMin(){
+        return float_list.get(7+((level-1)*9));
+    }//Ende getiMin
+
+    /** gibt die obere Intervallgrenze zurück */
+    private float getiMax(){
+        return float_list.get(8+((level-1)*9));
+    }// Ende getiMax
+
 
     /**
      * wird beim Click auf einen Button aufgerufen
      * und startet abhängig vom Button die passende Activity
      * @param view  Button, der geklickt wurde
      */
-    public void sendMessage(View view){
+    private void sendMessage(View view){
         // Infos im Bundle speichern
         Bundle bundle = new Bundle();
 
         if(view.getId() == R.id.info) {
             // zuerst x dann y
-            tipps.showAtLocation(popuplayout5, Gravity.CENTER,85, 245);
+            pw_tipps.showAtLocation(popuplayout5, Gravity.CENTER,85, 245);
             t_tipps.setText(getInfo());
         }
 
@@ -598,75 +659,156 @@ public class Levels extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-    }
+    }//Ende sendMessage
 
-    /**
-     * Teilt die Texte des ersten Levels, die nur mit einem Komma getrennt sind und gibt sie als einzelnes Array zurück
-     * an stelle 0: Level
-     * an Stelle 1: Funktion
-     * an Stelle 2: Tipp
-     * TODO Komma kommen auch im Info-Satz vor, sodass der Satz auch getrennt wird :(
-     * @param s
-     */
-    public void splitArray (String s){
-        text = s.split(";");
-    }
-
-    /**
-     * Gibt die aktuelle Funktion als String zurück
-     * @return  aktuelle Funktion
-     */
-
-    public String getFunction (){
-        return text[1];
-    }
 
     /**
      * Gibt die Info zu der aktuellen Funktion als String zurück
-     * TODO Methode non-static machen!
      * @return aktuelle Info
      */
-    static String getInfo (){
+    private String getInfo (){
         return text[2];
-    }
+    }// Ende getInfo
+
+
+    /** eigentliche Prüffunktion
+     *
+     * @param check Instanz der Prüfung
+     */
+    private void showResult (Check check){
+        // je nach Ergebnis wird das Ergebnis ausgegeben
+        int points=check.checkFunction(level, parameters);
+        // Variablen für die visuelle und textuelle Ergebnisanzeige
+        String result;
+        String conclusion;
+        int color;
+        // Ergebnistext je nach Pnktanzahl verändern
+        // maximal erreichte Punktzahl in einem Level sind 100
+        // bei falsch gezeichneten Graphen
+        if (points<=40){
+            points=0;
+            result="Falsch!";
+            conclusion="Leider hast Du nicht gut genug gezeichnet. \n " +
+                    "Schau doch das nächste Mal in die Infos, vielleicht bekommst Du da ein paar Tipps wie Du die Funktion richtig zeichnen kannst. "+
+                    "Probier Dein Glück im nächsten Level.";
+            // Rot
+            color=Color.rgb(153,2,14);
+        }
+        else {
+            // bei schlecht gezeichneten Graphen
+            if (points <= 50) {
+                result = "Gerade nochmal gut gegangen!";
+                conclusion = " Puh da hast Du ja nochmal Glück gehabt. \n" +
+                        "Versuche das nächste Mal genauer zu zeichnen,\n" +
+                        " vielleicht helfen Dir mehr Hilfspunkte am Anfang?" +
+                        " In diesem Level hast Du " + String.valueOf(points) + " Punkte geschafft. \n " +
+                        "Auf ins nächste Level!";
+                // Orange
+                color = Color.rgb(255, 127, 39);
+            } else {
+                // bei mittemmäßig gezeichneten Graphen
+                if (points <=70) {
+                    result = "Ganz ok";
+                    conclusion = " Das war doch gar nicht mal so schlecht.\n "+
+                            "Aber Übung macht den Meister! "+
+                            "Das bekommst Du das nächste Mal" +
+                            " bestimmt noch besser hin!\n" +
+                            "In diesem Level hast Du " + String.valueOf(points) + " Punkte geschafft. \n ";
+
+                    // Gelb
+                    color = Color.rgb(255, 201, 14);
+                } else {
+                    // bei gut gezeichneten Graphen
+                    if (points <= 90) {
+                        result = "Gut gemacht!";
+                        conclusion = " Das war schon ziemlich gut! \n" +
+                                "Glückwunsch, Du konntest weitere \n" + String.valueOf(points) + " Punkte sammeln. \n " +
+                                "Schaffst Du es im nächsten Level noch besser?";
+                        // hellgrün
+                        color = Color.rgb(181, 230, 29);
+                    } else {
+                        // bei sehr gut gezeichneten Graphen
+                        result = "Sehr gut";
+                        conclusion = " Bravo, Du hast den Funktionsgraph hervorragend gezeichnet " +
+                                "und konntest in diesem Level fabelhaft " + String.valueOf(points) + " Punkte erreichen. \n " +
+                                "Beweise Dich im neuen Level!";
+                        // Grün
+                        color = Color.rgb(34, 177, 76);
+                    }
+                }
+            }
+            // Sound ertön sobald Funktionsgraph richtig gezeichnet wurde
+            if(soundIsOn) mediaPlayer.start();
+        }// Ende if-else
+        // Ändern der Buttons: Löschen und Prüfen Button verschwinden, Button, der zum nächsten Level führt wird sichtbar
+        b_delete.setVisibility(View.INVISIBLE);
+        b_check.setVisibility(View.INVISIBLE);
+        b_next.setVisibility(View.VISIBLE);
+        //  Korrekturbild soll über die Zeichnung gelegt werden
+        tvg.changeBackground(level);
+        // gezeichneter Funktionsgraph wird in entsprechender Farbe ersetzt
+        tvg.redrawInColor(color);
+        // TODO ARABELL???? KOMMENTAR
+        levelinfo.set(level, points);
+        //Pop-Up Window für die Ausgabe der Bewertung mit Texten füllen
+        t_result.setText(result);
+        t_points.setText(String.valueOf(points));
+        t_points.setTextColor(color);
+        t_conclusion.setText(conclusion);
+        // Pop-Up Window anzeigen lassen
+        pw_scoreInThisLevel.showAtLocation(popupLayout4, Gravity.TOP, 0, 280);
+    } // Ende showResult
+
+
+
+    /** Icon ändern
+     * @param m ActionBar Icon das verändert werden soll
+     */
+    private void changeIcon(android.view.Menu m){
+        MenuItem item =m.findItem(R.id.sound);
+        item.setIcon(R.mipmap.sound_off);
+    } // Ende changeIcon
+
+
+    /** verändert den Sound
+     * @param item Item in der Actionbar der dieses Funktion auslöst
+     */
+    private void changeSound(MenuItem item){
+        if (soundIsOn) {
+            soundIsOn=false;
+            // Icon ändern
+            item.setIcon(R.mipmap.sound_off);
+        }
+        else {
+            soundIsOn=true;
+            item.setIcon(R.mipmap.sound_on_white);
+        }
+    }// Ende changeSound
+
+
 
     /**
-     * liest die aktuell  Parameter, Nullstellen un Achsenabschnitte eines Levels aus der float_list aus und gibt sie zurück
-     * @param l aktuelles Level
-     * @return Array mit allen relevanten Werten des Levels
-
-    static float[] getParameters(int l, ArrayList <Float> fl){
-    // Float-Array in dem alle Parameter, Nullstellen und Achsenabschnitt der jeweiligen Funktion und damit Level gespeichert wird
-    // eine Funktion hat max. 7 Werte: 4 Parameter, 2 Nullstellen, 1 Achsenabschnitt; deshalb 7-stelliges Array;
-    float [] paramters = new float[7];
-    // Startwert, bei dem in der float_liste begonnen werden soll, die WErte auszulesen
-    // und Endwert bei dem dann ein neues Level/Funktion beginnt und gestoppt werden soll
-    //Bsp: wir sind bei Funktion 2 also Level 2:
-    // wir müssen an Stelle 7 in der float_list beginnen: (2-1)*7=7
-    // dann folgen 7 Werte die wir auslesen müssen, also bis stelle 13
-    // der Endwert ist somit 14: 2+7;
-    int start = (l-1)*7;
-    int end= l*2;
-    int index=0;
-    for (int i=start; i<end; i++){
-    paramters[index]=fl.get(i);
-    index++;
-    };
-    return paramters;
-
-    } */
-
-
-    static void insertParameters (int l,ArrayList <Float> fl){
-        int paramertsPerFunction =9;
-        int level =l;
-        int start = (level-1)*paramertsPerFunction;
-        int end= (level*paramertsPerFunction);
-        int index=0;
-        for (int i=start; i<end; i++){
-            para[index]=fl.get(i);
-            index++;
-        };
+     * navigiert zum ausgewähltem Level
+     * @param chosenLevel   Level, auf das geklickt wurde
+     */
+    private void chooseLevel(int chosenLevel){
+        // wenn das Level ausgewählt werden darf
+        if(levelinfo.get(chosenLevel) == 200){
+            // speicher das Level in einem Bundle
+            Bundle bundle = new Bundle();
+            // Level aktualisieren
+            levelinfo.set(0, chosenLevel);
+            bundle.putIntegerArrayList("Infos", levelinfo);
+            bundle.putBoolean("Sound", soundIsOn);
+            // neues Intent
+            Intent i_new = new Intent(this, Levels.class);
+            i_new.putExtras(bundle);
+            // Activity starten
+            startActivity(i_new);
+        }
+        else {
+            pw_forbiddenChoice.showAtLocation(layout, Gravity.TOP, 0, 358);
+        }
     }
 
 
@@ -693,141 +835,7 @@ public class Levels extends AppCompatActivity {
         datasource.insert_table2(level,levelpoint1, levelpoint2, levelpoint3, levelpoint4, levelpoint5);
         //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
         Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
-    }
-
-    private void changeSound(MenuItem item){
-        if (soundIsOn) {
-            soundIsOn=false;
-            // Icon ändern
-            item.setIcon(R.mipmap.sound_off);
-        }
-        else {
-            soundIsOn=true;
-            item.setIcon(R.mipmap.sound_on_white);
-        }
-    }
-
-    private void changeIcon(android.view.Menu m){
-        MenuItem item =m.findItem(R.id.sound);
-        item.setIcon(R.mipmap.sound_off);
-    }
+    }// Ende onPause
 
 
-    // TODO umbennen in Bewertungs-Textausgeben
-    private void check (Check p){
-        // je nach Ergebnis wird das Ergebnis ausgegeben
-        int points=p.check(level,para);
-        // Variablen für die visuelle und textuelle Ergebnisanzeige
-        String result2;
-        String conclusion;
-        int color;
-
-        // Ergebnistext je nach PUnktanzahl verändern
-        // macimal erreichte PUnktzahl in einem Level sind 45
-        // falsch gezeichnet
-        if (points<=40){
-            points=0;
-            result2="Falsch!";
-            conclusion="Leider hast Du nicht gut genug gezeichnet. \n " +
-                    "Schau doch das nächste Mal in die Infos, vielleicht bekommst Du da ein paar Tipps wie Du die Funktion richtig zeichnen kannst. "+
-                    "Probier Dein Glück im nächsten Level.";
-            // Rot
-            color=Color.rgb(153,2,14);
-        }
-        else {
-
-            if (points <= 50) {
-                result2 = "Gerade nochmal gut gegangen!";
-                conclusion = " Puh da hast Du ja nochmal Glück gehabt. \n" +
-                        "Versuche das nächste Mal genauer zu zeichnen,\n" +
-                        " vielleicht helfen Dir mehr Hilfspunkte am Anfang?" +
-                        " In diesem Level hast Du " + String.valueOf(points) + " Punkte geschafft. \n " +
-                        "Auf ins nächste Level!";
-                // Orange
-                color = Color.rgb(255, 127, 39);
-            } else {
-                if (points <=70) {
-                    result2 = "Ganz ok";
-                    conclusion = " Das war doch gar nicht mal so schlecht.\n "+
-                            "Aber Übung macht den Meister! "+
-                            "Das bekommst Du das nächste Mal" +
-                            " bestimmt noch besser hin!\n" +
-                            "In diesem Level hast Du " + String.valueOf(points) + " Punkte geschafft. \n ";
-
-                    // Gelb
-                    color = Color.rgb(255, 201, 14);
-                } else {
-                    if (points <= 90) {
-                        result2 = "Gut gemacht!";
-                        conclusion = " Das war schon ziemlich gut! \n" +
-                                "Glückwunsch, Du konntest weitere \n" + String.valueOf(points) + " Punkte sammeln. \n " +
-                                "Schaffst Du es im nächsten Level noch besser?";
-                        // hellgrün
-                        color = Color.rgb(181, 230, 29);
-                    } else {
-                        result2 = "Sehr gut";
-                        conclusion = " Bravo, Du hast den Funktionsgraph hervorragend gezeichnet " +
-                                "und konntest in diesem Level fabelhaft " + String.valueOf(points) + " Punkte erreichen. \n " +
-                                "Beweise Dich im neuen Level!";
-                        // Grün
-                        color = Color.rgb(34, 177, 76);
-
-                    }
-                }
-            }
-            // Sound ertön sobal Funktionsgraph richtig gezeichnet wurde
-            if(soundIsOn) mp.start();
-        }// Ende if-else
-        // ändere die Anzeige des Buttons
-        // Löschen und Prüfen Button verschwinden
-        b_delete.setVisibility(View.INVISIBLE);
-        b_check.setVisibility(View.INVISIBLE);
-        // Button, der zum nächsten Level führt wird sichtbar
-        b_next.setVisibility(View.VISIBLE);
-        //  Korrekturbild soll über die Zeichnung gelegt werden
-        z.changeBackground(level);
-        z.redrawInColor(color);
-        levelinfo.set(level, points);
-        //Pop-Up Window mit Texten füllen
-        t_result2.setText(result2);
-        t_points.setText(String.valueOf(points));
-        t_points.setTextColor(color);
-        t_conclusion.setText(conclusion);
-        scoreInThisLevel.showAtLocation(popupLayout4, Gravity.TOP, 0, 280);
-
-        /*Intent intent = new Intent(Spiel.this, Punkte.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("result2", result2);
-        bundle.putString("conclusion",conclusion);
-        bundle.putInt("color",color);
-        bundle.putInt("points",points);
-        intent.putExtras(bundle);
-        startActivity (intent); */
-    }
-
-    public int getiMin(int level, ArrayList<Float> fl){
-        return 7+((level-1)*9);
-    }
-
-    public int getiMax(int level, ArrayList<Float> fl){
-        return 8+((level-1)*9);
-    }
-
-    private int calculateColor (int level, int score){
-        int color;
-
-        int relativScore=score/(level-1);
-        if(relativScore <=40){
-            color = Color.rgb(153,2,14);
-        } else if(relativScore <= 50){
-            color = Color.rgb(255, 127, 39);
-        } else if(relativScore <= 70){
-            color = Color.rgb(255, 201, 14);
-        } else if(relativScore <= 90) {
-            color = Color.rgb(181, 230, 29);
-        } else {
-            color = Color.rgb(34, 177, 76);
-        }
-       return color;
-    }
 }

@@ -298,6 +298,9 @@ public class Rating extends AppCompatActivity {
     @Override
     public void onBackPressed(){}
 
+    /** verändert den Sound
+     * @param item Item in der Actionbar der dieses Funktion auslöst
+     */
     private void changeSound(MenuItem item){
         if (soundIsOn) {
             soundIsOn=false;
@@ -310,6 +313,9 @@ public class Rating extends AppCompatActivity {
         }
     }
 
+    /** verändert den Sound
+     * @param m Item in der Actionbar das dieses Funktion auslöst
+     */
     private void changeIcon(android.view.Menu m){
         MenuItem item =m.findItem(R.id.sound);
         item.setIcon(R.mipmap.sound_off);
