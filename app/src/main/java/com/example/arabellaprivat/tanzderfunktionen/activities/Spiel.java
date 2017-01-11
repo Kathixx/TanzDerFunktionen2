@@ -127,7 +127,7 @@ public class Spiel extends AppCompatActivity {
     /** Popup Window zeigt Tipps zum zeichnen */
     private PopupWindow tipps;
     private View popuplayout5;
-    private Button b_ok5;
+    private Button b_close;
     private TextView t_tipps;
 
     /**
@@ -167,7 +167,7 @@ public class Spiel extends AppCompatActivity {
 
         // PopupWindow 1: falls ein Level schon gespielt aber nochmal aufgerufen wurde
         layout = inflater.inflate(R.layout.popupwindow, (ViewGroup) findViewById(R.id.popup_element));
-        w_forbidden_choice = new PopupWindow(layout, 300, 370, true);
+        w_forbidden_choice = new PopupWindow(layout, 300, 200, true);
         b_ok = (Button) layout.findViewById(R.id.ok);
         b_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,18 +222,20 @@ public class Spiel extends AppCompatActivity {
         );
 
         // Popup Window 5: Tipps die beim Zeichnen der Funktion helfen
-        popuplayout5 = inflater.inflate(R.layout.popup_tipps, (ViewGroup) findViewById(R.id.popup_tipps));
-        tipps = new PopupWindow(popuplayout5, 300, 200, true);
-        b_ok5 = (Button) popuplayout5.findViewById(R.id.ok);
-        b_ok5.setOnClickListener(new View.OnClickListener() {
+        popuplayout5 = inflater.inflate(R.layout.activity_info, (ViewGroup) findViewById(R.id.popup_tipps));
+        tipps = new PopupWindow(popuplayout5, 400, 400, true);
+        b_close = (Button) popuplayout5.findViewById(R.id.close);
+        b_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tipps.dismiss();
             }
         });
-        t_tipps = (TextView) popuplayout5.findViewById(R.id.content);
-        b_ok5.setTypeface(fontRegular);
+        t_tipps = (TextView) popuplayout5.findViewById(R.id.help);
+        b_close.setTypeface(fontRegular);
         t_tipps.setTypeface(fontRegular);
+        // Eigenschaften des Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
+        tipps.setBackgroundDrawable(new BitmapDrawable());
 
         // Informationen aus der MainActivity holen und verarbeiten
         Intent intent = getIntent();
@@ -280,6 +282,10 @@ public class Spiel extends AppCompatActivity {
         }
         // Punktestand anzeigen
         t_number.setText(String.valueOf(score));
+        // Farbe je nach Punktestand setzen
+        if (level!=1) t_number.setTextColor(calculateColor(level,score));
+
+
         t_number.setTypeface(fontBold);
 
 
@@ -380,7 +386,7 @@ public class Spiel extends AppCompatActivity {
                 else {
 
                    if (!p.pathIsInIntervall(para)) {
-                        pathTooShort.showAtLocation(popupLayout3, Gravity.TOP, 0, 380);
+                        pathTooShort.showAtLocation(popupLayout3, Gravity.TOP, 0,358);
                    }
                     else {
                     check(p);
@@ -476,7 +482,7 @@ public class Spiel extends AppCompatActivity {
             // Activity starten
             startActivity(i_new);
         } else {
-            w_forbidden_choice.showAtLocation(layout, Gravity.CENTER, 0, 0);
+            w_forbidden_choice.showAtLocation(layout, Gravity.TOP, 0, 358);
         }
     }
 
@@ -559,7 +565,8 @@ public class Spiel extends AppCompatActivity {
         Bundle bundle = new Bundle();
 
         if(view.getId() == R.id.info) {
-            tipps.showAtLocation(popuplayout5, Gravity.BOTTOM, 0, 0);
+            // zuerst x dann y
+            tipps.showAtLocation(popuplayout5, Gravity.CENTER,85, 245);
             t_tipps.setText(getInfo());
         }
 
@@ -799,5 +806,23 @@ public class Spiel extends AppCompatActivity {
 
     public int getiMax(int level, ArrayList<Float> fl){
         return 8+((level-1)*9);
+    }
+
+    private int calculateColor (int level, int score){
+        int color;
+
+        int relativScore=score/(level-1);
+        if(relativScore <=40){
+            color = Color.rgb(153,2,14);
+        } else if(relativScore <= 50){
+            color = Color.rgb(255, 127, 39);
+        } else if(relativScore <= 70){
+            color = Color.rgb(255, 201, 14);
+        } else if(relativScore <= 90) {
+            color = Color.rgb(181, 230, 29);
+        } else {
+            color = Color.rgb(34, 177, 76);
+        }
+       return color;
     }
 }

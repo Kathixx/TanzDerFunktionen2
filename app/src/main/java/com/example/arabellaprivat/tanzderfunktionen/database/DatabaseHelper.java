@@ -76,28 +76,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(1, '0.5x+2', 'Erinnerst Du Dich an die Funktion der Parameter m und b in f(x)=mx+b? m steht für die Steigung und b für den Schnittpunkt mit der y-Achse', 0.5, 2, 99, 99, -4, 99, 2,-8,6);";
+                    "(1, '0.5x+2', 'Erinnerst Du Dich an die Funktion der Parameter m und b in f(x)=m·x+b?\nm steht für die Steigung und b für den Schnittpunkt mit der y-Achse', 0.5, 2, 99, 99, -4, 99, 2,-8,6);";
     public static final String SQL_INSERTDB1_2 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(2, '0.25x²+1x-4', 'Alles, was Du tun musst ist, den Scheitelpunkt und die Verschiebung abzulesen', 0.25, 1, -4, 99, -6.5, 2.5, -4,-8,4);";
+                    "(2, '0.25x²+1x-4', 'Du weißt sicherlich, dass quadratische Funktionen immer eine Parabel als Funktionsgraph haben. Die einfachste Form davon ist die Normalparabel. Weißt Du noch wie diese aussieht? Denn dann musst Du hier nur noch die Verschiebung abzulesen!', 0.25, 1, -4, 99, -6.5, 2.5, -4,-8,4);";
     public static final String SQL_INSERTDB1_3 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(3, '3:(x-2)+1', 'Wie verhält sich der Graph für lim->0 ?', 3, 1, -1.5, 1, -1, 99, -0.5, -8,2);";
+                    "(3, '3:(x-2)+1', 'Du hast gelernt, dass gebrochenrationale Funktionen oft Definitionslücken haben. Können diese nicht behoben werden handelt es sich um eine Polstelle. Wie sieht das hier aus?\nWeißt du auch noch was eine waagrechte Asymptote ist und wie man sie berechnet?', 3, 1, -1.5, 1, -1, 99, -0.5, -8,2);";
     public static final String SQL_INSERTDB1_4 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(4, '3·cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a * sin(b*x+c)+d. Was geben die Parameter an ? a: Vergrößerung/Verkleinerung der Amplitude b: Streckung/Stauchung/Spiegelung an der x-Achse c: Verschiebung nach links oder rechts d: Verschiebung auf der y-Achse', 3, 1, 1, 0, -2.571, 0.571, 1.62, -4, 4);";
+                    "(4, '3·cos(x+1)', 'Die allgemeine Form dieser Funktion lautet f(x)=a·sin(b·x+c)+d.\nWas geben die Parameter an ?\n a: Vergrößerung/Verkleinerung der Amplitude\nb: Streckung/Stauchung/Spiegelung an der x-Achse\nc: Verschiebung nach links oder rechts\nd: Verschiebung auf der y-Achse', 3, 1, 1, 0, -2.571, 0.571, 1.62, -4, 4);";
 
     public static final String SQL_INSERTDB1_5 =
             "INSERT INTO Level"+
                     "(level_level,function,hint,a,b,c,d,x1,x2,y,min,max) " +
                     "VALUES " +
-                    "(5, 'ln(x+5)', 'Weisst du noch in welchem Punkt sich alle logarithmischen Funktionen schneiden ?', 1, 1, 5, 0, -4, 99, 1.5, -5, 5);";
+                    "(5, 'ln(x+5)', 'Dir ist bekannt das ln nichts anderes bedeutet als natürliche Logarithmusfunktion. Diese haben einige wichtige Eigenschaften, z. B. ihr Monotonieverhalten oder, dass sie alle eine Nullstelle bei 1 haben. Wie schaut eine generelle ln-Funktion aus und wie ist diese hier verschoben? ', 1, 1, 5, 0, -4, 99, 1.5, -5, 5);";
 
     //Constructor
     public DatabaseHelper(Context context) {

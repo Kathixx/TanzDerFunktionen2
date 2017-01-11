@@ -13,19 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
-        android:text="Halt! Das Level hast du schon erledigt. Such Dir bitte ein anderes aus."
+        android:text="Halt! \nDas Level hast du schon erledigt. Such Dir bitte ein anderes aus."
         android:textAlignment="center"
         android:textSize="20sp"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/background_light" />
+        android:padding="10dp"
+        android:textColor="@android:color/background_light"/>
 
     <Button
-        android:text="OK"
+        android:text="Ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ok"
         android:textColor="@android:color/background_light"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/transparent"
         android:textAllCaps="false"
         android:textAlignment="center"
         android:textSize="36sp" />

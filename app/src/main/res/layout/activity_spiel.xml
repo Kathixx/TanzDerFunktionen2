@@ -35,7 +35,7 @@
         android:id="@+id/functionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/btnBack"
+        android:background="@color/green_soft"
         android:textColor="@android:color/background_light"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -106,7 +106,7 @@
         android:textAllCaps="false"
         android:textSize="25sp"
         android:background="@drawable/circle_style"
-        android:backgroundTint="@color/btnBack"
+        android:backgroundTint="@color/yellow"
         android:textColor="@android:color/background_light" />
 
     <com.example.arabellaprivat.tanzderfunktionen.checkAndDraw.Hilfspunkte

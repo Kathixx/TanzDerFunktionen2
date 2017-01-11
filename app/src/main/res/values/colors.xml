@@ -4,6 +4,13 @@
     <color name="colorPrimaryDark">#155E02</color>
     <color name="colorAccent">#FF4081</color>
     <color name="btnColor">#8cb804</color>
-    <color name ="btnBack">#abd3a0</color>
+    <color name ="green_soft">#abd3a0</color>
+    <color name ="btnBack">#E45C66</color>
+    <color name="red">#99020E</color>
+    <color name="orange">#FF7F27</color>
+    <color name="yellow">#FFC90E</color>
+    <color name="green_light">#B5E61D</color>
+    <color name="green_dark">#22B14C</color>
+
 
 </resources>
