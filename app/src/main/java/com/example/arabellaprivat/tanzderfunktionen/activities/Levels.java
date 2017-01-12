@@ -159,7 +159,7 @@ public class Levels extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spiel);
+        setContentView(R.layout.activity_levels);
 
         // Schriftart für die ganze Activity ändern mithilfe des FontChanger
         FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");
@@ -178,8 +178,8 @@ public class Levels extends AppCompatActivity {
         t_level     = (TextView) findViewById(R.id.level);
         t_number    = (TextView) findViewById(R.id.number);
         i_score     = (ImageView) findViewById(R.id.score);
-        tvg           = (TouchViewGraph) findViewById(R.id.zeichenfläche);
-        tvd           = (TouchViewDots) findViewById (R.id.hilfspunkte);
+        tvg           = (TouchViewGraph) findViewById(R.id.drawing);
+        tvd           = (TouchViewDots) findViewById (R.id.dots);
         b_draw      = (Button) findViewById(R.id.draw);
         // Instanz der Prüfung (check) erstellen, Zeichenfläche und Hilfspunkte-Zeichenfläche werden mitübergeben
         check          = new Check(tvg, tvd);
@@ -292,7 +292,7 @@ public class Levels extends AppCompatActivity {
         insertParameters();
 
 
-        /************* Layout dynamisch anpassen */
+        /* ************ Layout dynamisch anpassen */
         // "Weiter"-Button, TouchView zum Zeichnen sowie "Check" Button sind unsichtber
         b_next.setVisibility(View.INVISIBLE);
         tvg.setVisibility(View.INVISIBLE);
@@ -398,7 +398,6 @@ public class Levels extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Intervall soll angezeigt werden
-                //TODO testen
                 t_intervall.setVisibility(View.VISIBLE);
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // zunächst wird überprüft ob überhaupt ein Graph gezeichnet wurde und ein entsprechender dialog angezeigt
@@ -442,7 +441,7 @@ public class Levels extends AppCompatActivity {
         inflater.inflate(R.menu.sound_level, menu);
         if (!soundIsOn) changeIcon(menu);
         return true;
-    }
+    }// Ende onCreateOptionsMenu
 
     /**
      * ermöglicht den Klick auf ein Item des Menüs
@@ -472,7 +471,6 @@ public class Levels extends AppCompatActivity {
                 chooseLevel(5);
                 break;
             case R.id.home:
-                MainActivity.firstTime = false;
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.anleitung:
@@ -480,7 +478,7 @@ public class Levels extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }// Ende onOptionsItemSelected
 
     /**
      * Teilt die Texte des ersten Levels, die nur mit einem Komma getrennt sind und gibt sie als einzelnes Array zurück
@@ -534,7 +532,7 @@ public class Levels extends AppCompatActivity {
      */
     private void visualizeScore() {
         Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
-        // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
+        // der Abstand vom linken Bildschirmrand wird jeweils erhöht
         int abstand_x = 0;
         for (int i = 1; i <= 5; i++) {
             // Farb-Eigenschaften festlegen
@@ -659,7 +657,7 @@ public class Levels extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-    }//Ende sendMessage
+    }// Ende sendMessage
 
 
     /**
@@ -748,7 +746,7 @@ public class Levels extends AppCompatActivity {
         tvg.changeBackground(level);
         // gezeichneter Funktionsgraph wird in entsprechender Farbe ersetzt
         tvg.redrawInColor(color);
-        // TODO ARABELL???? KOMMENTAR
+        // Punkte in die dafür vorgesehen Liste eintragen
         levelinfo.set(level, points);
         //Pop-Up Window für die Ausgabe der Bewertung mit Texten füllen
         t_result.setText(result);

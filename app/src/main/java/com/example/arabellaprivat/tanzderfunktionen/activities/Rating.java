@@ -54,7 +54,7 @@ public class Rating extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bewertung);
+        setContentView(R.layout.activity_rating);
 
 
         dataSource = MainActivity.dataSource;
@@ -65,12 +65,8 @@ public class Rating extends AppCompatActivity {
         // Schriftart für Popups extra holen
         Typeface fontBold = Typeface.createFromAsset(getAssets(),  "fonts/BAUHS93.TTF");
 
-        // Möglichkeit weiterzuspielen "ausschalten"
-        MainActivity.firstTime = true;
-
-        // Zwischenspeicher leeren
+        // Zwischenspeicher leeren sodass bei Neustart eine leere Liste vorgefunden wird
         MainActivity.integer_list.clear();
-
 
         // Intent, das diese Activity geöffnet hat
         Intent intent = getIntent();
@@ -135,7 +131,6 @@ public class Rating extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                MainActivity.firstTime = true;
                 sendMessage(v);
             }
         });
@@ -177,10 +172,10 @@ public class Rating extends AppCompatActivity {
      */
     private void visualizeScore() {
 
+        // Zeichenfläche erstellen
         Bitmap bitmap = Bitmap.createBitmap(500, 100, Bitmap.Config.ARGB_8888);
 
-
-        // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
+        // der Abstand vom linken Bildschirmrand wird nach jedem Stern erhöht
         float abstand_x = bitmap.getWidth() / 16;
 
         // nach und nach jeden Stern zeichnen

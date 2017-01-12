@@ -24,7 +24,7 @@ public class Instruction extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anleitung);
+        setContentView(R.layout.activity_instruction);
 
         // Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
         FontChanger fontChanger = new FontChanger(getAssets(), "fonts/Brandon_reg.otf");

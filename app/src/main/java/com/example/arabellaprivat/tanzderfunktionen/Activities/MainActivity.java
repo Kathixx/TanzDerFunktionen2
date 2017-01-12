@@ -2,7 +2,6 @@ package com.example.arabellaprivat.tanzderfunktionen.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,23 +32,21 @@ public class MainActivity extends AppCompatActivity {
 
     // IV
     /** Begrüßungstext beim Start der App */
-    private TextView t_willkommen;
+    private TextView t_welcome;
     /** Button, mit dem das Spiel gestartet wird */
     private Button b_start;
     /** Button navigiert zur Instruction */
-    private Button b_anleitung;
+    private Button b_instruction;
     /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
-    private Button b_weiterspielen;
+    private Button b_continue;
     /** hier werden die Punkte der einzelnen Level gespeichert und das Level selbst */
     private ArrayList<Integer> levelinfo;
     /** legt ein Datenquellen-Objekt an */
     public static Datasource dataSource;
-    //TODO JAVADOCH ARABELLA
+    /** Liste aus der Datenbank mit zuletzt gespieltem Level und den Punkten jedes Levels */
     static ArrayList <Integer> integer_list;
     /** Variable ob Sound an oder off ist */
     boolean soundIsOn= true;
-    /** gibt an, ob die App zum Ersten Mal nach Installation geöffnet wird */
-    protected static Boolean firstTime = null;
     /**Popup Window informiert, dass zuerst auf einem BlattPapier gerechnet werden muss */
     private PopupWindow pw_mainInfo;
     /** Layout des PopupWindos*/
@@ -85,15 +82,15 @@ public class MainActivity extends AppCompatActivity {
         dataSource.open();
 
         // Variablen belegen
-        t_willkommen = (TextView) findViewById(R.id.willkommen);
+        t_welcome = (TextView) findViewById(R.id.welcome);
         b_start = (Button) findViewById(R.id.start);
-        b_anleitung = (Button) findViewById(R.id.anleitung);
-        b_weiterspielen = (Button) findViewById(R.id.weiterspielen);
+        b_instruction = (Button) findViewById(R.id.instruction);
+        b_continue = (Button) findViewById(R.id.resume);
         levelinfo = new ArrayList<>(6);
 
 
         // Begrüßungstext anzeigen
-        t_willkommen.setText("Herzlich Willkommen beim Tanz der Funktionen");
+        t_welcome.setText("Herzlich Willkommen beim Tanz der Funktionen");
 
 
         // LayoutInflater für alle PopUpWindows
@@ -120,19 +117,20 @@ public class MainActivity extends AppCompatActivity {
         t_popupText.setTypeface(fontRegular);
 
 
-        // wenn weiter gespielt werden soll, brauchen wir den letzten Zwischenstand
+        // letzten Zwischenstand aus der Datenbank holen
         integer_list = dataSource.Int_Entries();
-        // wenn das Level 6 ist
-        // kann nicht weiter gespielt werden, Button Sichtbarkeit anpassen
+        // wenn ein letzter Zwischenstand eingetragen wurde
         if (integer_list.isEmpty()){
             // blende die Möglichkeit weiterzuspielen aus
-            b_weiterspielen.setVisibility(View.INVISIBLE);
-            b_start.setText("Start");}
-        else {
-            if (integer_list.get(integer_list.size()-6)==6){
-            // blende die Möglichkeit weiterzuspielen aus
-            b_weiterspielen.setVisibility(View.INVISIBLE);
-            b_start.setText("Start");}
+            b_continue.setVisibility(View.INVISIBLE);
+            b_start.setText("Start");
+        }
+        // wenn ein Zwischenstand eingetragen ist
+        // aber wenn beim letzten Spiel zuletzt die Endbewertung aufgerufen wurde
+        else if(integer_list.get(integer_list.size()-6)==6){
+            // blende die Möglichkeit weiterzuspielen auch aus
+            b_continue.setVisibility(View.INVISIBLE);
+            b_start.setText("Start");
         }
 
 
@@ -144,30 +142,29 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                // beim Neustart neue Liste erstellen, in der alle Infos stehen
-                // Liste mit den richtigen Werten füllen
+                // Liste mit neuen Werten füllen
                 // als erstes kommt das Level
                 levelinfo.add(1);
                 // dann folgen die Punkte der Level 1-5
                 // default 200
-                for(int i=1; i<=5; i++){
+                for(int i=1; i<=5; i++)
                     levelinfo.add(i, 200);
-                }
+                // Info, dass Berechnungen auf einem Blatt gemacht werden sollen
                 pw_mainInfo.showAtLocation(popupLayout, Gravity.CENTER, 0, 0);
 
             }
         });
 
-        b_weiterspielen.setOnClickListener(new View.OnClickListener() {
+        b_continue.setOnClickListener(new View.OnClickListener() {
             /**
              * ermöglicht eine Aktoin beim Klick auf den Button
              * @param v View, auf die geklickt wurde
              */
             @Override
             public void onClick(View v) {
+                // Liste mit Werten aus dem Zwischenspeicher belegen
                 // Level am Index 0 speichern
                 levelinfo.add(integer_list.get(integer_list.size()-6));
-                // levelinfo füllen
                 // am Index 1-5 sollen die letzten 5 Einträge der Liste stehen
                 // im 5. Level steht der letzte Wert der Liste
                 int index = (integer_list.size()-5);
@@ -175,11 +172,12 @@ public class MainActivity extends AppCompatActivity {
                     levelinfo.add(integer_list.get(index));
                     index++;
                 }
+                // Info, dass Berechnungen auf einem Blatt gemacht werden sollen
                 pw_mainInfo.showAtLocation(popupLayout, Gravity.CENTER, 0, 0);
             }
         });
 
-        b_anleitung.setOnClickListener(new View.OnClickListener() {
+        b_instruction.setOnClickListener(new View.OnClickListener() {
             /**
              * ermöglicht eine Aktoin beim Klick auf den Button
              * @param v View, auf die geklickt wurde
@@ -191,27 +189,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }//Ende OnCreate
-
-    /**
-     * Checks if the user is opening the app for the first time.
-     * Note that this method should be placed inside an activity and it can be called multiple times.
-     * Source: http://www.andreabaccega.com/blog/2012/04/12/android-how-to-execute-some-code-only-on-first-time-the-application-is-launched/
-     * @return boolean      edited variable firstTime
-     */
-    private boolean isFirstTime() {
-        if (firstTime == null) {
-            SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
-            firstTime = mPreferences.getBoolean("firstTime", true);
-            if (firstTime) {
-                SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putBoolean("firstTime", false);
-                editor.commit();
-            }
-        }
-        /*if(!firstTime)
-            firstTime = true; */
-        return firstTime;
-    }
 
     /**
      * erstellt die Icons in der ActionBar
@@ -259,12 +236,13 @@ public class MainActivity extends AppCompatActivity {
             // Liste mit Infos
             b.putIntegerArrayList("Infos", levelinfo);
 
+            // neue Actiity mit entsprechendem Bundle aufrufen
             Intent intent = new Intent(this, Levels.class);
             intent.putExtras(b);
             startActivity(intent);
         }
         // Instruction anzeigen lassen
-        if (view.getId() == R.id.anleitung) {
+        if (view.getId() == R.id.instruction) {
             startActivity(new Intent(this, Instruction.class));
         }
 

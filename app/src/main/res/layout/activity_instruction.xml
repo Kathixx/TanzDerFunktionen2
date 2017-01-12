@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:id="@+id/u_anleitung"
+        android:id="@+id/heading"
         android:textSize="50sp" />
 
     <Button
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:id="@+id/instructions"
-        android:layout_below="@+id/u_anleitung"
+        android:layout_below="@+id/heading"
         android:layout_alignParentStart="true"
         android:textAlignment="textStart"
         android:textSize="25dp"
