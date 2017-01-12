@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,18 +32,10 @@ public class Rating extends AppCompatActivity {
 
     /** Instanz von Datasource */
     private Datasource dataSource;
-    /** Bewertungssatz */
-    private TextView t_review;
     /** visualisiert, wie viele Punkte erreicht wurden */
     private ImageView i_points;
-    /** gibt an, wie viele Punkte erreicht wurden */
-    private TextView t_score;
-    /** Button startet das Spiel von vorne */
-    private Button b_restart;
     /** enthält alle wichtigen Infos über Level und Punkte */
     private ArrayList<Integer> levelinfo;
-    /** Anzahl der Punkte insgesamt */
-    private int score = 0;
     /** ist der Sound eingeschaltet? */
     private boolean soundIsOn;
 
@@ -77,15 +68,16 @@ public class Rating extends AppCompatActivity {
         soundIsOn=bundle.getBoolean("Sound");
 
         // Score berechnen
+        int score = 0;
         for(int i=1; i<=5; i++){
             score += levelinfo.get(i);
         }
 
         // Variablen belegen
-        t_review = (TextView) findViewById(R.id.review);
+        TextView t_review = (TextView) findViewById(R.id.review);
         i_points = (ImageView) findViewById(R.id.points);
-        t_score = (TextView) findViewById(R.id.score);
-        b_restart = (Button) findViewById(R.id.restart);
+        TextView t_score = (TextView) findViewById(R.id.score);
+        Button b_restart = (Button) findViewById(R.id.restart);
 
         // Schriftart für die Punte verändern
         t_score.setTypeface(fontBold);
@@ -327,8 +319,6 @@ public class Rating extends AppCompatActivity {
         //Level 6, damit man nach der Endbewertung zum Startbildschirm kommt bei Neustart der App
         //und nicht in Level 5 landet (->bereits gespielt)
         dataSource.insert_table2(6,levelinfo.get(1),  levelinfo.get(2), levelinfo.get(3), levelinfo.get(4), levelinfo.get(5));
-        //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
-        //Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -31,14 +31,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     // IV
-    /** Begrüßungstext beim Start der App */
-    private TextView t_welcome;
-    /** Button, mit dem das Spiel gestartet wird */
-    private Button b_start;
-    /** Button navigiert zur Instruction */
-    private Button b_instruction;
-    /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
-    private Button b_continue;
     /** hier werden die Punkte der einzelnen Level gespeichert und das Level selbst */
     private ArrayList<Integer> levelinfo;
     /** legt ein Datenquellen-Objekt an */
@@ -51,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private PopupWindow pw_mainInfo;
     /** Layout des PopupWindos*/
     private View popupLayout;
-    /** Ok Button im PopUpWindow */
-    private Button b_ok;
 
 
 
@@ -82,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
         dataSource.open();
 
         // Variablen belegen
-        t_welcome = (TextView) findViewById(R.id.welcome);
-        b_start = (Button) findViewById(R.id.start);
-        b_instruction = (Button) findViewById(R.id.instruction);
-        b_continue = (Button) findViewById(R.id.resume);
+        TextView t_welcome = (TextView) findViewById(R.id.welcome);
+        Button b_start = (Button) findViewById(R.id.start);
+        Button b_instruction = (Button) findViewById(R.id.instruction);
+        Button b_continue = (Button) findViewById(R.id.resume);
         levelinfo = new ArrayList<>(6);
 
 
@@ -98,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         // Popup Window 4: Info, dass zuerst berechnet werden muss
         popupLayout=inflater.inflate(R.layout.popup_main_info, (ViewGroup)findViewById(R.id.popup_maininfo));
         pw_mainInfo= new PopupWindow(popupLayout,300,370, true);
-        b_ok=(Button)popupLayout.findViewById(R.id.ok);
+        Button b_ok=(Button)popupLayout.findViewById(R.id.ok);
         // Bei Klick auf Ok: Popup schließt sich und man kommt ins nächste Level
         b_ok.setOnClickListener(new View.OnClickListener() {
             /**

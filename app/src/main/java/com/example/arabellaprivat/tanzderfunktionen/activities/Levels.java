@@ -50,8 +50,6 @@ public class Levels extends AppCompatActivity {
     private ArrayList<Integer> levelinfo;
 
     // Buttons
-    /** Info-Button */
-    private Button b_info;
     /** Button zum Löschen der View */
     private Button b_delete;
     /** Button zum prüfen der gemalten Funktion */
@@ -63,12 +61,6 @@ public class Levels extends AppCompatActivity {
 
     /** sagt, in welchem Intervall gezeichnet werden muss */
     private TextView t_intervall;
-    /** zeigt die zu malende Funktion an */
-    private TextView t_function;
-    /** diese TextView zeigt das aktuelle Level an */
-    private TextView t_level;
-    /** gibt die Punkteanzahl aus */
-    private TextView t_number;
     /** Punkte, die zeigen, welche Level wie abgeschlossen wurden */
     private ImageView i_score;
 
@@ -81,20 +73,15 @@ public class Levels extends AppCompatActivity {
     private Check check;
 
     /** Instanz von Datasource */
-    Datasource datasource = MainActivity.dataSource;
+    private Datasource datasource = MainActivity.dataSource;
 
     // Listen zum Auslesen aus der Datenbank
     /** float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionenen */
     private ArrayList <Float> float_list;
-    /** string_list enthält alle Text, also Funktion als Ganzes und Tipps */
-    private ArrayList <String> string_list;
     /** temporäres Array, in dem die Texte des jeweiligen Levels gespeichert werden */
     private String [] text;
     /** temporäres Array, in dem alle Werte des jeweiligen Levels gespeichert werden */
     private double [] parameters;
-
-    /** Zeitstempel für das Abfangen von DoppelKlick */
-    private long lastClick=0;
 
     /** Media Player für Musik */
     private MediaPlayer mediaPlayer;
@@ -106,22 +93,16 @@ public class Levels extends AppCompatActivity {
     private PopupWindow pw_nothingIsDrawn;
     /** Layout dieses Popup Windows*/
     private View popupLayout2;
-    /** Ok Button deses PopupWindows */
-    private Button b_ok2;
 
     /** Popup Window informiert, falls Graph zu kuzr gezeichnet wurde */
     private PopupWindow pw_pathTooShort;
     /** Layout dieses Popup Windows*/
     private View popupLayout3;
-    /** Ok Button deses PopupWindows */
-    private Button b_ok3;
 
     /** Popup Window informiert, wenn das angeklickte Level nicht ausgewählt werden darf */
     private PopupWindow pw_forbiddenChoice;
     /** Layout dieses Popup Windows*/
     private View layout;
-    /** Ok Button deses PopupWindows */
-    private Button b_ok;
 
     /** Popup Window, informiert über den erreichten Punktestand nach der Überprüfung */
     private PopupWindow pw_scoreInThisLevel;
@@ -138,8 +119,6 @@ public class Levels extends AppCompatActivity {
     private PopupWindow pw_tipps;
     /** Layout dieses Popup Windows*/
     private View popuplayout5;
-    /** Schließen button des PopUp Windows*/
-    private Button b_close;
     /** Text View für die Tipps in diesem Popup Window*/
     private TextView t_tipps;
 
@@ -162,20 +141,20 @@ public class Levels extends AppCompatActivity {
         Typeface fontRegular= Typeface.createFromAsset(getAssets(), "fonts/Brandon_reg.otf");
 
         // Variablen belegen
-        b_info      = (Button) findViewById(R.id.info);
-        b_delete    = (Button) findViewById(R.id.delete);
-        b_check     = (Button) findViewById(R.id.check);
-        b_next      = (Button) findViewById(R.id.next);
-        t_intervall = (TextView) findViewById(R.id.review);
-        t_function  = (TextView) findViewById(R.id.functionText);
-        t_level     = (TextView) findViewById(R.id.level);
-        t_number    = (TextView) findViewById(R.id.number);
-        i_score     = (ImageView) findViewById(R.id.score);
-        tvg           = (TouchViewGraph) findViewById(R.id.drawing);
-        tvd           = (TouchViewDots) findViewById (R.id.dots);
-        b_draw      = (Button) findViewById(R.id.draw);
+        Button b_info           = (Button) findViewById(R.id.info);
+        b_delete         = (Button) findViewById(R.id.delete);
+        b_check          = (Button) findViewById(R.id.check);
+        b_next           = (Button) findViewById(R.id.next);
+        b_draw           = (Button) findViewById(R.id.draw);
+        t_intervall    = (TextView) findViewById(R.id.review);
+        TextView t_function     = (TextView) findViewById(R.id.functionText);
+        TextView t_level        = (TextView) findViewById(R.id.level);
+        TextView t_number       = (TextView) findViewById(R.id.number);
+        i_score       = (ImageView) findViewById(R.id.score);
+        tvg                     = (TouchViewGraph) findViewById(R.id.drawing);
+        tvd                     = (TouchViewDots) findViewById (R.id.dots);
         // Instanz der Prüfung (check) erstellen, Zeichenfläche und Hilfspunkte-Zeichenfläche werden mitübergeben
-        check          = new Check(tvg, tvd);
+        check = new Check(tvg, tvd);
 
 
         // LayoutInflater für alle PopUpWindows
@@ -184,7 +163,7 @@ public class Levels extends AppCompatActivity {
         // PopupWindow 1: falls ein Level schon gespielt aber nochmal aufgerufen wurde
         layout = inflater.inflate(R.layout.popup_forbidden_choice, (ViewGroup) findViewById(R.id.popup_forbiddenChoice));
         pw_forbiddenChoice = new PopupWindow(layout, 300, 200, true);
-        b_ok = (Button) layout.findViewById(R.id.ok);
+        Button b_ok = (Button) layout.findViewById(R.id.ok);
         b_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,7 +179,7 @@ public class Levels extends AppCompatActivity {
         // Popup Window 2: Falls nichts gezeichnet wurde und auf überprüfen geklickt wurde
         popupLayout2=inflater.inflate(R.layout.popup_nothing_is_drawn, (ViewGroup)findViewById(R.id.popup_nothingIsDrawn));
         pw_nothingIsDrawn= new PopupWindow(popupLayout2, 300,200, true);
-        b_ok2=(Button) popupLayout2.findViewById(R.id.ok);
+        Button b_ok2=(Button) popupLayout2.findViewById(R.id.ok);
         b_ok2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +194,7 @@ public class Levels extends AppCompatActivity {
         // Popup Window 3: Falls der Pfad zu kurz also in einem zu kleinen Intervall gezeichnet wurde
         popupLayout3=inflater.inflate(R.layout.popup_path_too_short, (ViewGroup)findViewById(R.id.popup_pathTooShort));
         pw_pathTooShort= new PopupWindow(popupLayout3,300,200, true);
-        b_ok3= (Button) popupLayout3.findViewById(R.id.ok);
+        Button b_ok3= (Button) popupLayout3.findViewById(R.id.ok);
         b_ok3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {pw_pathTooShort.dismiss();tvg.deleteView();
@@ -242,7 +221,7 @@ public class Levels extends AppCompatActivity {
         // Popup Window 5: Tipps die beim Zeichnen der Funktion helfen
         popuplayout5 = inflater.inflate(R.layout.popup_info, (ViewGroup) findViewById(R.id.popup_info));
         pw_tipps = new PopupWindow(popuplayout5, 400, 400, true);
-        b_close = (Button) popuplayout5.findViewById(R.id.close);
+        Button b_close = (Button) popuplayout5.findViewById(R.id.close);
         b_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,7 +250,7 @@ public class Levels extends AppCompatActivity {
 
         // Listen aus der datasource holen (static, da datasource nicht mittels Bunde übergeben werden kann und keine neue Instanz von Datasource erstellt werden soll
         float_list= datasource.Float_Entries();
-        string_list= datasource.String_Entries();
+        ArrayList <String> string_list= datasource.String_Entries();
 
         // Text Array mit 3 möglichen Einträgen erstellen: 1. für das Level, 2. für die Funktion (als String), 3. Tipp
         text= new String [3];
@@ -338,6 +317,8 @@ public class Levels extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
+                // Zeitstempel für das Abfangen von DoppelKlick
+                long lastClick=0;
                 /* Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
                  * werden unterschiedliche Aktionen von diesem Button hervorgerufen
                  * die Zeichenfläche die Sichtbar ist wird geleert */

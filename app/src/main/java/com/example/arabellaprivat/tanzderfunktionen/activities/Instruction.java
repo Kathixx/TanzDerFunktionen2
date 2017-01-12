@@ -12,11 +12,6 @@ import com.example.arabellaprivat.tanzderfunktionen.R;
 /* diese Klasse erklärt die Regeln der App */
 public class Instruction extends AppCompatActivity {
 
-    /** Text für die Instruction */
-    private TextView t_instructions;
-    /** schließt die Activity */
-    private Button b_close;
-
     /**
      * erstellt die Activity bei dessen Aufruf
      * @param savedInstanceState    Siehe Super Klasse
@@ -31,8 +26,8 @@ public class Instruction extends AppCompatActivity {
         fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
         // Variablen belegen
-        t_instructions = (TextView) findViewById(R.id.instructions);
-        b_close = (Button) findViewById(R.id.close);
+        TextView t_instructions = (TextView) findViewById(R.id.instructions);
+        Button b_close = (Button) findViewById(R.id.close);
 
         // richtigen Text ausgeben
         t_instructions.setText("Diese App hilft Dir dabei, deine Kenntnisse über mathematische Funktionen auszubauen. Freu dich auf 5 Level, in denen Du Funktionen untersuchst und zeichnest. Sammle bis zu 500 Punkte und werde so nicht nur zum Mathe-King, sondern bereite Dich egal wo du gerade bist, auf die nächste Klausur vor!\n\n" +
