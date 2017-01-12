@@ -36,7 +36,7 @@ import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
  * Created by Arabella und Kathi
  * hier findet das Spiel an sich, sowie das Zeichnen und Überprüfen statt
  * Quellen:
- * DoubleClick: http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button
+ * DoubleClick: http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button  (b_delete.setOnClickListener())
  * Menü: https://developer.android.com/guide/topics/ui/menus.html
  */
 public class Levels extends AppCompatActivity {
@@ -82,13 +82,6 @@ public class Levels extends AppCompatActivity {
 
     /** Instanz von Datasource */
     Datasource datasource = MainActivity.dataSource;
-    /** Instanzen für das Speichern der Aktuellen Punktestände */
-    private int levelpoint1;
-    private int levelpoint2;
-    private int levelpoint3;
-    private int levelpoint4;
-    private int levelpoint5;
-
 
     // Listen zum Auslesen aus der Datenbank
     /** float_list enthält alle Parameter, Nullstellen und Achsenabschnitte der Funktionenen */
@@ -236,9 +229,9 @@ public class Levels extends AppCompatActivity {
         // Popup Window 4: Zeigt das Ergebnis und die Punkte des gezeichneten Graphen an
         popupLayout4=inflater.inflate(R.layout.popup_score_in_this_level, (ViewGroup)findViewById(R.id.popup_scoreInThisLevel));
         pw_scoreInThisLevel= new PopupWindow(popupLayout4,400,350, true);
-        t_result=(TextView) popupLayout4.findViewById(R.id.Ergebnis);
-        t_points=(TextView) popupLayout4.findViewById(R.id.Punkte);
-        t_conclusion=(TextView) popupLayout4.findViewById(R.id.Erklärung);
+        t_result=(TextView) popupLayout4.findViewById(R.id.result);
+        t_points=(TextView) popupLayout4.findViewById(R.id.points);
+        t_conclusion=(TextView) popupLayout4.findViewById(R.id.conclusion);
         // Eigenschaften dieses Popup Windows festlegen: Bei Klick auserhalb des Popup soll sich dieses schließen
         pw_scoreInThisLevel.setBackgroundDrawable(new BitmapDrawable());
         // Schriftarten werden nicht vom FontChanger verändert und müssen hier extra überschrieben werden
@@ -340,6 +333,7 @@ public class Levels extends AppCompatActivity {
         b_delete.setOnClickListener(new View.OnClickListener() {
             /**
              * ermöglicht eine Aktoin beim Klick auf den Button
+             * Quelle um den Doppelklick zu realisieren:  http://stackoverflow.com/questions/5608720/android-preventing-double-click-on-a-button
              * @param v View, auf die geklickt wurde
              */
             @Override
@@ -824,14 +818,7 @@ public class Levels extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        levelpoint1 = levelinfo.get(1);
-        levelpoint2 = levelinfo.get(2);
-        levelpoint2 = levelinfo.get(2);
-        levelpoint3 = levelinfo.get(3);
-        levelpoint4 = levelinfo.get(4);
-        levelpoint5 = levelinfo.get(5);
-
-        datasource.insert_table2(level,levelpoint1, levelpoint2, levelpoint3, levelpoint4, levelpoint5);
+        datasource.insert_table2(level, levelinfo.get(1), levelinfo.get(2), levelinfo.get(3),  levelinfo.get(4), levelinfo.get(5));
         //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
         //Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
     }// Ende onPause
