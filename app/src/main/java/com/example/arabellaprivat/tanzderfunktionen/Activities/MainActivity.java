@@ -24,7 +24,6 @@ import com.example.arabellaprivat.tanzderfunktionen.R;
 /**
  * Startbildschirm
  * wird beim Start der App automatisch aufgerufen
- * Quelle der Methode firstTime(): http://www.andreabaccega.com/blog/2012/04/12/android-how-to-execute-some-code-only-on-first-time-the-application-is-launched/
  */
 public class MainActivity extends AppCompatActivity {
 

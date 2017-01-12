@@ -43,7 +43,6 @@ public class Check {
      * @param parameters wird von der Klasse Levels übergeben, beinhalten alle Parameter die aus der Datenbank gelesen wurden und für die Berechnung notwendig sind
      * @return true falls gezeichnete Funktion der Original-Funktion entspricht
     */
-
     public int checkFunction(int level, double [] parameters) {
         // xWert der Funktion
         double xValue;
@@ -154,12 +153,22 @@ public class Check {
     }//End compareBitmapPoints
 
 
-    //berechnet x Koordinate
+    /**
+     * berechnet aus einem x-Koordinatenwert den entsprechenden Pixelwert
+     * @param coordinate Koordinate die umgewandelt werden soll
+     * @param xMax maximaler xWert des Koordinatensystems
+     * @return umgewandelter xWert in Pixelangaben
+     */
     private double xCoordinateToPixel (double coordinate,  double xMax){
         double xValue;
+        // Länge der Zeichenfläche auslesen
         double widthView=tvg.getRight()-tvg.getLeft();
-        // nach wie vielen Pixeln kommt 1 x Wert
+        // Längenmaß einer xKoordinate berechnen
         double stepPixels=widthView/(2*xMax);
+        /* Da die Koordinaten auch in den negativen Bereich gehen
+         * wird hier der maximale x-Koordinatenwert addiert
+         * sodass praktisch nun das Koordinatensystem am linken Zeichenflächenrand beginnt.
+         */
         coordinate=xMax+coordinate;
         xValue=coordinate*stepPixels;
         return xValue;
@@ -204,6 +213,16 @@ public class Check {
     }// Ende pixelToCoordinate
 
 
+    /**
+     * berechnet den Funktionswert mit unterschiedlichen Funktionen, abhängig vom level
+     * @param level aktuelles Level, bestimmt den Funktionstyp
+     * @param xValue x-WErt von dem der y-WErt berechnet werden soll
+     * @param a Parameter a, aus der Datenbank gelesen
+     * @param b Parameter b, aus der Datenbank gelesen
+     * @param c Parameter c, aus der Datenbank gelesen
+     * @param d Parameter d, aus der Datenbank gelesen
+     * @return berechneter y-Wert
+     */
     private double calculateYValue (int level,double xValue, double a, double b, double c, double d) {
         double yValue;
         // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
@@ -234,18 +253,21 @@ public class Check {
     }//End calculateYValue
 
     /**
-     * rechnet einen Koordinaten-Wert in Pixelwert um
-     * v.a. für y-Werte
-     * abhängig von den maximalen y-Werten
-     * Vorraussetzung: Koordinatensystem ist zentriert
-     * @param coordinate  berechnete y-Koordinaten
-     * @param yMax
-     * @return
+     * berechnet aus einem y-Koordinatenwert den entsprechenden Pixelwert
+     * @param coordinate Koordinate die umgewandelt werden soll
+     * @param yMax maximaler yWert des Koordinatensystems
+     * @return umgewandelter yWert in Pixelangaben
      */
     private double yCoordinateToPixel (double coordinate, double yMax){
         double yValue;
-        double widthView=tvg.getBottom()-tvg.getTop();
-        double stepPixels=widthView/(2*yMax);
+        // Höhe der Zeichenfläche auslesen
+        double heightView=tvg.getBottom()-tvg.getTop();
+        // Längenmaß einer y-Koordinate berechnen
+        double stepPixels=heightView/(2*yMax);
+        /* Da die Koordinaten auch in den negativen Bereich gehen
+         * un die Pixel in negativer y-Richtung zunehmen
+         * wird hier der Koordinatenwert vom maximale y-Koordinatenwert subtrahiert
+         */
         coordinate=yMax-coordinate;
         yValue=coordinate*stepPixels;
         return yValue;
