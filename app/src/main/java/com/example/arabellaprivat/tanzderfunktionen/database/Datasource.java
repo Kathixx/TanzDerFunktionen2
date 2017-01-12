@@ -38,16 +38,19 @@ public class Datasource  {
         databaseHelper = new DatabaseHelper(context);
     }
 
-    /** Callback-Methoden open() und close()*/
+    /** Callback-Methode open()
+     * stellt eine Verbindung zur Datenbank her
+     * */
     public void open() {
         Log.d(LOG_TAG, "Eine Referenz auf die Datenbank wird jetzt angefragt.");
-        //Verbindung zur DB herstellen
         database = databaseHelper.getWritableDatabase();
         Log.d(LOG_TAG, "Datenbank-Referenz erhalten. Pfad zur Datenbank: " + database.getPath());
     }
 
+    /** Callback-Methode close()
+     * schließt die Verbindung zur Datenbank
+     */
     public void close() {
-        //Verbindung zur DB schließen
         databaseHelper.close();
         Log.d(LOG_TAG, "Datenbank mit Hilfe des DbHelpers geschlossen.");
     }
@@ -167,7 +170,7 @@ public class Datasource  {
 
     /** Methode Int_Entries
      * prueft ob level und punkte in db eingetragen wurden und schreibt sie in eine arrayliste
-     * @return      Arrayliste mit Level und punkten
+     * @return     Arrayliste mit Level und punkten
      */
     public ArrayList<Integer> Int_Entries () {
         //Cursor der level und punkte der tabelle zwischenspeicher durchläuft

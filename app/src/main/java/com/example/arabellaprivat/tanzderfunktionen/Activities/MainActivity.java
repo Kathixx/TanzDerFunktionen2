@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
      * wird beim Start der App aufgerufen
      * setzt Layout und Interaktionen fest
      * legt Datenquellenobjekt an
-     * öffnen und schließen der DBverbindung in lifecyle-callbacks ausgelagert
+     * öffnet die Datenquelle beim Starten der App
      *
      * @param savedInstanceState    Siehe Super-Klasse
      */
@@ -249,8 +249,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Callback Methode
+     * Callback Methode onDestroy()
      * schließt die Verbindung zur Datenbank
+     * wird aufgerufen, wenn die App komplett geschlossen wird
      */
     @Override
     protected void onDestroy() {

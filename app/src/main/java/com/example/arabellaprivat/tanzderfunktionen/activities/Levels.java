@@ -80,14 +80,14 @@ public class Levels extends AppCompatActivity {
     /** Prüfung  */
     private Check check;
 
-    /**Instanz vonn Datasource */
+    /** Instanz von Datasource */
     Datasource datasource = MainActivity.dataSource;
-    /* Instanzen für das Speichern der Aktuellen Punktestände */
-    private int levelpoint1; //= levelinfo.get(1);
-    private int levelpoint2; //= levelinfo.get(2);
-    private int levelpoint3; //= levelinfo.get(3);
-    private int levelpoint4; //= levelinfo.get(4);
-    private int levelpoint5; //= 3; //levelinfo.get(5)
+    /** Instanzen für das Speichern der Aktuellen Punktestände */
+    private int levelpoint1;
+    private int levelpoint2;
+    private int levelpoint3;
+    private int levelpoint4;
+    private int levelpoint5;
 
 
     // Listen zum Auslesen aus der Datenbank
@@ -818,7 +818,8 @@ public class Levels extends AppCompatActivity {
 
     /**
      * Callback Methode
-     * speichert Zwischenstand ab
+     * speichert den Zwischenstand ab
+     * holt sich das aktuelle Level und die aktuellen Punkte aus levelinfo
      */
     @Override
     protected void onPause() {
@@ -829,10 +830,10 @@ public class Levels extends AppCompatActivity {
         levelpoint3 = levelinfo.get(3);
         levelpoint4 = levelinfo.get(4);
         levelpoint5 = levelinfo.get(5);
-        //levelpoint5 = 5;
+
         datasource.insert_table2(level,levelpoint1, levelpoint2, levelpoint3, levelpoint4, levelpoint5);
         //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
-        Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
     }// Ende onPause
 
 

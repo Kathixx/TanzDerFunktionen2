@@ -31,6 +31,7 @@ import com.example.arabellaprivat.tanzderfunktionen.database.Datasource;
  */
 public class Rating extends AppCompatActivity {
 
+    /** Instanz von Datasource */
     private Datasource dataSource;
     /** Bewertungssatz */
     private TextView t_review;
@@ -56,7 +57,7 @@ public class Rating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
 
-
+        //Instanz zuweisen
         dataSource = MainActivity.dataSource;
 
         //// Schriftart für die ganze Activity ändern mithilfe des FontChangeCrawlers
@@ -323,9 +324,11 @@ public class Rating extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //Level 6, damit man nach der Endbewertung zum Startbildschirm kommt bei Neustart der App
+        //und nicht in Level 5 landet (->bereits gespielt)
         dataSource.insert_table2(6,levelinfo.get(1),  levelinfo.get(2), levelinfo.get(3), levelinfo.get(4), levelinfo.get(5));
         //"Gespeichert"-Toast anzeigen zum überprüfen ob es klappt
-        Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Deine Daten wurden gespeichert",Toast.LENGTH_SHORT).show();
     }
 
 }
